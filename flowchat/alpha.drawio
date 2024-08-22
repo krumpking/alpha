@@ -1,0 +1,48 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36" version="24.7.7">
+  <diagram id="LZyW_0qhAirCPNJixHdg" name="Page-1">
+    <mxGraphModel dx="1621" dy="1675" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="5" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="2" target="nnJxEQl-LUOF7UYTDnaY-9" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="240" y="-960" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="2" value="Admin login" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="180" y="-1140" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="nnJxEQl-LUOF7UYTDnaY-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="6" target="nnJxEQl-LUOF7UYTDnaY-13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="6" value="User login" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="490" y="-1140" width="170" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="7" value="Alpha Profile" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="-60" y="-720" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="nnJxEQl-LUOF7UYTDnaY-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="nnJxEQl-LUOF7UYTDnaY-9" target="nnJxEQl-LUOF7UYTDnaY-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="nnJxEQl-LUOF7UYTDnaY-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="nnJxEQl-LUOF7UYTDnaY-9" target="7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="nnJxEQl-LUOF7UYTDnaY-9" value="Main Page" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="180" y="-950" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="nnJxEQl-LUOF7UYTDnaY-10" value="Add / Remove Staff" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="180" y="-720" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="nnJxEQl-LUOF7UYTDnaY-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="nnJxEQl-LUOF7UYTDnaY-13" target="nnJxEQl-LUOF7UYTDnaY-15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="nnJxEQl-LUOF7UYTDnaY-13" value="Home&amp;nbsp;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="515" y="-950" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="nnJxEQl-LUOF7UYTDnaY-15" value="Profile" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="515" y="-720" width="120" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

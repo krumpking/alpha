@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1042293949658",
+    "firebase_url": "https://miningassociation-8942c.firebaseio.com",
+    "project_id": "miningassociation-8942c",
+    "storage_bucket": "miningassociation-8942c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1042293949658:android:083b242b7cb654104891e3",
+        "android_client_info": {
+          "package_name": "com.alpha.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1042293949658-sjiv63ihf0qc33tap8kpjok2b8k244e3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8vXCDE2Rsgdd0Yl_jvUsf_qSPhA4n_Hc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1042293949658-sjiv63ihf0qc33tap8kpjok2b8k244e3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
