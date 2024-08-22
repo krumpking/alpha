@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
-const greenColor = Color(0xff03B02C);
-const redColor = Color(0xffD53A00);
-const primaryColor = Color(0xff4b5320);
-var accentGreen = Colors.lightGreen[100];
-const tetiaryColor = Color(0xffc03e05);
-const accentColor = Colors.cyanAccent;
-const greyAccent = Color(0xffeeeeeee);
-const whiteColor = Colors.white;
+class Pallete {
+  static Color greenColor = const Color(0xff03B02C);
+  static Color redColor = const Color(0xffD53A00);
+  static Color primaryColor = const Color(0xff4b5320);
+  var accentGreen = Colors.lightGreen[100];
+  static Color tertiaryColor = const Color(0xffc03e05);
+  static Color accentColor = Colors.cyanAccent;
+  static Color greyAccent = const Color(0xffeeeeeee);
+  static Color whiteColor = Colors.white;
+
+}

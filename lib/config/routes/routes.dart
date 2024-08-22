@@ -6,7 +6,8 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
   switch (routeSettings.name) {
     case welcomeRoute:
       return MaterialPageRoute(
-          settings: routeSettings, builder: (_) => WelcomePage());
+          settings: routeSettings, builder: (_) => WelcomePage()
+      );
 
     default:
       return MaterialPageRoute(

@@ -4,6 +4,7 @@ import 'package:alpha/config/routes/routes.dart';
 import 'package:alpha/core/constants/color_constants.dart';
 import 'package:alpha/features/welcome/pages/splash.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 Future<void> main() async {
@@ -20,20 +21,18 @@ class Alpha extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       theme: ThemeData(
-        primaryColor: primaryColor,
+        primaryColor: Pallete.primaryColor,
         dialogBackgroundColor: Colors.white, // Change dialog background color
-        focusColor: primaryColor, // Change focus color
+        focusColor: Pallete.primaryColor, // Change focus color
         colorScheme: ColorScheme.fromSwatch().copyWith(
-          primary: primaryColor,
-          secondary: accentColor,
-          background: Colors.grey[200], // General background color
-          surface: Colors.white, // Surface color for cards, etc.
+          primary: Pallete.primaryColor,
+          secondary: Pallete.accentColor,
+          surface: Colors.grey[200], // General background color
           onPrimary: Colors.white, // Text color on primary color
           onSecondary: Colors.black, // Text color on secondary color
-          onBackground: Colors.black, // Text color on background color
-          onSurface: Colors.black, // Text color on surface color
+          onSurface: Colors.black,
         ),
         textTheme: const TextTheme(
           displayLarge: TextStyle(fontSize: 18.0),
@@ -55,9 +54,10 @@ class Alpha extends StatelessWidget {
         dialogTheme: DialogTheme(
           backgroundColor: Colors.white, // Dialog background color
           titleTextStyle: TextStyle(
-              color: primaryColor, fontSize: 20), // Dialog title text style
-          contentTextStyle: TextStyle(
-              color: Colors.black, fontSize: 16), // Dialog content text style
+              color: Pallete.primaryColor, fontSize: 20), // Dialog title text style
+          contentTextStyle: const TextStyle(
+              color: Colors.black, fontSize: 16
+          ), // Dialog content text style
         ),
       ),
       supportedLocales: const [
