@@ -2,6 +2,7 @@
 import 'package:alpha/core/constants/route_constants.dart';
 import 'package:animated_introduction/animated_introduction.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class WelcomePage extends StatelessWidget {
   WelcomePage({super.key});
@@ -45,9 +46,7 @@ class WelcomePage extends StatelessWidget {
       isFullScreen: true,
       slides: pages,
       indicatorType: IndicatorType.circle,
-      onDone: () {
-        Navigator.of(context).pushNamed(loginRoute);
-      },
+      onDone: ()=> Get.offAllNamed(RoutesHelper.loginScreen)
     );
   }
 }

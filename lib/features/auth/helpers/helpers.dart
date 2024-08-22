@@ -1,6 +1,14 @@
+import 'dart:async';
 
+import 'package:alpha/core/constants/route_constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:logger/logger.dart';
+
+import '../../../custom_widgets/circular_loader/circular_loader.dart';
+import '../services/auth_service.dart';
 
 class AuthHelpers {
 
@@ -8,25 +16,28 @@ class AuthHelpers {
 
   static Future<void> handleEmailVerification({required User user}) async {
     if (!user.emailVerified) {
-      GeneralHelpers.permanentNavigator(context, EmailVerificationScreen(user: user));
+      Get.offAllNamed(
+        RoutesHelper.emailVerificationScreen,
+        arguments: user
+      );
     } else {
-      GeneralHelpers.permanentNavigator(context, const AuthHandler());
+      Get.offAllNamed(RoutesHelper.initialScreen);
     }
   }
 
-  static Future<void> checkEmailVerification({required BuildContext context, required User currentUser}) async {
+  static Future<void> checkEmailVerification({required User currentUser}) async {
     await currentUser.reload().then((value){
       final user = FirebaseAuth.instance.currentUser;
 
       if (user?.emailVerified ?? false) {
-        GeneralHelpers.permanentNavigator(context, const AuthHandler());
+        Get.offAllNamed(RoutesHelper.initialScreen);
       }
     });
 
   }
 
-  static setTimerForAutoRedirect(BuildContext context) {
-    const Duration timerPeriod = Duration(seconds: 5); // Change the timer period as needed
+  static setTimerForAutoRedirect() {
+    const Duration timerPeriod = Duration(seconds: 5);
     Timer.periodic(
       timerPeriod,
           (timer) async {
@@ -35,12 +46,9 @@ class AuthHelpers {
 
           if (user?.emailVerified ?? false) {
 
-            timer.cancel(); // Stop the timer once verification is successful
+            timer.cancel();
 
-            GeneralHelpers.permanentNavigator(
-                context,
-                const AccountVerificationSuccessful()
-            );
+            Get.offAllNamed(RoutesHelper.successfulVerificationScreen);
           }
         });
 
@@ -63,42 +71,74 @@ class AuthHelpers {
     }
   }
 
-  static Future<UserProfile?> fetchProfileDataAndCache({required BuildContext context, required bool wannaNavigate}) async {
-    UserProfileProvider userProfileProvider = Provider.of<UserProfileProvider>(context, listen: false);
-    UserProfile? userProfileData = userProfileProvider.userProfile;
+  static void validateAndSubmitForm({
+    required String password,
+    required String email,
+  }) async {
+    if (password.isEmpty) {
+      Get.snackbar(
+        'Error',
+        'Password is required.',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 3),
+      );
+      return;
+    }
 
-    if (userProfileData == null) {
-      final user = FirebaseAuth.instance.currentUser;
+    if (password.length < 8) {
+      Get.snackbar(
+        'Error',
+        'Password is too short.',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 3),
+      );
+      return;
+    }
 
-      final userStoredProfile = await UserProfileServices.fetchUserProfileInformation(user!.uid);
-      if (userStoredProfile != null) {
-        userProfileProvider.setUserProfile(userStoredProfile);
-        await SharedPreferencesHelper.saveUserProfileToCache(userStoredProfile).then((_){
-          if(wannaNavigate == true){
-            GeneralHelpers.back(context);
-            GeneralHelpers.permanentNavigator(context, const AuthHandler());
-          }
-        });
+    if (!GetUtils.isEmail(email)) {
+      Get.snackbar(
+        'Error',
+        'Please input a valid email.',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 3),
+      );
+      return;
+    }
+
+    Get.dialog(
+      const CustomLoader(
+        message: 'Logging in',
+      ),
+      barrierDismissible: false,
+    );
+
+    await AuthServices.login(
+      emailAddress: email.trim(),
+      password: password.trim(),
+    ).then((response){
+      if (!response.success) {
+        if (!Get.isSnackbarOpen) Get.back();
+        Get.snackbar(
+          'Error',
+          response.message ?? 'Something went wrong',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          duration: const Duration(seconds: 3),
+        );
+      } else {
+        if (Get.isDialogOpen!) Get.back();
+        Get.offAllNamed(RoutesHelper.initialScreen);
       }
-    }
-
-    return userProfileData;
-  }
-
-
-  static Widget getSelectedUserRole() {
-    switch (userRole) {
-      case UserRole.agent:
-        return const AgentMainScreen();
-      case UserRole.customer:
-        return const CustomerMainScreen();
-      case UserRole.delivery:
-        return const DeliveryMainScreen();
-      case UserRole.distributor:
-        return const DistributorMainScreen();
-      default:
-        return const InitialRoleSelectionScreen();
-    }
+    });
   }
 
 }
+
+

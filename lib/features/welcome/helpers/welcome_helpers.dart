@@ -10,11 +10,11 @@ class WelcomeHelpers {
 
     bool hasSeenWelcome = await getSPBoolean(opened);
     if (hasSeenWelcome) {
-      Get.toNamed(loginRoute);
+      Get.toNamed(RoutesHelper.loginScreen);
     } else {
       saveBool(opened, true);
       // Navigate to welcome screen
-      Get.toNamed(loginRoute);
+      Get.toNamed(RoutesHelper.loginScreen);
     }
   }
 

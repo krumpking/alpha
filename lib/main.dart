@@ -2,8 +2,11 @@
 
 import 'package:alpha/config/routes/routes.dart';
 import 'package:alpha/core/constants/color_constants.dart';
+import 'package:alpha/core/constants/route_constants.dart';
+import 'package:alpha/features/not_found/not_found_screen.dart';
 import 'package:alpha/features/welcome/pages/splash.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
@@ -65,7 +68,12 @@ class Alpha extends StatelessWidget {
         Locale('sh'), // Shona
         Locale('nbl') // Ndebele
       ],
-      onGenerateRoute: (settings) => generateRoute(settings),
+      initialRoute: RoutesHelper.splashScreen,
+      getPages: RoutesHelper.routes,
+      unknownRoute: GetPage(
+          name: "/",
+          page: ()=> const NotFoundScreen()
+      ),
       home: const SplashScreen(),
     );
   }
