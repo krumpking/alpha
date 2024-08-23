@@ -29,14 +29,13 @@ class _LoginScreenState extends State<LoginScreen> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Colors.green, Colors.orange],
+            colors: [Colors.green, Colors.green, Colors.orange],
           ),
         ),
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(24.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+            child: ListView(
               children: [
                 const SizedBox(height: 40),
                 const Text(
@@ -114,13 +113,15 @@ class _LoginScreenState extends State<LoginScreen> {
                       FadeInSlide(
                         duration: 1.8,
                         child: GeneralButton(
-                            btnColor: Pallete.primaryColor,
+                            btnColor: Pallete.greenColor,
                             width: screenWidth,
                             borderRadius: 10,
                             child: Text(
-                              'Log In',
+                              'Sign in',
                               style: GoogleFonts.poppins(
                                 color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12
                               ),
                             ),
                             onTap: ()=> AuthHelpers.validateAndSubmitForm(
@@ -152,7 +153,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           fontWeight: FontWeight.w400
                                       )
                                   )
-                                ]),
+                                ]
+                            ),
                           ),
                         ),
                       ),

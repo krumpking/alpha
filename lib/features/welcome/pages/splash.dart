@@ -1,6 +1,8 @@
-import 'package:alpha/features/welcome/helpers/welcome_helpers.dart';
+import 'package:alpha/core/constants/local_image_constants.dart';
+import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
 
+import '../../auth/handlers/auth_handler.dart';
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -9,38 +11,18 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  @override
-  void initState() {
-    super.initState();
-    WelcomeHelpers.checkForWelcome();
-  }
-
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        fit: StackFit.expand,
-        alignment: AlignmentDirectional.center,
-        children: [
-          // Background image covering the whole screen
-          Image.asset(
-            'assets/images/welcome_bg.jpg',
-            fit: BoxFit.cover,
-            width: double.infinity,
-          ),
-          // Centered logos
-          Center(
-            child:
-                // First logo
-                Image.asset(
-              'assets/images/logo_white.png',
-              width: 200, // Set width as needed
-              height: 200, // Set height as needed
-            ),
-          ),
-        ],
-      ),
+    return AnimatedSplashScreen.withScreenFunction(
+      splash: LocalImageAsset.logo,
+      splashIconSize: 100,
+      screenFunction: () async {
+
+        return const AuthHandler();
+      },
+      splashTransition: SplashTransition.rotationTransition,
     );
   }
 }
+

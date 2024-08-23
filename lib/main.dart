@@ -1,14 +1,11 @@
-// import 'package:flutter_stripe/flutter_stripe.dart';
-
-import 'package:alpha/config/routes/routes.dart';
 import 'package:alpha/core/constants/color_constants.dart';
 import 'package:alpha/core/constants/route_constants.dart';
 import 'package:alpha/features/not_found/not_found_screen.dart';
 import 'package:alpha/features/welcome/pages/splash.dart';
+import 'package:alpha/firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
-import 'package:loader_overlay/loader_overlay.dart';
 
 Future<void> main() async {
   await _setup();
@@ -17,6 +14,9 @@ Future<void> main() async {
 
 Future<void> _setup() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform
+  );
 }
 
 class Alpha extends StatelessWidget {
