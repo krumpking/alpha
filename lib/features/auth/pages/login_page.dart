@@ -113,7 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       FadeInSlide(
                         duration: 1.8,
                         child: GeneralButton(
-                            btnColor: Pallete.greenColor,
+                            btnColor: Pallete.primaryColor,
                             width: screenWidth,
                             borderRadius: 10,
                             child: Text(
