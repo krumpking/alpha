@@ -1,18 +1,13 @@
 import 'dart:async';
-
-import 'package:alpha/core/constants/route_constants.dart';
+import 'package:alpha/core/utils/logs.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:logger/logger.dart';
-
+import '../../../core/utils/routes.dart';
 import '../../../custom_widgets/circular_loader/circular_loader.dart';
 import '../services/auth_service.dart';
 
 class AuthHelpers {
-
-  static final Logger _logger = Logger();
 
   static Future<void> handleEmailVerification({required User user}) async {
     if (!user.emailVerified) {
@@ -66,7 +61,7 @@ class AuthHelpers {
         return null;
       }
     } catch (e) {
-      _logger.e('Error getting user token: $e');
+      DevLogs.logError('Error getting user token: $e');
       return null;
     }
   }

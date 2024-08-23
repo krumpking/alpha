@@ -1,3 +1,3 @@
-class LocalImageAsset {
-  static const String logo = '';
+class LocalImageConstants {
+  static const String logo = 'assets/images/logo.png';
 }

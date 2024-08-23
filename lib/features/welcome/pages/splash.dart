@@ -14,14 +14,44 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedSplashScreen.withScreenFunction(
-      splash: LocalImageAsset.logo,
-      splashIconSize: 100,
-      screenFunction: () async {
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+           end: Alignment.bottomCenter,
+           colors: [
+             Colors.white,
+             Colors.white,
+             Colors.white,
+             Colors.white,
+             Colors.white,
+             Colors.white,
+             Colors.white,
+             Colors.white,
+             Colors.white,
+             Colors.white,
+             Colors.white,
+             Colors.white,Colors.white,
+             Colors.white,
+             Colors.white,
+             Colors.white,
+             Colors.white,
+             Colors.white,
+             Colors.blue,
+             Colors.green,
+           ]
+        ),
+      ),
+      child: AnimatedSplashScreen.withScreenFunction(
+        splash: LocalImageConstants.logo,
+        splashIconSize: 100,
+        backgroundColor: Colors.transparent,
+        screenFunction: () async {
 
-        return const AuthHandler();
-      },
-      splashTransition: SplashTransition.rotationTransition,
+          return const AuthHandler();
+        },
+        splashTransition: SplashTransition.rotationTransition,
+      ),
     );
   }
 }

@@ -1,5 +1,4 @@
 import 'package:alpha/core/constants/animation_asset_constants.dart';
-import 'package:alpha/core/constants/route_constants.dart';
 import 'package:alpha/core/utils/logs.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import '../../../core/constants/color_constants.dart';
+import '../../../core/utils/routes.dart';
 import '../../../custom_widgets/custom_button/general_button.dart';
 import '../helpers/helpers.dart';
 import '../services/auth_service.dart';
@@ -37,7 +37,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
 
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(screenHeight * 0.075),
+        preferredSize: Size.fromHeight(65),
         child: Container(
           padding: const EdgeInsets.all(16),
           child: Column(

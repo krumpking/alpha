@@ -1,15 +1,18 @@
 import 'package:alpha/core/constants/color_constants.dart';
-import 'package:alpha/core/constants/route_constants.dart';
+import 'package:alpha/core/utils/routes.dart';
+import 'package:alpha/core/utils/shared_pref.dart';
 import 'package:alpha/features/not_found/not_found_screen.dart';
 import 'package:alpha/features/welcome/pages/splash.dart';
 import 'package:alpha/firebase_options.dart';
+import 'package:alpha/global/global.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 
 Future<void> main() async {
   await _setup();
-  runApp(const Alpha());
+  runApp(const ProviderScope(child: Alpha()));
 }
 
 Future<void> _setup() async {
@@ -17,6 +20,8 @@ Future<void> _setup() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform
   );
+
+  userRole = await CacheUtils.getUserRoleFromCache();
 }
 
 class Alpha extends StatelessWidget {

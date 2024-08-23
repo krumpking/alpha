@@ -1,4 +1,4 @@
-import 'package:alpha/core/constants/route_constants.dart';
+
 import 'package:alpha/custom_widgets/custom_button/general_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,12 +6,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import '../../../core/constants/animation_asset_constants.dart';
 import '../../../core/constants/color_constants.dart';
+import '../../../core/utils/routes.dart';
 import '../../../custom_widgets/circular_loader/circular_loader.dart';
 import '../../../custom_widgets/text_fields/custom_text_field.dart';
 import '../services/auth_service.dart';
 
 class ForgotPasswordScreen extends StatelessWidget {
-
 
   ForgotPasswordScreen({super.key,});
 

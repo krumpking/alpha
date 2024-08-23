@@ -1,13 +1,12 @@
 import 'package:alpha/core/constants/animation_asset_constants.dart';
-import 'package:alpha/core/constants/route_constants.dart';
 import 'package:alpha/custom_widgets/custom_button/general_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../../core/constants/color_constants.dart';
+import '../../../core/utils/routes.dart';
 import '../services/auth_service.dart';
 
 class ResendResetEmailScreen extends StatelessWidget {
@@ -16,7 +15,7 @@ class ResendResetEmailScreen extends StatelessWidget {
   const ResendResetEmailScreen({super.key, required this.email});
 
   @override
-  Widget build(BuildContext context) {String? sentTo;
+  Widget build(BuildContext context) {
   double screenWidth = MediaQuery.sizeOf(context).width;
 
 

@@ -8,14 +8,14 @@ import 'package:flutter/material.dart';
 
 import '../../../custom_widgets/cards/staff_card.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class UserHomeScreen extends StatefulWidget {
+  const UserHomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<UserHomeScreen> createState() => _UserHomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
+class _UserHomeScreenState extends State<UserHomeScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final List<Color> colors = [
     Colors.blue,
@@ -29,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 6, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
   }
 
   @override
@@ -69,13 +69,13 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Alpha Profile',
+                          'Max Rosco',
                           style: TextStyle(
                               fontWeight: FontWeight.bold
                           ),
                         ),
                         Text(
-                          'Time to save the world',
+                          'Mental Health Nurse',
                           style: TextStyle(
                             fontSize: 12
                           ),
@@ -90,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                 ),
 
                 const CustomTextField(
-                    labelText: 'Find Stuff',
+                    labelText: 'Find some shifts',
                     prefixIcon: Icon(
                       Icons.search
                     )
@@ -106,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Stuff',
+              'Shifts report',
               textAlign: TextAlign.start,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
@@ -163,21 +163,15 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
               ),
               tabAlignment: TabAlignment.start,
               tabs: const [
-                Tab(text: 'Assigned Stuff'),
-                Tab(text: 'Database Stuff'),
-                Tab(text: 'Shifts Available'),
-                Tab(text: 'Nurses'),
-                Tab(text: 'Social Workers'),
-                Tab(text: 'Care/Support Workers'),
+                Tab(text: 'Shifts'),
+                Tab(text: 'Documents Expiring'),
+                Tab(text: 'Shifts Done'),
               ],
             ),
             Expanded(
               child: TabBarView(
                 controller: _tabController,
                 children: [
-                  _buildTabCategory(),
-                  _buildTabCategory(),
-                  _buildTabCategory(),
                   _buildTabCategory(),
                   _buildTabCategory(),
                   _buildTabCategory(),
@@ -195,31 +189,31 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
       physics: const BouncingScrollPhysics(),
       children: const [
         TaskItemCard(
-          name: 'Max Roccuso',
-          role: 'Nurse',
+          name: 'NHS Shifts',
+          role: 'Hospital',
           time: '12/08/24 1:00pm - 2:00pm',
-          type: 'Alpha',
+          type: 'Available',
         ),
 
         TaskItemCard(
-          name: 'Max Roccuso',
-          role: 'Nurse',
+          name: 'NHS Shifts',
+          role: 'Hospital',
           time: '12/08/24 1:00pm - 2:00pm',
-          type: 'Alpha',
+          type: 'Available',
         ),
 
         TaskItemCard(
-          name: 'Max Roccuso',
-          role: 'Nurse',
+          name: 'NHS Shifts',
+          role: 'Hospital',
           time: '12/08/24 1:00pm - 2:00pm',
-          type: 'Alpha',
+          type: 'Available',
         ),
 
         TaskItemCard(
-          name: 'Max Roccuso',
-          role: 'Nurse',
+          name: 'NHS Shifts',
+          role: 'Hospital',
           time: '12/08/24 1:00pm - 2:00pm',
-          type: 'Alpha',
+          type: 'Available',
         ),
 
 

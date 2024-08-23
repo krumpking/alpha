@@ -1,5 +1,3 @@
-
-import 'package:alpha/core/constants/route_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -7,6 +5,7 @@ import 'package:lottie/lottie.dart';
 
 import '../../../core/constants/animation_asset_constants.dart';
 import '../../../core/constants/color_constants.dart';
+import '../../../core/utils/routes.dart';
 import '../../../custom_widgets/custom_button/general_button.dart';
 
 class AccountVerificationSuccessful extends StatelessWidget {
@@ -14,9 +13,8 @@ class AccountVerificationSuccessful extends StatelessWidget {
 
 
   @override
-  Widget build(BuildContext context) {String? sentTo;
+  Widget build(BuildContext context) {
   double screenWidth = Get.width;
-
 
   return Scaffold(
     body: Padding(
@@ -24,7 +22,7 @@ class AccountVerificationSuccessful extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(
+          const SizedBox(
             height: 25,
           ),
 

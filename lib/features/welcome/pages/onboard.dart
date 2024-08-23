@@ -1,8 +1,8 @@
-// Create a simple stateless widget that displays a welcome message.
-import 'package:alpha/core/constants/route_constants.dart';
 import 'package:animated_introduction/animated_introduction.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../../core/utils/routes.dart';
 
 class WelcomePage extends StatelessWidget {
   WelcomePage({super.key});

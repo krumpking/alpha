@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../core/utils/api_response.dart';
@@ -94,6 +95,31 @@ class AuthServices {
       return APIResponse(success: false, message: 'Failed to send password reset email. Please try again.');
     }
   }
+
+  // Future<void> saveUserToFirestore(User user, String role) async {
+  //   final usersRef = FirebaseFirestore.instance.collection('users');
+  //
+  //   await usersRef.doc(user.uid).set({
+  //     'uid': user.uid,
+  //     'email': user.email,
+  //     'role': role,
+  //     'displayName': user.displayName,
+  //     'photoURL': user.photoURL,
+  //     'createdAt': FieldValue.serverTimestamp(),
+  //   }, SetOptions(merge: true));
+  // }
+
+  static Future<APIResponse<String?>> fetchUserRole(String uid) async {
+    final usersRef = FirebaseFirestore.instance.collection('users');
+    final userDoc = await usersRef.doc(uid).get();
+
+    if (userDoc.exists) {
+      return APIResponse(success: true, data: userDoc.data()?['role'], message: 'Role fetched successful');
+    }else{
+      return APIResponse(success: false, message: 'Role fetching failed');
+    }
+  }
+
 }
 
 // Custom AuthException class for better error handling
