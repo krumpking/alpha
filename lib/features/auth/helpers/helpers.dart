@@ -116,7 +116,7 @@ class AuthHelpers {
     await AuthServices.login(
       emailAddress: email.trim(),
       password: password.trim(),
-    ).then((response){
+    ).then((response) {
       if (!response.success) {
         if (!Get.isSnackbarOpen) Get.back();
         Get.snackbar(
@@ -129,10 +129,22 @@ class AuthHelpers {
         );
       } else {
         if (Get.isDialogOpen!) Get.back();
+
+        // Show success snackbar
+        Get.snackbar(
+          'Success',
+          'Login successful!',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+          duration: const Duration(seconds: 3),
+        );
+
         Get.offAllNamed(RoutesHelper.initialScreen);
       }
     });
   }
+
 
 }
 
