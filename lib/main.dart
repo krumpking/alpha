@@ -20,8 +20,6 @@ Future<void> _setup() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform
   );
-
-  userRole = await CacheUtils.getUserRoleFromCache();
 }
 
 class Alpha extends StatelessWidget {

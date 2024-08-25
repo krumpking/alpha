@@ -14,14 +14,10 @@ import '../state/authentication_provider.dart';
 class AuthHandler extends ConsumerWidget {
   const AuthHandler({super.key});
 
-  Future<bool> _checkOnBoardingStatus() async {
-    return await CacheUtils.checkOnBoardingStatus();
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return FutureBuilder<bool>(
-      future: _checkOnBoardingStatus(),
+      future: CacheUtils.checkOnBoardingStatus(),
       builder: (context, onboardingSnapshot) {
         if (onboardingSnapshot.connectionState == ConnectionState.waiting) {
           return const Center(
@@ -43,30 +39,34 @@ class AuthHandler extends ConsumerWidget {
             if (snapshot.hasData) {
               final user = snapshot.data!;
 
+              return FutureBuilder<UserRole?>(
+                future: AuthHelpers.getUserRole(user),
+                builder: (context, roleSnapshot) {
+                  if (roleSnapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
 
-              WidgetsBinding.instance.addPostFrameCallback((_) async {
-                ref.read(userProvider.notifier).updateUser(user);
+                  final userRole = roleSnapshot.data;
 
-                if (!user.emailVerified) {
-                  AuthHelpers.handleEmailVerification(user: user);
-                }
+                  // Handle email verification
+                  WidgetsBinding.instance.addPostFrameCallback((_) async {
+                    ref.read(userProvider.notifier).updateUser(user);
 
-                if (userRole == null) {
-                  await AuthServices.fetchUserRole(user.uid).then((response) async{
-                    if (response.data != null) {
-                      await CacheUtils.saveUserRoleToCache(response.data!);
-
-                      userRole = await CacheUtils.getUserRoleFromCache();
+                    if (!user.emailVerified) {
+                      AuthHelpers.handleEmailVerification(user: user);
                     }
                   });
-                }
-              });
 
 
 
-
-
-              return userRole ==  UserRole.admin ? const AdminHomeScreen() : const UserHomeScreen();
+                  // Redirect based on user role
+                  return userRole == UserRole.admin
+                      ? const AdminHomeScreen()
+                      : const UserHomeScreen();
+                },
+              );
             } else {
               return hasSeenOnboarding
                   ? const LoginScreen()

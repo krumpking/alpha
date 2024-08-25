@@ -1,3 +1,4 @@
+import 'package:alpha/core/utils/shared_pref.dart';
 import 'package:animated_introduction/animated_introduction.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -45,7 +46,11 @@ class WelcomePage extends StatelessWidget {
       isFullScreen: true,
       slides: pages,
       indicatorType: IndicatorType.circle,
-      onDone: ()=> Get.offAllNamed(RoutesHelper.loginScreen)
+      onDone: ()async{
+        await CacheUtils.updateOnboardingStatus(true).then((value){
+          Get.offAllNamed(RoutesHelper.loginScreen);
+        });
+      }
     );
   }
 }

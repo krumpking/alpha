@@ -1,3 +1,4 @@
+import 'package:alpha/core/utils/logs.dart';
 import 'package:alpha/global/global.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -37,8 +38,10 @@ class CacheUtils{
     String role = prefs.getString('user_role') ?? '';
 
     if(role == 'admin'){
+      DevLogs.logInfo(role);
       return UserRole.admin;
     }else if(role == 'user'){
+      DevLogs.logInfo(role);
       return UserRole.user;
     }
 

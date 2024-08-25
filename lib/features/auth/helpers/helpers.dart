@@ -4,7 +4,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/utils/routes.dart';
+import '../../../core/utils/shared_pref.dart';
 import '../../../custom_widgets/circular_loader/circular_loader.dart';
+import '../../../global/global.dart';
 import '../services/auth_service.dart';
 
 class AuthHelpers {
@@ -146,6 +148,24 @@ class AuthHelpers {
   }
 
 
+  static Future<UserRole?> getUserRole(User user) async {
+    UserRole? userRole = await CacheUtils.getUserRoleFromCache();
+
+    if (userRole == null) {
+      await AuthServices.fetchUserRole(user.uid).then((response) async{
+
+        DevLogs.logInfo("USER ROLE = ${response.data}");
+
+        if (response.data != null) {
+          await CacheUtils.saveUserRoleToCache(response.data!);
+
+          userRole = await CacheUtils.getUserRoleFromCache();
+        }
+      });
+    }
+
+    return userRole;
+  }
 }
 
 
