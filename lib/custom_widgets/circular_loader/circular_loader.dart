@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '../../../core/constants/color_constants.dart';
 
@@ -40,7 +39,7 @@ class CustomLoader extends StatelessWidget {
                 flex: 5,
                 child: Text(
                   '$message.....',
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
                       color: Pallete.primaryColor,
                       fontSize: 12
                   ),

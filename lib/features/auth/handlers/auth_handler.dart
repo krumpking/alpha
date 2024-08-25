@@ -8,6 +8,7 @@ import 'package:alpha/global/global.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../sidebarx_feat/pages/main_screen.dart';
 import '../helpers/helpers.dart';
 import '../state/authentication_provider.dart';
 
@@ -60,11 +61,11 @@ class AuthHandler extends ConsumerWidget {
                   });
 
 
+                  return MainScreen(selectedRole: userRole!);
 
-                  // Redirect based on user role
-                  return userRole == UserRole.admin
-                      ? const AdminHomeScreen()
-                      : const UserHomeScreen();
+                  // return userRole == UserRole.admin
+                  //     ? const AdminHomeScreen()
+                  //     : const UserHomeScreen();
                 },
               );
             } else {

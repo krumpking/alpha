@@ -2,7 +2,6 @@ import 'package:alpha/custom_widgets/custom_button/general_button.dart';
 import 'package:alpha/features/auth/helpers/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../../animations/fade_in_slide.dart';
 import '../../../core/constants/color_constants.dart';
 import '../../../core/utils/routes.dart';
@@ -69,11 +68,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   child: Column(
                     children: [
-                      FadeInSlide(
+                      const FadeInSlide(
                         duration: 1.2,
                         child: Text(
                           'Login',
-                          style: GoogleFonts.poppins(
+                          style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold),
                         ),
@@ -116,9 +115,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             btnColor: Pallete.primaryColor,
                             width: screenWidth,
                             borderRadius: 10,
-                            child: Text(
+                            child: const Text(
                               'Sign in',
-                              style: GoogleFonts.poppins(
+                              style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 12
@@ -142,13 +141,13 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: RichText(
                             textAlign: TextAlign.center,
                             text: TextSpan(
-                                style: GoogleFonts.poppins(
+                                style: const TextStyle(
                                     fontSize: 12,
                                 ),
                                 children: [
                                   TextSpan(
                                       text: "Forgot Password?",
-                                      style: GoogleFonts.poppins(
+                                      style: TextStyle(
                                           color: Pallete.primaryColor,
                                           fontWeight: FontWeight.w400
                                       )

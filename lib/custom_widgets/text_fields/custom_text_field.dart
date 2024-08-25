@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-
 import '../../core/constants/color_constants.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -52,7 +50,7 @@ class CustomTextField extends StatelessWidget {
         ),
 
         labelText: labelText ?? '',
-        labelStyle: labelStyle ?? GoogleFonts.poppins(
+        labelStyle: labelStyle ?? const TextStyle(
           color: Colors.grey,
           fontSize: 12
         ),

@@ -1,6 +1,7 @@
 import 'package:alpha/core/constants/color_constants.dart';
 import 'package:alpha/core/utils/routes.dart';
 import 'package:alpha/core/utils/shared_pref.dart';
+import 'package:alpha/features/auth/handlers/auth_handler.dart';
 import 'package:alpha/features/not_found/not_found_screen.dart';
 import 'package:alpha/features/welcome/pages/splash.dart';
 import 'package:alpha/firebase_options.dart';
@@ -77,7 +78,7 @@ class Alpha extends StatelessWidget {
           name: "/",
           page: ()=> const NotFoundScreen()
       ),
-      home: const SplashScreen(),
+      home: const AuthHandler(),
     );
   }
 }

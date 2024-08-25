@@ -1,8 +1,6 @@
-
 import 'package:alpha/custom_widgets/custom_button/general_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import '../../../core/constants/animation_asset_constants.dart';
 import '../../../core/constants/color_constants.dart';
@@ -62,19 +60,19 @@ class ForgotPasswordScreen extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  Text(
+                  const Text(
                     'Reset Password',
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.poppins(
+                    style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold
                     ),
                   ),
 
-                  Text(
+                  const Text(
                     'Enter your email and we will send you a password reset link',
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.poppins(
+                    style: TextStyle(
                       fontSize: 12,
                     ),
                   ),
@@ -102,9 +100,9 @@ class ForgotPasswordScreen extends StatelessWidget {
                     btnColor: Pallete.primaryColor,
                     width: screenWidth,
                     borderRadius: 10,
-                    child: Text(
+                    child: const Text(
                         'Reset Password',
-                      style: GoogleFonts.poppins(
+                      style: TextStyle(
                         color: Colors.white,
                       ),
                     ),

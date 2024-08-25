@@ -46,8 +46,8 @@ class _SplashScreenState extends State<SplashScreen> {
         splash: LocalImageConstants.logo,
         splashIconSize: 100,
         backgroundColor: Colors.transparent,
+        disableNavigation: true,
         screenFunction: () async {
-
           return const AuthHandler();
         },
         splashTransition: SplashTransition.rotationTransition,

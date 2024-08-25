@@ -1,8 +1,10 @@
+import 'package:alpha/features/add_user/pages/add_user.dart';
 import 'package:alpha/features/auth/handlers/auth_handler.dart';
 import 'package:alpha/features/auth/pages/email_verification.dart';
 import 'package:alpha/features/auth/pages/forgot_password.dart';
 import 'package:alpha/features/home/pages/admin_home_screen.dart';
 import 'package:alpha/features/home/pages/user_home_screen.dart';
+import 'package:alpha/features/statistics/pages/admin_stuff_stats.dart';
 import 'package:alpha/features/welcome/pages/onboard.dart';
 import 'package:alpha/features/welcome/pages/splash.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -23,6 +25,8 @@ class RoutesHelper {
   static String resendVerificationEmailScreen = '/resendVerificationEmail';
   static String adminHomeScreen = '/adminHome';
   static String userHomeScreen = '/userHome';
+  static String adminStatsScreen = '/adminStats';
+  static String adminAddUserScreen = '/addStats';
 
 
   static getWelcomeRoute (String name)=> "$welcomeScreen?name=$name";
@@ -34,6 +38,8 @@ class RoutesHelper {
   static getForgotPasswordRoute (String name)=> "$forgotPasswordScreen?name=$name";
   static getAdminHomeRoute (String name)=> "$adminHomeScreen?name=$name";
   static getUserHomeRoute (String name)=> "$userHomeScreen?name=$name";
+  static getAdminStatsRoute (String name)=> "$adminStatsScreen?name=$name";
+  static getAdminAddUserRoute (String name)=> "$adminAddUserScreen?name=$name";
 
 
   static List<GetPage> routes = [
@@ -80,6 +86,18 @@ class RoutesHelper {
     GetPage(
         name: adminHomeScreen,
         page: ()=> const AdminHomeScreen()
+    ),
+
+
+    GetPage(
+        name: adminAddUserScreen,
+        page: ()=> const AdminAddUser()
+    ),
+
+
+    GetPage(
+        name: adminStatsScreen,
+        page: ()=> const AdminStuffStats()
     ),
 
 

@@ -3,7 +3,6 @@ import 'package:alpha/core/utils/logs.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import '../../../core/constants/color_constants.dart';
 import '../../../core/utils/routes.dart';
@@ -33,11 +32,10 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = Get.width;
-    double screenHeight = Get.width;
 
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(65),
+        preferredSize: const Size.fromHeight(65),
         child: Container(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -97,9 +95,9 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                       height: 8,
                     ),
 
-                    Text(
+                    const Text(
                       'Verify you email address',
-                      style: GoogleFonts.poppins(
+                      style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold
                       ),
@@ -107,16 +105,16 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
 
                     Text(
                       '\n${widget.user.email}\n',
-                      style: GoogleFonts.poppins(
+                      style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.bold
                       ),
                     ),
 
-                    Text(
+                    const Text(
                       'Congratulations your account awaits. Verify your email to start Shopping and Experience a world of unrivaled Deals and personalized Offers.',
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.poppins(
+                      style: TextStyle(
                         fontSize: 12,
                       ),
                     ),
@@ -129,9 +127,9 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                         btnColor: Pallete.primaryColor,
                         width: screenWidth,
                         borderRadius: 10,
-                        child: Text(
+                        child: const Text(
                           'Continue',
-                          style: GoogleFonts.poppins(
+                          style: TextStyle(
                             color: Colors.white,
                           ),
                         ),
@@ -159,7 +157,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
 
                       child: RichText(
                         text: TextSpan(
-                            style: GoogleFonts.poppins(
+                            style: const TextStyle(
                                 fontSize: 12,
                             ),
                             children: [
@@ -169,7 +167,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
 
                               TextSpan(
                                   text: " Resend",
-                                  style: GoogleFonts.poppins(
+                                  style: TextStyle(
                                       color: Pallete.primaryColor,
                                       fontWeight: FontWeight.bold
                                   )

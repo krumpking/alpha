@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
-
 import '../../../core/constants/animation_asset_constants.dart';
 import '../../../core/constants/color_constants.dart';
 import '../../../core/utils/routes.dart';
@@ -40,18 +38,18 @@ class AccountVerificationSuccessful extends StatelessWidget {
                   height: 8,
                 ),
 
-                Text(
+                const Text(
                   'Verification Successful',
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold
                   ),
                 ),
 
-                Text(
-                  'Congratulations your account has been activated.Continue to start Shopping and Experience a world of unrivaled Deals and personalized Offers.',
+                const Text(
+                  'Congratulations your account has been activated.Continue to start using the app.',
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
                     fontSize: 12,
                   ),
                 ),
@@ -64,9 +62,9 @@ class AccountVerificationSuccessful extends StatelessWidget {
                     btnColor: Pallete.primaryColor,
                     width: screenWidth,
                     borderRadius: 10,
-                    child: Text(
+                    child: const Text(
                       'Continue',
-                      style: GoogleFonts.poppins(
+                      style: TextStyle(
                         color: Colors.white,
                       ),
                     ),

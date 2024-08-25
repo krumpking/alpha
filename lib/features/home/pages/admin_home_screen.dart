@@ -4,9 +4,12 @@ import 'package:alpha/core/constants/color_constants.dart';
 import 'package:alpha/custom_widgets/cards/task_item.dart';
 import 'package:alpha/custom_widgets/text_fields/custom_text_field.dart';
 import 'package:alpha/features/home/services/dummy.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../custom_widgets/cards/staff_card.dart';
+import '../../../custom_widgets/sidebar/admin_drawer.dart';
 
 class AdminHomeScreen extends StatefulWidget {
   const AdminHomeScreen({super.key});
@@ -24,6 +27,8 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> with SingleTickerProv
     Colors.purple,
     Colors.amber
   ];
+  final _key = GlobalKey<ScaffoldState>();
+  final user = FirebaseAuth.instance.currentUser;
 
 
   @override
@@ -40,7 +45,11 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> with SingleTickerProv
 
   @override
   Widget build(BuildContext context) {
+    bool isSmallScreen = Get.width < 600;
+
     return Scaffold(
+      key: _key,
+      drawer: isSmallScreen ? AdminDrawer(user: user!,) : null,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         bottom: PreferredSize(
@@ -51,6 +60,12 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> with SingleTickerProv
               children: [
                 Row(
                   children: [
+                    if(isSmallScreen)IconButton(
+                      onPressed: (){
+                        _key.currentState!.openDrawer();
+                      },
+                      icon: const Icon(Icons.menu),
+                    ),
                     Container(
                       width: 120,
                       height: 120,

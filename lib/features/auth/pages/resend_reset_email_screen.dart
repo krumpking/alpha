@@ -2,7 +2,6 @@ import 'package:alpha/core/constants/animation_asset_constants.dart';
 import 'package:alpha/custom_widgets/custom_button/general_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../../core/constants/color_constants.dart';
@@ -79,9 +78,9 @@ class ResendResetEmailScreen extends StatelessWidget {
                     height: 8,
                   ),
 
-                  Text(
+                  const Text(
                     'Password Reset Email Sent',
-                    style: GoogleFonts.poppins(
+                    style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold
                     ),
@@ -89,16 +88,16 @@ class ResendResetEmailScreen extends StatelessWidget {
 
                   Text(
                     '\n$email\n',
-                    style: GoogleFonts.poppins(
+                    style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold
                     ),
                   ),
 
-                  Text(
+                  const Text(
                     'Your Account Security is our priority!. We`ve sent you a secure link to safely Change Your Password and keep\nYour Account Protected ',
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.poppins(
+                    style: TextStyle(
                       fontSize: 12,
                     ),
                   ),
@@ -111,9 +110,9 @@ class ResendResetEmailScreen extends StatelessWidget {
                       btnColor: Pallete.primaryColor,
                       width: screenWidth,
                       borderRadius: 10,
-                      child: Text(
+                      child: const Text(
                         'Continue',
-                        style: GoogleFonts.poppins(
+                        style: TextStyle(
                           color: Colors.white,
                         ),
                       ),
@@ -142,7 +141,7 @@ class ResendResetEmailScreen extends StatelessWidget {
                     },
                     child: RichText(
                       text: TextSpan(
-                          style: GoogleFonts.poppins(
+                          style: const TextStyle(
                               fontSize: 12,
                           ),
                           children: [
@@ -152,7 +151,7 @@ class ResendResetEmailScreen extends StatelessWidget {
 
                             TextSpan(
                                 text: " Resend",
-                                style: GoogleFonts.poppins(
+                                style: TextStyle(
                                     color: Pallete.primaryColor,
                                     fontWeight: FontWeight.bold
                                 )
