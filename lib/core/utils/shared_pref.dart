@@ -48,5 +48,10 @@ class CacheUtils{
     return null;
   }
 
+  static Future<void> clearUserRoleFromCache() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('user_role');
+  }
+
 
 }

@@ -1,5 +1,7 @@
+import 'package:alpha/core/utils/routes.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 
 import '../../../core/utils/api_response.dart';
 
@@ -59,22 +61,55 @@ class AuthServices {
         return APIResponse(success: false, message: 'Failed to login. Please try again.');
       }
     } on FirebaseAuthException catch (e) {
-      switch (e.code) {
-        case 'invalid-email':
-          return APIResponse(success: false, message: 'Invalid email address format.');
-        case 'user-disabled':
-          return APIResponse(success: false, message: 'User account is disabled.');
-        case 'user-not-found':
+      if (e.code == 'user-not-found') {
+        // User not found in FirebaseAuth, check Firestore
+        final userDoc = await FirebaseFirestore.instance
+            .collection('users')
+            .where('email', isEqualTo: emailAddress)
+            .get();
+
+        if (userDoc.docs.isNotEmpty) {
+          try {
+            final UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                email: emailAddress,
+                password: password
+            );
+
+            if(userCredential.user != null){
+              await userCredential.user!.sendEmailVerification();
+            }
+            return APIResponse(success: true, data: userCredential.user, message: 'User profile found and login successful');
+          } on FirebaseAuthException catch (signUpError) {
+            // Handle signup errors
+            switch (signUpError.code) {
+              case 'email-already-in-use':
+                return APIResponse(success: false, message: 'Email Address already in use');
+              case 'weak-password':
+                return APIResponse(success: false, message: 'Your password is too weak');
+              default:
+                return APIResponse(success: false, message: 'Unknown error, please contact Support');
+            }
+          }
+        } else {
           return APIResponse(success: false, message: 'No user found for that email.');
-        case 'wrong-password':
-          return APIResponse(success: false, message: 'Incorrect password.');
-        default:
-          return APIResponse(success: false, message: e.message ?? 'An unknown error occurred.');
+        }
+      } else {
+        switch (e.code) {
+          case 'invalid-email':
+            return APIResponse(success: false, message: 'Invalid email address format.');
+          case 'user-disabled':
+            return APIResponse(success: false, message: 'User account is disabled.');
+          case 'wrong-password':
+            return APIResponse(success: false, message: 'Incorrect password.');
+          default:
+            return APIResponse(success: false, message: e.message ?? 'An unknown error occurred.');
+        }
       }
     } catch (e) {
       return APIResponse(success: false, message: 'An error occurred. Please try again.');
     }
   }
+
 
   // Sign out user
   static Future<APIResponse<void>> signOut() async {
@@ -96,18 +131,6 @@ class AuthServices {
     }
   }
 
-  // Future<void> saveUserToFirestore(User user, String role) async {
-  //   final usersRef = FirebaseFirestore.instance.collection('users');
-  //
-  //   await usersRef.doc(user.uid).set({
-  //     'uid': user.uid,
-  //     'email': user.email,
-  //     'role': role,
-  //     'displayName': user.displayName,
-  //     'photoURL': user.photoURL,
-  //     'createdAt': FieldValue.serverTimestamp(),
-  //   }, SetOptions(merge: true));
-  // }
 
   static Future<APIResponse<String?>> fetchUserRole(String uid) async {
     final usersRef = FirebaseFirestore.instance.collection('users');
@@ -117,6 +140,68 @@ class AuthServices {
       return APIResponse(success: true, data: userDoc.data()?['role'], message: 'Role fetched successful');
     }else{
       return APIResponse(success: false, message: 'Role fetching failed');
+    }
+  }
+
+
+  static Future<APIResponse<void>> requestVerificationCode({
+    required String phoneNumber,
+    required void Function(String verificationId) onCodeSent,
+  }) async {
+    try {
+      // Check if the phone number exists in Firestore
+      final usersRef = FirebaseFirestore.instance.collection('users');
+      final querySnapshot = await usersRef.where('phone_number', isEqualTo: phoneNumber).get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        // Phone number exists, proceed with sending OTP
+        await FirebaseAuth.instance.verifyPhoneNumber(
+          phoneNumber: phoneNumber,
+          verificationCompleted: (PhoneAuthCredential credential) async {
+            try {
+              // Automatically sign in the user if the verification is completed
+              await FirebaseAuth.instance.signInWithCredential(credential);
+              Get.offAllNamed(RoutesHelper.initialScreen);
+            } catch (e) {
+              // Handle any sign-in errors here
+              Get.snackbar(
+                'Sign In Error',
+                'Failed to sign in automatically. Please try again.',
+                snackPosition: SnackPosition.BOTTOM,
+              );
+            }
+          },
+          verificationFailed: (FirebaseAuthException error) {
+            Get.snackbar(
+              'Verification Failed',
+              'Verification failed: ${error.message}',
+              snackPosition: SnackPosition.BOTTOM,
+            );
+          },
+          codeSent: (String verificationId, int? forceResendingToken) {
+            onCodeSent(verificationId);  // Call the provided callback with verificationId
+          },
+          codeAutoRetrievalTimeout: (String verificationId) {
+            // Handle auto retrieval timeout if needed
+          },
+        );
+        return APIResponse(success: true, message: 'Verification code sent.');
+      } else {
+        // Phone number does not exist, show error message
+        Get.snackbar(
+          'Phone Number Not Registered',
+          'Phone number not registered. Please sign up first.',
+          snackPosition: SnackPosition.BOTTOM,
+        );
+        return APIResponse(success: false, message: 'Phone number not registered.');
+      }
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'An error occurred: ${e.toString()}',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return APIResponse(success: false, message: 'An error occurred: ${e.toString()}');
     }
   }
 

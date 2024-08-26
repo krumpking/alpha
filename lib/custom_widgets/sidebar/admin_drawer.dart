@@ -1,5 +1,7 @@
 import 'package:alpha/core/constants/local_image_constants.dart';
 import 'package:alpha/core/utils/routes.dart';
+import 'package:alpha/core/utils/shared_pref.dart';
+import 'package:alpha/features/auth/services/auth_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -172,21 +174,23 @@ class _AdminDrawerState extends State<AdminDrawer> {
                 }
             ),
 
-            const ListTile(
-                leading: Icon(
-                  Icons.logout,
-                  color: Colors.redAccent,
+            ListTile(
+              onTap: () async{
+                await CacheUtils.clearUserRoleFromCache().then((_) async{
+                  await AuthServices.signOut();
+                });
+              },
+              leading: const Icon(
+                Icons.logout,
+                color: Colors.redAccent,
+              ),
+              title: const Text(
+                'Sign Out',
+                style: TextStyle(
+                    color: Colors.redAccent,
+                  fontSize: 16
                 ),
-                title: Text(
-                  'Sign Out',
-                  style: TextStyle(
-                      color: Colors.redAccent,
-                    fontSize: 16
-                  ),
-                ),
-                trailing: Icon(
-                    Icons.navigate_next
-                ),
+              ),
             ),
 
           ],

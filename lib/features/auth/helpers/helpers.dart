@@ -119,7 +119,17 @@ class AuthHelpers {
       emailAddress: email.trim(),
       password: password.trim(),
     ).then((response) {
-      if (!response.success) {
+      if (!response.success && response.message != 'No user found for that email.') {
+        if (!Get.isSnackbarOpen) Get.back();
+        Get.snackbar(
+          'Error',
+          response.message ?? 'Something went wrong',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          duration: const Duration(seconds: 3),
+        );
+      } else if (!response.success && response.message == 'No user found for that email.') {
         if (!Get.isSnackbarOpen) Get.back();
         Get.snackbar(
           'Error',

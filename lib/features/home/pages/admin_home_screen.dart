@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:alpha/core/constants/color_constants.dart';
+import 'package:alpha/core/constants/dimensions.dart';
 import 'package:alpha/custom_widgets/cards/task_item.dart';
 import 'package:alpha/custom_widgets/text_fields/custom_text_field.dart';
 import 'package:alpha/features/home/services/dummy.dart';
@@ -45,11 +46,9 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> with SingleTickerProv
 
   @override
   Widget build(BuildContext context) {
-    bool isSmallScreen = Get.width < 600;
-
     return Scaffold(
       key: _key,
-      drawer: isSmallScreen ? AdminDrawer(user: user!,) : null,
+      drawer: Dimensions.isSmallScreen ? AdminDrawer(user: user!,) : null,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         bottom: PreferredSize(
@@ -60,7 +59,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> with SingleTickerProv
               children: [
                 Row(
                   children: [
-                    if(isSmallScreen)IconButton(
+                    if(Dimensions.isSmallScreen)IconButton(
                       onPressed: (){
                         _key.currentState!.openDrawer();
                       },
