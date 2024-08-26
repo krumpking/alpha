@@ -1,10 +1,12 @@
 import 'package:alpha/core/constants/color_constants.dart';
 import 'package:alpha/custom_widgets/custom_button/general_button.dart';
 import 'package:alpha/custom_widgets/text_fields/custom_text_field.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:extended_phone_number_input/consts/enums.dart';
 import 'package:extended_phone_number_input/phone_number_controller.dart';
 import 'package:extended_phone_number_input/phone_number_input.dart';
 import 'package:flutter/material.dart';
+import '../../../core/constants/local_image_constants.dart';
 import '../../../custom_widgets/custom_dropdown.dart';
 import '../helper/add_user_helper.dart';
 
@@ -41,11 +43,17 @@ class _AdminAddUserState extends State<AdminAddUser> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: ListView(
           children: [
-
-
+            const SizedBox(height: 30),
+            ClipOval(
+              child: Image.asset(
+                LocalImageConstants.addUser,
+                width: MediaQuery.of(context).size.height * 0.18,
+                height: MediaQuery.of(context).size.height * 0.18,
+              ),
+            ),
+            const SizedBox(height: 50),
             CustomDropDown(
                 prefixIcon: Icons.person,
                 items: const ['Admin', 'User'],
