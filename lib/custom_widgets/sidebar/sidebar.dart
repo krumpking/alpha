@@ -1,8 +1,12 @@
+import 'package:alpha/core/constants/color_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:sidebarx/sidebarx.dart';
 
 class Sidebar extends StatelessWidget {
-  const Sidebar({ super.key, required SidebarXController controller,})  : _controller = controller;
+  const Sidebar({
+    super.key,
+    required SidebarXController controller,
+  }) : _controller = controller;
 
   final SidebarXController _controller;
 
@@ -16,9 +20,9 @@ class Sidebar extends StatelessWidget {
           color: Theme.of(context).canvasColor,
           borderRadius: BorderRadius.circular(20),
         ),
-        hoverColor: Theme.of(context).primaryColor.withOpacity(0.4),
-        textStyle: TextStyle(color: Colors.white.withOpacity(0.7)),
-        selectedTextStyle: const TextStyle(color: Colors.white),
+        hoverColor: Theme.of(context).primaryColor,
+        textStyle: TextStyle(color: Pallete.primaryColor),
+        selectedTextStyle: TextStyle(color: Pallete.primaryColor),
         hoverTextStyle: const TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.w500,
@@ -31,25 +35,14 @@ class Sidebar extends StatelessWidget {
         ),
         selectedItemDecoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: Color(0xFF5F5FA7).withOpacity(0.37),
-          ),
-          gradient: LinearGradient(
-            colors: [Color(0xFF3E3E61), Theme.of(context).canvasColor],
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.28),
-              blurRadius: 30,
-            )
-          ],
+          border: Border.all(color: Pallete.primaryColor, width: 4),
         ),
         iconTheme: IconThemeData(
-          color: Colors.white.withOpacity(0.7),
+          color: Pallete.primaryColor,
           size: 20,
         ),
-        selectedIconTheme: const IconThemeData(
-          color: Colors.white,
+        selectedIconTheme: IconThemeData(
+          color: Pallete.primaryColor,
           size: 20,
         ),
       ),
@@ -59,17 +52,14 @@ class Sidebar extends StatelessWidget {
           color: Theme.of(context).canvasColor,
         ),
       ),
-      footerDivider: Divider(
-
-      ),
+      footerDivider: Divider(),
       headerBuilder: (context, extended) {
-        return const SizedBox(
+        return SizedBox(
           height: 100,
           child: Padding(
             padding: EdgeInsets.all(16.0),
-            child: Icon(
-                Icons.person
-            ),
+            child: Icon(Icons.account_circle,
+                size: 50, color: Pallete.primaryColor),
           ),
         );
       },
@@ -83,19 +73,11 @@ class Sidebar extends StatelessWidget {
         ),
         const SidebarXItem(
           icon: Icons.edit_note,
-          label: 'Requisitions',
+          label: 'Add User',
         ),
         const SidebarXItem(
-          icon: Icons.people,
-          label: 'People',
-        ),
-        const SidebarXItem(
-          icon: Icons.favorite,
-          label: 'Favorites',
-        ),
-        const SidebarXItem(
-          iconWidget: FlutterLogo(size: 20),
-          label: 'Flutter',
+          icon: Icons.analytics,
+          label: 'Staff statistics',
         ),
       ],
     );

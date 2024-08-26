@@ -25,10 +25,6 @@ class AdminTabScreensContainer extends StatelessWidget {
             return const AdminAddUser();
           case 2:
             return const AdminStuffStats();
-          case 3:
-            return const Center(child: Text('Home Screen 4'),);
-          case 4:
-            return const Center(child: Text('Home Screen 5'),);
           default:
             return Text(
               'Not Found',

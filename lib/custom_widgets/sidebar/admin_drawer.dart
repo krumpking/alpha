@@ -28,7 +28,7 @@ class _AdminDrawerState extends State<AdminDrawer> {
               color: Colors.white,
               height: MediaQuery.of(context).size.height * 0.32,
               child: DrawerHeader(
-                decoration: const BoxDecoration(color:Colors.white),
+                decoration: const BoxDecoration(color: Colors.white),
                 child: Column(
                   children: [
                     Container(
@@ -39,12 +39,14 @@ class _AdminDrawerState extends State<AdminDrawer> {
                         color: Colors.white,
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.grey.shade300, // Light color for top shadow
+                            color: Colors
+                                .grey.shade300, // Light color for top shadow
                             offset: const Offset(-5, -5),
                             blurRadius: 15,
                           ),
                           BoxShadow(
-                            color: Colors.grey.shade500, // Dark color for bottom shadow
+                            color: Colors
+                                .grey.shade500, // Dark color for bottom shadow
                             offset: const Offset(5, 5),
                             blurRadius: 15,
                           ),
@@ -52,23 +54,23 @@ class _AdminDrawerState extends State<AdminDrawer> {
                       ),
                       child: ClipOval(
                         child: CachedNetworkImage(
-                          imageUrl: widget.user.photoURL ??  "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                          imageUrl: widget.user.photoURL ??
+                              "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
                           width: MediaQuery.of(context).size.height * 0.18,
                           height: MediaQuery.of(context).size.height * 0.18,
                           fit: BoxFit.cover,
                           placeholder: (context, url) => Skeletonizer(
                             enabled: true,
                             child: SizedBox(
-                              height: MediaQuery.of(context).size.height*0.45,
+                              height: MediaQuery.of(context).size.height * 0.45,
                               child: Image.asset(LocalImageConstants.logo),
                             ),
                           ),
                           errorWidget: (context, url, error) =>
-                          const Icon(Icons.error),
+                              const Icon(Icons.error),
                         ),
                       ),
                     ),
-
                     Container(
                       margin: const EdgeInsets.only(top: 15),
                       child: Column(
@@ -96,87 +98,59 @@ class _AdminDrawerState extends State<AdminDrawer> {
                 ),
               ),
             ),
-
             ListTile(
-                leading: Icon(
-                  Icons.home,
-                  color: Pallete.primaryColor,
-                ),
-                title: const Text(
-                  'Home',
-                  style: TextStyle(
-                    fontSize: 16
-                  ),
-                ),
-                trailing: const Icon(
-                    Icons.navigate_next
-                ),
+              leading: Icon(
+                Icons.home,
+                color: Pallete.primaryColor,
+              ),
+              title: const Text(
+                'Home',
+                style: TextStyle(fontSize: 16),
+              ),
+              trailing: const Icon(Icons.navigate_next),
             ),
-
             ListTile(
-                leading: Icon(
-                  Icons.auto_graph,
-                  color: Pallete.primaryColor,
-                ),
-                title: const Text(
-                    'Stuff Statistics',
-                  style: TextStyle(
-                      fontSize: 16
-                  ),
-                ),
-                trailing: const Icon(
-                    Icons.navigate_next
-                ),
-
-              onTap: (){
+              leading: Icon(
+                Icons.auto_graph,
+                color: Pallete.primaryColor,
+              ),
+              title: const Text(
+                'Staff Statistics',
+                style: TextStyle(fontSize: 16),
+              ),
+              trailing: const Icon(Icons.navigate_next),
+              onTap: () {
                 Get.toNamed(RoutesHelper.adminStatsScreen);
               },
             ),
-
-
             ListTile(
-                leading: Icon(
-                  Icons.people_alt_outlined,
-                  color: Pallete.primaryColor,
-                ),
-                title: const Text(
-                    'Add Stuff',
-                  style: TextStyle(
-                      fontSize: 16
-                  ),
-                ),
-                trailing: const Icon(
-                    Icons.navigate_next
-                ),
-
-              onTap: (){
-                  Get.toNamed(RoutesHelper.adminAddUserScreen);
+              leading: Icon(
+                Icons.people_alt_outlined,
+                color: Pallete.primaryColor,
+              ),
+              title: const Text(
+                'Add Staff',
+                style: TextStyle(fontSize: 16),
+              ),
+              trailing: const Icon(Icons.navigate_next),
+              onTap: () {
+                Get.toNamed(RoutesHelper.adminAddUserScreen);
               },
             ),
-
-
             ListTile(
                 leading: Icon(
                   Icons.settings,
                   color: Pallete.primaryColor,
                 ),
                 title: const Text(
-                    'Settings',
-                  style: TextStyle(
-                      fontSize: 16
-                  ),
+                  'Settings',
+                  style: TextStyle(fontSize: 16),
                 ),
-                trailing: const Icon(
-                    Icons.navigate_next
-                ),
-                onTap: () async{
-
-                }
-            ),
-
+                trailing: const Icon(Icons.navigate_next),
+                onTap: () async {}),
             ListTile(
-              onTap: () async{
-                await CacheUtils.clearUserRoleFromCache().then((_) async{
+              onTap: () async {
+                await CacheUtils.clearUserRoleFromCache().then((_) async {
                   await AuthServices.signOut();
                 });
               },
@@ -186,15 +160,10 @@ class _AdminDrawerState extends State<AdminDrawer> {
               ),
               title: const Text(
                 'Sign Out',
-                style: TextStyle(
-                    color: Colors.redAccent,
-                  fontSize: 16
-                ),
+                style: TextStyle(color: Colors.redAccent, fontSize: 16),
               ),
             ),
-
           ],
-        )
-    );
+        ));
   }
 }

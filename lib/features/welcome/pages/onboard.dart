@@ -11,30 +11,30 @@ class WelcomePage extends StatelessWidget {
   final List<SingleIntroScreen> pages = [
     const SingleIntroScreen(
       sideDotsBgColor: Colors.green,
-      title: 'Farmerz Tool',
+      title: 'Alpha',
       description: 'All you want ',
-      imageAsset: 'assets/images/farmer_one.png',
+      imageAsset: 'assets/images/add_user.png',
       imageHeightMultiple: 10.0,
     ),
     const SingleIntroScreen(
       sideDotsBgColor: Colors.green,
-      title: 'Farmerz Tool',
+      title: 'Alpha Staffing',
       description: 'All you want ',
-      imageAsset: 'assets/images/farmer_two.png',
+      imageAsset: 'assets/images/add_user.png',
       imageHeightMultiple: 10.0,
     ),
     const SingleIntroScreen(
       sideDotsBgColor: Colors.green,
-      title: 'Farmerz Tool',
+      title: 'Alpha',
       description: 'All you want ',
-      imageAsset: 'assets/images/farmer_three.png',
+      imageAsset: 'assets/images/add_user.png',
       imageHeightMultiple: 10.0,
     ),
     const SingleIntroScreen(
-      title: 'Farmerz Tool',
+      title: 'Alpha',
       sideDotsBgColor: Colors.green,
       description: 'All you want ',
-      imageAsset: 'assets/images/farmer_four.png',
+      imageAsset: 'assets/images/add_user.png',
       imageHeightMultiple: 10.0,
     ),
   ];
@@ -42,15 +42,14 @@ class WelcomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedIntroduction(
-      footerBgColor: Colors.green,
-      isFullScreen: true,
-      slides: pages,
-      indicatorType: IndicatorType.circle,
-      onDone: ()async{
-        await CacheUtils.updateOnboardingStatus(true).then((value){
-          Get.offAllNamed(RoutesHelper.loginScreen);
+        footerBgColor: Colors.green,
+        isFullScreen: true,
+        slides: pages,
+        indicatorType: IndicatorType.circle,
+        onDone: () async {
+          await CacheUtils.updateOnboardingStatus(true).then((value) {
+            Get.offAllNamed(RoutesHelper.loginScreen);
+          });
         });
-      }
-    );
   }
 }
