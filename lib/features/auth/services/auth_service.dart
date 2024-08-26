@@ -203,6 +203,21 @@ class AuthServices {
       );
       return APIResponse(success: false, message: 'An error occurred: ${e.toString()}');
     }
+
+    // void _handlePhoneNumberSubmit(String phoneNumber) async {
+    //   final response = await AuthServices.requestVerificationCode(
+    //     phoneNumber: phoneNumber,
+    //     onCodeSent: (verificationId) {
+    //       Get.to(() => OTPScreen(verificationId: verificationId));
+    //     },
+    //   );
+    //
+    //   if (!response.success) {
+    //     // Handle the API response error if needed
+    //     print(response.message);
+    //   }
+    // }
+
   }
 
 }

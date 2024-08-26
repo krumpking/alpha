@@ -1,6 +1,8 @@
 import 'package:alpha/core/constants/color_constants.dart';
+import 'package:alpha/core/utils/routes.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../core/constants/local_image_constants.dart';
@@ -125,9 +127,12 @@ class _AdminStuffStatsState extends State<AdminStuffStats> {
                   ),
 
                   Expanded(
-                      child: statWidget(
-                          number: "Staff",
-                          title: "Add/Remove"
+                      child: GestureDetector(
+                        onTap: ()=> Get.toNamed(RoutesHelper.viewUserScreen),
+                        child: statWidget(
+                            number: "Staff",
+                            title: "Add/Remove"
+                        ),
                       )
                   ),
                 ],

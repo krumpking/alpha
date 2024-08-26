@@ -1,4 +1,5 @@
 import 'package:alpha/features/add_user/pages/add_user.dart';
+import 'package:alpha/features/add_user/pages/view_users.dart';
 import 'package:alpha/features/auth/handlers/auth_handler.dart';
 import 'package:alpha/features/auth/pages/email_verification.dart';
 import 'package:alpha/features/auth/pages/forgot_password.dart';
@@ -26,7 +27,8 @@ class RoutesHelper {
   static String adminHomeScreen = '/adminHome';
   static String userHomeScreen = '/userHome';
   static String adminStatsScreen = '/adminStats';
-  static String adminAddUserScreen = '/addStats';
+  static String adminAddUserScreen = '/addUser';
+  static String viewUserScreen = '/viewUsers';
 
 
   static getWelcomeRoute (String name)=> "$welcomeScreen?name=$name";
@@ -40,6 +42,7 @@ class RoutesHelper {
   static getUserHomeRoute (String name)=> "$userHomeScreen?name=$name";
   static getAdminStatsRoute (String name)=> "$adminStatsScreen?name=$name";
   static getAdminAddUserRoute (String name)=> "$adminAddUserScreen?name=$name";
+  static getAdminViewUserRoute (String name)=> "$viewUserScreen?name=$name";
 
 
   static List<GetPage> routes = [
@@ -92,6 +95,11 @@ class RoutesHelper {
     GetPage(
         name: adminAddUserScreen,
         page: ()=> const AdminAddUser()
+    ),
+
+    GetPage(
+        name: viewUserScreen,
+        page: ()=> const AdminViewUsers()
     ),
 
 

@@ -54,7 +54,7 @@ class AddUserHelper {
       barrierDismissible: false,
     );
 
-    await AddUserServices.addUserToFirebase(
+    await StuffServices.addStuffToFirebase(
       email: email,
       selectedRole: role.toLowerCase(),
       phoneNumber: phoneNUmber
