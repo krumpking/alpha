@@ -19,53 +19,60 @@ class _AdminStuffStatsState extends State<AdminStuffStats> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Pallete.primaryColor,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(300),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Pallete.primaryColor
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              ClipOval(
-                child: CachedNetworkImage(
-                  imageUrl: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                  width: MediaQuery.of(context).size.height * 0.18,
-                  height: MediaQuery.of(context).size.height * 0.18,
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) => Skeletonizer(
-                    enabled: true,
-                    child: SizedBox(
-                      height: MediaQuery.of(context).size.height*0.45,
-                      child: Image.asset(LocalImageConstants.logo),
+      appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
+        backgroundColor: Pallete.primaryColor,
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(220),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Pallete.primaryColor
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ClipOval(
+                  child: CachedNetworkImage(
+                    imageUrl: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                    width: MediaQuery.of(context).size.height * 0.18,
+                    height: MediaQuery.of(context).size.height * 0.18,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => Skeletonizer(
+                      enabled: true,
+                      child: SizedBox(
+                        height: MediaQuery.of(context).size.height*0.45,
+                        child: Image.asset(LocalImageConstants.logo),
+                      ),
                     ),
+                    errorWidget: (context, url, error) =>
+                    const Icon(Icons.error),
                   ),
-                  errorWidget: (context, url, error) =>
-                  const Icon(Icons.error),
                 ),
-              ),
 
-              const Text(
-                'Alpha Imperial',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                    fontSize: 20
+                const Text(
+                  'Alpha Imperial',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                      fontSize: 20
+                  ),
                 ),
-              ),
 
-              const Text(
-                'Our Monthly Stats',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 14
+                const Text(
+                  'Our Monthly Stats',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14
+                  ),
                 ),
-              )
-            ],
-          ),
-        )
+                const SizedBox(
+                  height: 20,
+                ),
+              ],
+            ),
+          )
+        ),
       ),
       body: Container(
         padding: const EdgeInsets.all(
