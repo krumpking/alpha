@@ -53,23 +53,27 @@ class _AdminDrawerState extends State<AdminDrawer> {
                         ],
                       ),
                       child: ClipOval(
-                        child: CachedNetworkImage(
-                          imageUrl: widget.user.photoURL ??
-                              "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                          width: MediaQuery.of(context).size.height * 0.18,
-                          height: MediaQuery.of(context).size.height * 0.18,
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) => Skeletonizer(
-                            enabled: true,
-                            child: SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.45,
-                              child: Image.asset(LocalImageConstants.logo),
-                            ),
+                          child: SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.45,
+                        child: Image.asset(LocalImageConstants.logo),
+                      )
+                          //  CachedNetworkImage(
+                          //   imageUrl: widget.user.photoURL ??
+                          //       "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                          //   width: MediaQuery.of(context).size.height * 0.18,
+                          //   height: MediaQuery.of(context).size.height * 0.18,
+                          //   fit: BoxFit.cover,
+                          //   placeholder: (context, url) => Skeletonizer(
+                          //     enabled: true,
+                          //     child: SizedBox(
+                          //       height: MediaQuery.of(context).size.height * 0.45,
+                          //       child: Image.asset(LocalImageConstants.logo),
+                          //     ),
+                          //   ),
+                          //   errorWidget: (context, url, error) =>
+                          //       const Icon(Icons.error),
+                          // ),
                           ),
-                          errorWidget: (context, url, error) =>
-                              const Icon(Icons.error),
-                        ),
-                      ),
                     ),
                     Container(
                       margin: const EdgeInsets.only(top: 15),
