@@ -23,10 +23,6 @@ class Sidebar extends StatelessWidget {
         hoverColor: Theme.of(context).primaryColor,
         textStyle: TextStyle(color: Pallete.primaryColor),
         selectedTextStyle: TextStyle(color: Pallete.primaryColor),
-        hoverTextStyle: const TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.w500,
-        ),
         itemTextPadding: const EdgeInsets.only(left: 30),
         selectedItemTextPadding: const EdgeInsets.only(left: 30),
         itemDecoration: BoxDecoration(
