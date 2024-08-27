@@ -38,8 +38,8 @@ class AdminViewUsers extends ConsumerWidget {
               itemBuilder: (context, index) {
                 final user = users[index];
                 return Container(
-                  padding: EdgeInsets.all(8),
-                  margin: EdgeInsets.symmetric(
+                  padding: const EdgeInsets.all(8),
+                  margin: const EdgeInsets.symmetric(
                      vertical: 8
                   ),
                   decoration: BoxDecoration(
