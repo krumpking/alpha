@@ -132,14 +132,19 @@ class AuthServices {
   }
 
 
-  static Future<APIResponse<String?>> fetchUserRole(String uid) async {
+  static Future<APIResponse<String?>> fetchUserRole(String email) async {
     final usersRef = FirebaseFirestore.instance.collection('users');
-    final userDoc = await usersRef.doc(uid).get();
 
-    if (userDoc.exists) {
-      return APIResponse(success: true, data: userDoc.data()?['role'], message: 'Role fetched successful');
-    }else{
-      return APIResponse(success: false, message: 'Role fetching failed');
+    // Query the collection to find a user document with the specified email
+    final querySnapshot = await usersRef.where('email', isEqualTo: email).get();
+
+    // Check if any documents are found
+    if (querySnapshot.docs.isNotEmpty) {
+      // Get the first document found (assuming email is unique)
+      final userDoc = querySnapshot.docs.first;
+      return APIResponse(success: true, data: userDoc.data()['role'], message: 'Role fetched successfully');
+    } else {
+      return APIResponse(success: false, message: 'Role fetching failed: no user found with the specified email');
     }
   }
 
