@@ -4,9 +4,12 @@ import 'package:alpha/core/constants/color_constants.dart';
 import 'package:alpha/custom_widgets/cards/task_item.dart';
 import 'package:alpha/custom_widgets/text_fields/custom_text_field.dart';
 import 'package:alpha/features/home/services/dummy.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../../core/constants/dimensions.dart';
 import '../../../custom_widgets/cards/staff_card.dart';
+import '../../../custom_widgets/sidebar/user_drawer.dart';
 
 class UserHomeScreen extends StatefulWidget {
   const UserHomeScreen({super.key});
@@ -24,6 +27,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> with SingleTickerProvid
     Colors.purple,
     Colors.amber
   ];
+  final _key = GlobalKey<ScaffoldState>();
+  final user = FirebaseAuth.instance.currentUser;
+
 
 
   @override
@@ -41,6 +47,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> with SingleTickerProvid
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _key,
+      drawer: Dimensions.isSmallScreen ? UserDrawer(user: user!,) : null,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         bottom: PreferredSize(
@@ -51,6 +59,12 @@ class _UserHomeScreenState extends State<UserHomeScreen> with SingleTickerProvid
               children: [
                 Row(
                   children: [
+                    if(Dimensions.isSmallScreen)IconButton(
+                      onPressed: (){
+                        _key.currentState!.openDrawer();
+                      },
+                      icon: const Icon(Icons.menu),
+                    ),
                     Container(
                       width: 120,
                       height: 120,
@@ -100,7 +114,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> with SingleTickerProvid
           )
         ),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -168,7 +183,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> with SingleTickerProvid
                 Tab(text: 'Shifts Done'),
               ],
             ),
-            Expanded(
+            SizedBox(
+                height: 400,
               child: TabBarView(
                 controller: _tabController,
                 children: [
@@ -185,39 +201,40 @@ class _UserHomeScreenState extends State<UserHomeScreen> with SingleTickerProvid
   }
 
   Widget _buildTabCategory(){
-    return ListView(
-      physics: const BouncingScrollPhysics(),
-      children: const [
-        TaskItemCard(
-          name: 'NHS Shifts',
-          role: 'Hospital',
-          time: '12/08/24 1:00pm - 2:00pm',
-          type: 'Available',
-        ),
+    return SizedBox(
+      height: 800,
+      child: ListView(
+        physics: const BouncingScrollPhysics(),
+        children: const [
+          TaskItemCard(
+            name: 'NHS Shifts',
+            role: 'Hospital',
+            time: '12/08/24 1:00pm - 2:00pm',
+            type: 'Available',
+          ),
 
-        TaskItemCard(
-          name: 'NHS Shifts',
-          role: 'Hospital',
-          time: '12/08/24 1:00pm - 2:00pm',
-          type: 'Available',
-        ),
+          TaskItemCard(
+            name: 'NHS Shifts',
+            role: 'Hospital',
+            time: '12/08/24 1:00pm - 2:00pm',
+            type: 'Available',
+          ),
 
-        TaskItemCard(
-          name: 'NHS Shifts',
-          role: 'Hospital',
-          time: '12/08/24 1:00pm - 2:00pm',
-          type: 'Available',
-        ),
+          TaskItemCard(
+            name: 'NHS Shifts',
+            role: 'Hospital',
+            time: '12/08/24 1:00pm - 2:00pm',
+            type: 'Available',
+          ),
 
-        TaskItemCard(
-          name: 'NHS Shifts',
-          role: 'Hospital',
-          time: '12/08/24 1:00pm - 2:00pm',
-          type: 'Available',
-        ),
-
-
-      ],
+          TaskItemCard(
+            name: 'NHS Shifts',
+            role: 'Hospital',
+            time: '12/08/24 1:00pm - 2:00pm',
+            type: 'Available',
+          ),
+        ],
+      ),
     );
   }
 

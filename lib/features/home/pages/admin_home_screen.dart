@@ -114,7 +114,8 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> with SingleTickerProv
           )
         ),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -185,7 +186,8 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> with SingleTickerProv
                 Tab(text: 'Care/Support Workers'),
               ],
             ),
-            Expanded(
+            SizedBox(
+                height: 400,
               child: TabBarView(
                 controller: _tabController,
                 children: [
