@@ -162,7 +162,7 @@ class AuthHelpers {
     UserRole? userRole = await CacheUtils.getUserRoleFromCache();
 
     if (userRole == null) {
-      await AuthServices.fetchUserRole(user.uid).then((response) async{
+      await AuthServices.fetchUserRole(user.email!).then((response) async{
 
         DevLogs.logInfo("USER ROLE = ${response.data}");
 
