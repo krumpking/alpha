@@ -1,3 +1,6 @@
+
+// UserProfile model with toJson and fromJson methods
+
 import 'dart:io';
 
 class UserProfile {
