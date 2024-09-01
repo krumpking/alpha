@@ -1,14 +1,16 @@
 import 'package:alpha/core/constants/color_constants.dart';
 import 'package:alpha/custom_widgets/custom_button/general_button.dart';
 import 'package:alpha/custom_widgets/text_fields/custom_text_field.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:extended_phone_number_input/consts/enums.dart';
 import 'package:extended_phone_number_input/phone_number_controller.dart';
 import 'package:extended_phone_number_input/phone_number_input.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../../../core/constants/local_image_constants.dart';
 import '../../../custom_widgets/custom_dropdown.dart';
+import '../../../models/user_profile.dart';
 import '../helper/add_user_helper.dart';
+import 'dart:io';
 
 class AdminAddUser extends StatefulWidget {
   const AdminAddUser({super.key});
@@ -21,12 +23,66 @@ class _AdminAddUserState extends State<AdminAddUser> {
   String selectedRole = 'User';
   PhoneNumberInputController? phoneNumberController;
   TextEditingController emailController = TextEditingController();
-
+  TextEditingController nameController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+  TextEditingController previousEmployerController = TextEditingController();
+  TextEditingController contactInformationController = TextEditingController();
+  TextEditingController documentNameController = TextEditingController();
+  String selectedCurrentRole = "Nurse";
+  List<String> specialisations = [];
+  String? profilePicturePath;
+  File? selectedDocument;
+  DateTime? expiryDate;
+  DateTime? preferredWorkDay;
 
   @override
   void initState() {
     super.initState();
     phoneNumberController = PhoneNumberInputController(context);
+  }
+
+  Future<void> pickExpiryDate() async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null && picked != expiryDate) {
+      setState(() {
+        expiryDate = picked;
+      });
+    }
+  }
+
+  Future<void> pickPreferredWorkDay() async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null && picked != preferredWorkDay) {
+      setState(() {
+        preferredWorkDay = picked;
+      });
+    }
+  }
+
+  Future<void> pickDocument() async {
+    // Implement file picking logic, using file picker or image picker
+  }
+
+  Future<void> pickProfilePicture() async {
+    // Implement image picking logic
+  }
+
+  void addSpecialisation(String value) {
+    if (value.isNotEmpty && !specialisations.contains(value)) {
+      setState(() {
+        specialisations.add(value);
+      });
+    }
   }
 
   @override
@@ -45,37 +101,54 @@ class _AdminAddUserState extends State<AdminAddUser> {
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
-            const SizedBox(height: 30),
-            ClipOval(
-              child: Image.asset(
-                LocalImageConstants.addUser,
-                width: MediaQuery.of(context).size.height * 0.18,
-                height: MediaQuery.of(context).size.height * 0.18,
+            const SizedBox(height: 20),
+            GestureDetector(
+              onTap: pickProfilePicture,
+              child: ClipOval(
+                child: profilePicturePath != null
+                    ? Image.file(
+                  File(profilePicturePath!),
+                  width: MediaQuery.of(context).size.height * 0.18,
+                  height: MediaQuery.of(context).size.height * 0.18,
+                )
+                    : Image.asset(
+                  LocalImageConstants.addUser,
+                  width: MediaQuery.of(context).size.height * 0.18,
+                  height: MediaQuery.of(context).size.height * 0.18,
+                ),
               ),
             ),
-            const SizedBox(height: 50),
+            const SizedBox(height: 30),
+            CustomTextField(
+              controller: nameController,
+              labelText: 'Name',
+              prefixIcon: const Icon(Icons.person, color: Colors.grey),
+            ),
+            const SizedBox(height: 10),
             CustomDropDown(
-                prefixIcon: Icons.person,
-                items: const ['Admin', 'User'],
-                selectedValue: selectedRole,
-                onChanged: (value){
-                  setState(() {
-                    selectedRole = value!;
-                  });
-                },
-                isEnabled: true
+              prefixIcon: Icons.person,
+              items: const ['Admin', 'User'],
+              selectedValue: selectedRole,
+              onChanged: (value) {
+                setState(() {
+                  selectedRole = value!;
+                });
+              },
+              isEnabled: true,
             ),
             const SizedBox(height: 10),
             CustomTextField(
               controller: emailController,
               labelText: 'Email Address',
-              prefixIcon: const Icon(
-                Icons.email_outlined,
-                color: Colors.grey,
-              ),
+              prefixIcon: const Icon(Icons.email_outlined, color: Colors.grey),
             ),
             const SizedBox(height: 10),
-
+            CustomTextField(
+              controller: addressController,
+              labelText: 'Address',
+              prefixIcon: const Icon(Icons.home, color: Colors.grey),
+            ),
+            const SizedBox(height: 10),
             PhoneNumberInput(
               initialCountry: 'ZW',
               locale: 'fr',
@@ -83,35 +156,147 @@ class _AdminAddUserState extends State<AdminAddUser> {
               controller: phoneNumberController,
               countryListMode: CountryListMode.bottomSheet,
               enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: Colors.grey)
+                borderRadius: BorderRadius.circular(10),
+                borderSide: const BorderSide(color: Colors.grey),
               ),
               focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: Pallete.primaryColor)
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(color: Pallete.primaryColor),
               ),
               allowPickFromContacts: false,
             ),
-
+            const SizedBox(height: 10),
+            CustomTextField(
+              controller: contactInformationController,
+              labelText: 'Contact Information',
+              prefixIcon: const Icon(Icons.phone, color: Colors.grey),
+            ),
+            const SizedBox(height: 10),
+            GestureDetector(
+              onTap: pickPreferredWorkDay,
+              child: CustomTextField(
+                labelText: 'Preferred Work Days',
+                prefixIcon: const Icon(Icons.calendar_today, color: Colors.grey),
+                enabled: false,
+                controller: TextEditingController(
+                  text: preferredWorkDay != null
+                      ? DateFormat('yyyy-MM-dd').format(preferredWorkDay!)
+                      : '',
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            CustomTextField(
+              controller: previousEmployerController,
+              labelText: 'Previous Employer\'s Name',
+              prefixIcon: const Icon(Icons.business_center, color: Colors.grey),
+            ),
+            const SizedBox(height: 10),
+            CustomDropDown(
+              prefixIcon: Icons.work,
+              items: const [
+                'Nurse',
+                'Social Worker',
+                'Care/Support Worker',
+                'Range'
+              ],
+              selectedValue: selectedCurrentRole,
+              onChanged: (value) {
+                setState(() {
+                  selectedCurrentRole = value!;
+                });
+              },
+              isEnabled: true,
+            ),
+            const SizedBox(height: 10),
+            Wrap(
+              spacing: 8.0,
+              runSpacing: 4.0,
+              children: specialisations
+                  .map((spec) => Chip(
+                label: Text(spec),
+                backgroundColor: Pallete.primaryColor.withOpacity(0.7),
+                deleteIcon: const Icon(Icons.close),
+                onDeleted: () {
+                  setState(() {
+                    specialisations.remove(spec);
+                  });
+                },
+              ))
+                  .toList(),
+            ),
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Specialisations',
+                prefixIcon: const Icon(Icons.medical_services, color: Colors.grey),
+              ),
+              onSubmitted: addSpecialisation,
+            ),
+            const SizedBox(height: 10),
+            GestureDetector(
+              onTap: pickDocument,
+              child: CustomTextField(
+                labelText: 'Document',
+                prefixIcon: const Icon(Icons.file_present, color: Colors.grey),
+                enabled: false,
+                controller: TextEditingController(
+                  text: selectedDocument != null
+                      ? selectedDocument!.path.split('/').last
+                      : '',
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            GestureDetector(
+              onTap: pickExpiryDate,
+              child: CustomTextField(
+                labelText: 'Expiry Date',
+                prefixIcon: const Icon(Icons.date_range, color: Colors.grey),
+                enabled: false,
+                controller: TextEditingController(
+                  text: expiryDate != null
+                      ? DateFormat('yyyy-MM-dd').format(expiryDate!)
+                      : '',
+                ),
+              ),
+            ),
             const SizedBox(height: 30),
-
-
             Center(
               child: GeneralButton(
-                onTap: () => AddUserHelper.validateAndSubmitForm(email: emailController.text.trim(), phoneNUmber: phoneNumberController!.fullPhoneNumber.trim(), password: "alpha1234", role: selectedRole),
+                onTap: () => AddUserHelper.validateAndSubmitForm(
+                  email: emailController.text.trim(),
+                  phoneNumber: phoneNumberController!.fullPhoneNumber.trim(),
+                  password: "alpha1234",
+                  role: selectedRole,
+                  userProfile: UserProfile(
+                    name: nameController.text.trim(),
+                    email: emailController.text.trim(),
+                    phoneNumber: phoneNumberController!.fullPhoneNumber.trim(),
+                    address: addressController.text.trim(),
+                    preferredWorkDays: preferredWorkDay,
+                    previousEmployer: previousEmployerController.text.trim(),
+                    contactInformation:
+                    contactInformationController.text.trim(),
+                    currentRole: selectedCurrentRole!,
+                    specialisations: specialisations,
+                    profilePicture: profilePicturePath,
+                    document: selectedDocument,
+                    documentName: documentNameController.text.trim(),
+                    expiryDate: expiryDate,
+                  ),
+                ),
                 borderRadius: 10,
                 btnColor: Pallete.primaryColor,
                 width: 150,
                 child: const Text(
                   "Add User",
                   style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold
-                  ),
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

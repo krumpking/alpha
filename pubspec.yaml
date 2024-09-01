@@ -52,6 +52,8 @@ dependencies:
   sidebarx: ^0.17.1
   cached_network_image: ^3.4.0
   skeletonizer: ^1.4.2
+  file_picker: ^8.0.7
+  intl: ^0.19.0
 
 dev_dependencies:
   flutter_test:
