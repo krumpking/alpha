@@ -267,9 +267,9 @@ class _AdminAddUserState extends State<AdminAddUser> {
                   .toList(),
             ),
             TextField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Specialisations',
-                prefixIcon: const Icon(Icons.medical_services, color: Colors.grey),
+                prefixIcon: Icon(Icons.medical_services, color: Colors.grey),
               ),
               onSubmitted: addSpecialisation,
             ),

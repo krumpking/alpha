@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-
+import 'package:get/get.dart';
+import '../../core/constants/color_constants.dart';
+import '../../core/constants/dimensions.dart';
+import '../../custom_widgets/cards/task_item.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -9,238 +11,164 @@ class ProfileScreen extends StatefulWidget {
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
-  int _selectedIndex = 0;
-  final List<String> _tabs = ['Documents', 'Assigned Shifts', 'Notes'];
+class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProviderStateMixin{
+  late TabController _tabController;
+
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          _buildHeader(),
-          _buildTabs(),
-          Expanded(
-            child: _buildTabContent(),
-          ),
-        ],
-      ),
-    );
-  }
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(110),
+            child: Padding(
+                padding:const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        if(Dimensions.isSmallScreen)IconButton(
+                          onPressed: (){
+                            Get.back();
+                          },
+                          icon: const Icon(Icons.arrow_back),
+                        ),
+                        Container(
+                          width: 120,
+                          height: 120,
+                          clipBehavior: Clip.hardEdge,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16)
+                          ),
+                          child: Image.network(
+                            "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 16,
+                        ),
+                        const Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Max Rosco',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            Text(
+                              'Mental Health Nurse',
+                              style: TextStyle(
+                                  fontSize: 12
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
 
-  Widget _buildHeader() {
-    return Container(
-      padding: EdgeInsets.all(16),
-      child: Row(
-        children: [
-          CircleAvatar(
-            radius: 30,
-            backgroundColor: Colors.green,
-          ),
-          SizedBox(width: 16),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+                    const SizedBox(
+                      height: 16,
+                    ),
+                  ],
+                )
+            )
+        ),
+      ),
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
             children: [
-              Text(
-                'NAME',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              TabBar(
+                controller: _tabController,
+                physics: const BouncingScrollPhysics(),
+                isScrollable: true,
+                unselectedLabelStyle: TextStyle(
+                    color: Pallete.greyAccent,
+                    fontSize: 14
+                ),
+                labelStyle: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold
+                ),
+                tabAlignment: TabAlignment.center,
+                tabs: const [
+                  Tab(text: 'Documents'),
+                  Tab(text: 'Assigned Shifts'),
+                  Tab(text: 'Noted'),
+                ],
               ),
-              Text('TITLE'),
+
+              SizedBox(
+                  height: 600,
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: [
+                      _buildTabCategory(),
+                      _buildTabCategory(),
+                      _buildTabCategory(),
+                    ],
+                  )
+              ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTabCategory(){
+    return SizedBox(
+      height: 800,
+      child: ListView(
+        physics: const BouncingScrollPhysics(),
+        children: const [
+          TaskItemCard(
+            name: 'NHS Shifts',
+            role: 'Hospital',
+            time: '12/08/24 1:00pm - 2:00pm',
+            type: 'Available',
+          ),
+
+          TaskItemCard(
+            name: 'NHS Shifts',
+            role: 'Hospital',
+            time: '12/08/24 1:00pm - 2:00pm',
+            type: 'Available',
+          ),
+
+          TaskItemCard(
+            name: 'NHS Shifts',
+            role: 'Hospital',
+            time: '12/08/24 1:00pm - 2:00pm',
+            type: 'Available',
+          ),
+
+          TaskItemCard(
+            name: 'NHS Shifts',
+            role: 'Hospital',
+            time: '12/08/24 1:00pm - 2:00pm',
+            type: 'Available',
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildTabs() {
-    return Container(
-      height: 50,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: _tabs.length,
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: () {
-              setState(() {
-                _selectedIndex = index;
-              });
-            },
-            child: Container(
-              alignment: Alignment.center,
-              margin: EdgeInsets.symmetric(horizontal: 8),
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                    color: _selectedIndex == index ? Colors.blue : Colors.transparent,
-                    width: 2,
-                  ),
-                ),
-              ),
-              child: Text(
-                _tabs[index],
-                style: TextStyle(
-                  color: _selectedIndex == index ? Colors.blue : Colors.black,
-                ),
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _buildTabContent() {
-    switch (_selectedIndex) {
-      case 0:
-        return _buildDocumentsTab();
-      case 1:
-        return _buildAssignedShiftsTab();
-      case 2:
-        return _buildNotesTab();
-      default:
-        return Container();
-    }
-  }
-
-  Widget _buildDocumentsTab() {
-    List<Map<String, dynamic>> documents = [
-      {'name': 'Name of Document', 'type': 'Type of Document', 'expiryDate': DateTime(2023, 7, 10), 'status': 'Expired'},
-      {'name': 'Name of Document', 'type': 'Type of Document', 'expiryDate': DateTime(2023, 9, 1), 'status': 'Close to due'},
-      {'name': 'Name of Document', 'type': 'Type of Document', 'expiryDate': DateTime(2023, 10, 10), 'status': 'Still valid'},
-    ];
-
-    return ListView.builder(
-      itemCount: documents.length,
-      itemBuilder: (context, index) {
-        var document = documents[index];
-        return Card(
-          margin: EdgeInsets.all(8),
-          child: Padding(
-            padding: EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(document['name'], style: TextStyle(fontWeight: FontWeight.bold)),
-                Text(document['type']),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Expiry Date: ${DateFormat('dd MMM yyyy').format(document['expiryDate'])}'),
-                    _buildStatusChip(document['status']),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildStatusChip(String status) {
-    Color color;
-    switch (status) {
-      case 'Expired':
-        color = Colors.red;
-        break;
-      case 'Close to due':
-        color = Colors.orange;
-        break;
-      case 'Still valid':
-        color = Colors.green;
-        break;
-      default:
-        color = Colors.grey;
-    }
-
-    return Chip(
-      label: Text(status),
-      backgroundColor: color,
-      labelStyle: TextStyle(color: Colors.white),
-    );
-  }
-
-  Widget _buildAssignedShiftsTab() {
-    return Column(
-      children: [
-        _buildPreferredWorkDays(),
-        _buildAddressInfo(),
-        _buildFeedbackSection(),
-      ],
-    );
-  }
-
-  Widget _buildPreferredWorkDays() {
-    return Card(
-      margin: EdgeInsets.all(8),
-      child: Padding(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Preferred work days', style: TextStyle(fontWeight: FontWeight.bold)),
-            Text('Flexible/Night'),
-            Wrap(
-              spacing: 8,
-              children: [
-                Chip(label: Text('Monday')),
-                Chip(label: Text('Tuesday')),
-                Chip(label: Text('Wednesday')),
-              ],
-            ),
-            TextButton(
-              onPressed: () {},
-              child: Text('Add/Remove'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildAddressInfo() {
-    return Card(
-      margin: EdgeInsets.all(8),
-      child: Padding(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Address:', style: TextStyle(fontWeight: FontWeight.bold)),
-            Text('Number:'),
-            Text('Main Employer'),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildFeedbackSection() {
-    return Card(
-      margin: EdgeInsets.all(8),
-      child: Padding(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Feedback', style: TextStyle(fontWeight: FontWeight.bold)),
-            Text('Name of hospital'),
-            Text('Completed shift: Time of shift'),
-            TextButton(
-              onPressed: () {},
-              child: Text('Show'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNotesTab() {
-    return Center(
-      child: Text('Notes content goes here'),
-    );
-  }
 }
