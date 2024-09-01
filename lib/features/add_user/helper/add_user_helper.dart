@@ -1,6 +1,7 @@
 import 'package:alpha/features/add_user/services/add_user_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import '../../../custom_widgets/circular_loader/circular_loader.dart';
 import '../../../models/user_profile.dart';
 
@@ -128,4 +129,66 @@ class AddUserHelper {
       duration: const Duration(seconds: 3),
     );
   }
+
+
+
+  static Future<DateTime> pickExpiryDate({required BuildContext context, required DateTime expiryDate}) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null && picked != expiryDate) {
+        expiryDate = picked;
+    }
+
+    return expiryDate;
+  }
+
+  static Future<DateTime> pickPreferredWorkDay({required BuildContext context, required DateTime preferredWorkDay}) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null && picked != preferredWorkDay) {
+        preferredWorkDay = picked;
+    }
+
+    return preferredWorkDay;
+  }
+
+  static Future<String> pickDob({required BuildContext context, required DateTime dob}) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime(2000),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null && picked != dob) {
+        dob = picked;
+    }
+
+    return DateFormat('yyyy-MM-dd').format(dob);
+  }
+
+  Future<void> pickDocument() async {
+    // Implement file picking logic, using file picker or image picker
+  }
+
+  Future<void> pickProfilePicture() async {
+    // Implement image picking logic
+  }
+
+  static List<String> addSpecialisation({required String value, required List<String> specialisations}) {
+    if (value.isNotEmpty && !specialisations.contains(value)) {
+        specialisations.add(value);
+    }
+
+    return specialisations;
+  }
+
+
 }

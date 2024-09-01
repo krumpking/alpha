@@ -44,64 +44,6 @@ class _AdminAddUserState extends State<AdminAddUser> {
     phoneNumberController = PhoneNumberInputController(context);
   }
 
-  Future<void> pickExpiryDate() async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime.now(),
-      lastDate: DateTime(2101),
-    );
-    if (picked != null && picked != expiryDate) {
-      setState(() {
-        expiryDate = picked;
-      });
-    }
-  }
-
-  Future<void> pickPreferredWorkDay() async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime.now(),
-      lastDate: DateTime(2101),
-    );
-    if (picked != null && picked != preferredWorkDay) {
-      setState(() {
-        preferredWorkDay = picked;
-      });
-    }
-  }
-
-  Future<void> pickDob() async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime(2000),
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
-    );
-    if (picked != null && picked != dob) {
-      setState(() {
-        dob = picked;
-        dobController.text = DateFormat('yyyy-MM-dd').format(dob!);
-      });
-    }
-  }
-
-  Future<void> pickDocument() async {
-    // Implement file picking logic, using file picker or image picker
-  }
-
-  Future<void> pickProfilePicture() async {
-    // Implement image picking logic
-  }
-
-  void addSpecialisation(String value) {
-    if (value.isNotEmpty && !specialisations.contains(value)) {
-      setState(() {
-        specialisations.add(value);
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -137,12 +79,6 @@ class _AdminAddUserState extends State<AdminAddUser> {
               ),
             ),
             const SizedBox(height: 30),
-            CustomTextField(
-              controller: nameController,
-              labelText: 'Name',
-              prefixIcon: const Icon(Icons.person, color: Colors.grey),
-            ),
-            const SizedBox(height: 10),
             CustomDropDown(
               prefixIcon: Icons.person,
               items: const ['Admin', 'User'],
@@ -150,6 +86,36 @@ class _AdminAddUserState extends State<AdminAddUser> {
               onChanged: (value) {
                 setState(() {
                   selectedRole = value!;
+                });
+              },
+              isEnabled: true,
+            ),
+            const SizedBox(height: 10),
+
+            CustomTextField(
+              controller: nameController,
+              labelText: 'Name',
+              prefixIcon: const Icon(Icons.person, color: Colors.grey),
+            ),
+            const SizedBox(height: 10),
+            GestureDetector(
+              onTap: pickDob,
+              child: CustomTextField(
+                controller: dobController,
+                labelText: 'Date of Birth',
+                prefixIcon: const Icon(Icons.cake, color: Colors.grey),
+                enabled: false,
+              ),
+            ),
+
+            const SizedBox(height: 10),
+            CustomDropDown(
+              prefixIcon: Icons.transgender,
+              items: const ['Male', 'Female', 'Other'],
+              selectedValue: selectedGender,
+              onChanged: (value) {
+                setState(() {
+                  selectedGender = value!;
                 });
               },
               isEnabled: true,
@@ -184,12 +150,6 @@ class _AdminAddUserState extends State<AdminAddUser> {
               allowPickFromContacts: false,
             ),
             const SizedBox(height: 10),
-            CustomTextField(
-              controller: contactInformationController,
-              labelText: 'Contact Information',
-              prefixIcon: const Icon(Icons.phone, color: Colors.grey),
-            ),
-            const SizedBox(height: 10),
             GestureDetector(
               onTap: pickPreferredWorkDay,
               child: CustomTextField(
@@ -204,32 +164,16 @@ class _AdminAddUserState extends State<AdminAddUser> {
               ),
             ),
             const SizedBox(height: 10),
-            GestureDetector(
-              onTap: pickDob,
-              child: CustomTextField(
-                controller: dobController,
-                labelText: 'Date of Birth',
-                prefixIcon: const Icon(Icons.cake, color: Colors.grey),
-                enabled: false,
-              ),
-            ),
-            const SizedBox(height: 10),
-            CustomDropDown(
-              prefixIcon: Icons.transgender,
-              items: const ['Male', 'Female', 'Other'],
-              selectedValue: selectedGender,
-              onChanged: (value) {
-                setState(() {
-                  selectedGender = value!;
-                });
-              },
-              isEnabled: true,
-            ),
-            const SizedBox(height: 10),
             CustomTextField(
               controller: previousEmployerController,
               labelText: 'Previous Employer\'s Name',
               prefixIcon: const Icon(Icons.business_center, color: Colors.grey),
+            ),
+            const SizedBox(height: 10),
+            CustomTextField(
+              controller: contactInformationController,
+              labelText: 'Contact Information',
+              prefixIcon: const Icon(Icons.phone, color: Colors.grey),
             ),
             const SizedBox(height: 10),
             CustomDropDown(
