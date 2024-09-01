@@ -1,6 +1,3 @@
-
-// UserProfile model with toJson and fromJson methods
-
 import 'dart:io';
 
 class UserProfile {
@@ -17,6 +14,8 @@ class UserProfile {
   File? document;
   String documentName;
   DateTime? expiryDate;
+  DateTime? dob;
+  String? gender;
 
   UserProfile({
     required this.name,
@@ -32,6 +31,8 @@ class UserProfile {
     this.document,
     required this.documentName,
     this.expiryDate,
+    required this.dob,
+    required this.gender,
   });
 
   Map<String, dynamic> toJson() => {
@@ -48,6 +49,8 @@ class UserProfile {
     'document': document?.path,
     'documentName': documentName,
     'expiryDate': expiryDate?.toIso8601String(),
+    'dob': dob?.toIso8601String(),
+    'gender': gender,
   };
 
   factory UserProfile.fromJson(Map<String, dynamic> json) => UserProfile(
@@ -68,5 +71,7 @@ class UserProfile {
     expiryDate: json['expiryDate'] != null
         ? DateTime.parse(json['expiryDate'])
         : null,
+    dob: json['dob'] != null ? DateTime.parse(json['dob']) : null,
+    gender: json['gender'],
   );
 }

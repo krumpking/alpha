@@ -28,12 +28,15 @@ class _AdminAddUserState extends State<AdminAddUser> {
   TextEditingController previousEmployerController = TextEditingController();
   TextEditingController contactInformationController = TextEditingController();
   TextEditingController documentNameController = TextEditingController();
+  TextEditingController dobController = TextEditingController();
+  String selectedGender = 'Male';
   String selectedCurrentRole = "Nurse";
   List<String> specialisations = [];
   String? profilePicturePath;
   File? selectedDocument;
   DateTime? expiryDate;
   DateTime? preferredWorkDay;
+  DateTime? dob;
 
   @override
   void initState() {
@@ -65,6 +68,21 @@ class _AdminAddUserState extends State<AdminAddUser> {
     if (picked != null && picked != preferredWorkDay) {
       setState(() {
         preferredWorkDay = picked;
+      });
+    }
+  }
+
+  Future<void> pickDob() async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime(2000),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null && picked != dob) {
+      setState(() {
+        dob = picked;
+        dobController.text = DateFormat('yyyy-MM-dd').format(dob!);
       });
     }
   }
@@ -186,6 +204,28 @@ class _AdminAddUserState extends State<AdminAddUser> {
               ),
             ),
             const SizedBox(height: 10),
+            GestureDetector(
+              onTap: pickDob,
+              child: CustomTextField(
+                controller: dobController,
+                labelText: 'Date of Birth',
+                prefixIcon: const Icon(Icons.cake, color: Colors.grey),
+                enabled: false,
+              ),
+            ),
+            const SizedBox(height: 10),
+            CustomDropDown(
+              prefixIcon: Icons.transgender,
+              items: const ['Male', 'Female', 'Other'],
+              selectedValue: selectedGender,
+              onChanged: (value) {
+                setState(() {
+                  selectedGender = value!;
+                });
+              },
+              isEnabled: true,
+            ),
+            const SizedBox(height: 10),
             CustomTextField(
               controller: previousEmployerController,
               labelText: 'Previous Employer\'s Name',
@@ -215,7 +255,8 @@ class _AdminAddUserState extends State<AdminAddUser> {
               children: specialisations
                   .map((spec) => Chip(
                 label: Text(spec),
-                backgroundColor: Pallete.primaryColor.withOpacity(0.7),
+                backgroundColor:
+                Pallete.primaryColor.withOpacity(0.7),
                 deleteIcon: const Icon(Icons.close),
                 onDeleted: () {
                   setState(() {
@@ -277,7 +318,9 @@ class _AdminAddUserState extends State<AdminAddUser> {
                     previousEmployer: previousEmployerController.text.trim(),
                     contactInformation:
                     contactInformationController.text.trim(),
-                    currentRole: selectedCurrentRole!,
+                    currentRole: selectedCurrentRole,
+                    gender: selectedGender,
+                    dob: dob,
                     specialisations: specialisations,
                     profilePicture: profilePicturePath,
                     document: selectedDocument,
@@ -297,6 +340,7 @@ class _AdminAddUserState extends State<AdminAddUser> {
                 ),
               ),
             ),
+
           ],
         ),
       ),
