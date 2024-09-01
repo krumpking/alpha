@@ -5,6 +5,7 @@ import 'package:alpha/features/auth/pages/email_verification.dart';
 import 'package:alpha/features/auth/pages/forgot_password.dart';
 import 'package:alpha/features/home/pages/admin_home_screen.dart';
 import 'package:alpha/features/home/pages/user_home_screen.dart';
+import 'package:alpha/features/manage_profile/manage_profile_screen.dart';
 import 'package:alpha/features/statistics/pages/admin_stuff_stats.dart';
 import 'package:alpha/features/welcome/pages/onboard.dart';
 import 'package:alpha/features/welcome/pages/splash.dart';
@@ -29,6 +30,7 @@ class RoutesHelper {
   static String adminStatsScreen = '/adminStats';
   static String adminAddUserScreen = '/addUser';
   static String viewUserScreen = '/viewUsers';
+  static String userProfileScreen = '/profile';
 
 
   static getWelcomeRoute (String name)=> "$welcomeScreen?name=$name";
@@ -91,6 +93,10 @@ class RoutesHelper {
         page: ()=> const AdminHomeScreen()
     ),
 
+    GetPage(
+        name: userProfileScreen,
+        page: ()=> const ProfileScreen()
+    ),
 
     GetPage(
         name: adminAddUserScreen,
