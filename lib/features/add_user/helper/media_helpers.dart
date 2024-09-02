@@ -1,7 +1,12 @@
 import 'dart:io';
 
+import 'package:alpha/features/auth/state/authentication_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../../../custom_widgets/circular_loader/circular_loader.dart';
+import '../services/storage_services.dart';
 
 class MediaHelpers {
   static final User? _currentUser = FirebaseAuth.instance.currentUser;
@@ -55,9 +60,6 @@ class MediaHelpers {
                       GestureDetector(
                         onTap: ()async{
 
-
-                          UserProvider user = Provider.of<UserProvider>(context, listen: false);
-
                           if(files != null && files!.isNotEmpty){
                             showDialog(
                                 context: context,
@@ -75,13 +77,13 @@ class MediaHelpers {
                               );
 
                               await _currentUser!.updatePhotoURL(imageUrl).then((value){
-                                GeneralHelpers.back(context);
+                                Get.back();
                               });
 
                               final updatedUser = FirebaseAuth.instance.currentUser;
-                              user.updateUser(updatedUser);
+                              userProvider.(updatedUser);
 
-                              Fluttertoast.showToast(msg: 'Display Photo updated Successfully');
+                              AuthHelpers.
                             }
 
                             else{

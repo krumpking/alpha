@@ -1,3 +1,4 @@
+import 'package:alpha/custom_widgets/snackbar/custom_snackbar.dart';
 import 'package:alpha/features/add_user/services/add_user_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,72 +16,72 @@ class AddUserHelper {
   }) async {
     // Validate Password
     if (password.isEmpty) {
-      showErrorSnackbar('Password is required.');
+      CustomSnackBar.showErrorSnackbar(message: 'Password is required.');
       return;
     }
 
     if (password.length < 8) {
-      showErrorSnackbar('Password is too short.');
+      CustomSnackBar.showErrorSnackbar(message: 'Password is too short.');
       return;
     }
 
     // Validate Email
     if (!GetUtils.isEmail(email)) {
-      showErrorSnackbar('Please input a valid email.');
+      CustomSnackBar.showErrorSnackbar(message: 'Please input a valid email.');
       return;
     }
 
     // Validate Phone Number
     if (phoneNumber.isEmpty || !GetUtils.isPhoneNumber(phoneNumber)) {
-      showErrorSnackbar('Please input a valid phone number.');
+      CustomSnackBar.showErrorSnackbar(message: 'Please input a valid phone number.');
       return;
     }
 
     // Validate Name
     if (userProfile.name.isEmpty) {
-      showErrorSnackbar('Name is required.');
+      CustomSnackBar.showErrorSnackbar(message: 'Name is required.');
       return;
     }
 
     // Validate Address
     if (userProfile.address.isEmpty) {
-      showErrorSnackbar('Address is required.');
+      CustomSnackBar.showErrorSnackbar(message: 'Address is required.');
       return;
     }
 
     // Validate Previous Employer
     if (userProfile.previousEmployer.isEmpty) {
-      showErrorSnackbar('Previous Employer is required.');
+      CustomSnackBar.showErrorSnackbar(message: 'Previous Employer is required.');
       return;
     }
 
     // Validate Contact Information
     if (userProfile.contactInformation.isEmpty) {
-      showErrorSnackbar('Contact Information is required.');
+      CustomSnackBar.showErrorSnackbar(message: 'Contact Information is required.');
       return;
     }
 
     // Validate Role
     if (role.isEmpty) {
-      showErrorSnackbar('Role is required.');
+      CustomSnackBar.showErrorSnackbar(message: 'Role is required.');
       return;
     }
 
     // Validate Specialisations
     if (userProfile.specialisations.isEmpty) {
-      showErrorSnackbar('At least one specialisation is required.');
+      CustomSnackBar.showErrorSnackbar(message: 'At least one specialisation is required.');
       return;
     }
 
     // Validate Document
     if (userProfile.document == null || userProfile.document!.path.isEmpty) {
-      showErrorSnackbar('Document upload is required.');
+      CustomSnackBar.showErrorSnackbar(message: 'Document upload is required.');
       return;
     }
 
     // Validate Document Expiry Date
     if (userProfile.expiryDate == null) {
-      showErrorSnackbar('Document expiry date is required.');
+      CustomSnackBar.showErrorSnackbar(message: 'Document expiry date is required.');
       return;
     }
 
@@ -100,36 +101,13 @@ class AddUserHelper {
     ).then((response) {
       if (!response.success) {
         if (!Get.isSnackbarOpen) Get.back();
-        showErrorSnackbar(response.message ?? 'Something went wrong');
+        CustomSnackBar.showErrorSnackbar(message: response.message ?? 'Something went wrong');
       } else {
         if (Get.isDialogOpen!) Get.back();
-        showSuccessSnackbar('User account created successfully');
+        CustomSnackBar.showSuccessSnackbar(message: 'User account created successfully');
       }
     });
   }
-
-  static void showErrorSnackbar(String message) {
-    Get.snackbar(
-      'Error',
-      message,
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: Colors.red,
-      colorText: Colors.white,
-      duration: const Duration(seconds: 3),
-    );
-  }
-
-  static void showSuccessSnackbar(String message) {
-    Get.snackbar(
-      'Success',
-      message,
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: Colors.green,
-      colorText: Colors.white,
-      duration: const Duration(seconds: 3),
-    );
-  }
-
 
 
   static Future<DateTime> pickExpiryDate({required BuildContext context, required DateTime expiryDate}) async {
