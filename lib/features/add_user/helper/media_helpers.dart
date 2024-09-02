@@ -1,9 +1,13 @@
-class MediaHelpers {
+import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+
+class MediaHelpers {
   static final User? _currentUser = FirebaseAuth.instance.currentUser;
 
   static Future<List<File>?> onUploadMediaClick({required BuildContext context, required String documentName}) async {
-    List<File>? files = []; // Initialize as an empty list
+    List<File>? files = [];
     showDialog(
         context: context,
         barrierDismissible: true,
@@ -44,7 +48,7 @@ class MediaHelpers {
                     children: [
                       Text(
                         documentName,
-                        style: GoogleFonts.poppins(
+                        style: const TextStyle(
                             fontWeight: FontWeight.bold
                         ),
                       ),
