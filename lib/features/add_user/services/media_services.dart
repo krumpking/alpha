@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
 
 class MediaServices {
@@ -22,6 +24,20 @@ class MediaServices {
     }
 
     return null;
+  }
+
+
+  static Future<File?> pickDocument() async {
+    final result = await FilePicker.platform.pickFiles(type: FileType.any);
+    if (result != null && result.files.single.path != null) {
+      return File(result.files.single.path!);
+    }
+    return null;
+  }
+
+  static Future<String> fileToBase64(File file) async {
+    final bytes = await file.readAsBytes();
+    return base64Encode(bytes);
   }
 
 }

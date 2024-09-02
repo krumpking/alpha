@@ -73,7 +73,7 @@ class AddUserHelper {
     }
 
     // Validate Document
-    if (userProfile.document == null || userProfile.document!.path.isEmpty) {
+    if (userProfile.documentUrl == null) {
       CustomSnackBar.showErrorSnackbar(message: 'Document upload is required.');
       return;
     }
@@ -120,6 +120,60 @@ class AddUserHelper {
 
     return picked;
   }
+
+  static Future<String> showWeekPicker(BuildContext context) async {
+    final selectedDays = await showDialog<List<String>>(
+      context: context,
+      builder: (BuildContext context) {
+        List<String> selectedDays = [];
+        List<String> weekDays = [
+          'Monday', 'Tuesday', 'Wednesday', 'Thursday',
+          'Friday', 'Saturday', 'Sunday'
+        ];
+
+        return AlertDialog(
+          title: const Text('Select Preferred Work Days'),
+          content: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: weekDays.map((day) {
+                  return CheckboxListTile(
+                    title: Text(day),
+                    value: selectedDays.contains(day),
+                    onChanged: (bool? checked) {
+                      setState(() {
+                        if (checked == true) {
+                          selectedDays.add(day);
+                        } else {
+                          selectedDays.remove(day);
+                        }
+                      });
+                    },
+                  );
+                }).toList(),
+              );
+            },
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: Get.back,
+              child: const Text('Cancel')
+            ),
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop(selectedDays);
+              },
+            ),
+          ],
+        );
+      },
+    );
+
+    return selectedDays!.join(', ');
+  }
+
 
   static List<String> addSpecialisation({required String value, required List<String> specialisations}) {
     if (value.isNotEmpty && !specialisations.contains(value)) {

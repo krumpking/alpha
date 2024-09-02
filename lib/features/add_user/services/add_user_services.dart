@@ -26,7 +26,7 @@ class StuffServices {
         'current_role': userProfile.currentRole,
         'specialisations': userProfile.specialisations,
         'profile_picture': userProfile.profilePicture,
-        'document': userProfile.document?.path,
+        'document': userProfile.documentUrl,
         'document_name': userProfile.documentName,
         'document_expiry_date': userProfile.expiryDate?.toIso8601String(),
       };

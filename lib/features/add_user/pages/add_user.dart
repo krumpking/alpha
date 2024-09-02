@@ -2,6 +2,7 @@ import 'package:alpha/core/constants/color_constants.dart';
 import 'package:alpha/custom_widgets/custom_button/general_button.dart';
 import 'package:alpha/custom_widgets/text_fields/custom_text_field.dart';
 import 'package:alpha/features/add_user/helper/media_helpers.dart';
+import 'package:alpha/features/add_user/helper/storage_helper.dart';
 import 'package:extended_phone_number_input/consts/enums.dart';
 import 'package:extended_phone_number_input/phone_number_controller.dart';
 import 'package:extended_phone_number_input/phone_number_input.dart';
@@ -12,7 +13,6 @@ import '../../../custom_widgets/custom_dropdown.dart';
 import '../../../models/user_profile.dart';
 import '../helper/add_user_helper.dart';
 import 'dart:io';
-import '../services/storage_services.dart';
 import '../state/profilr_pic_provider.dart';
 
 class AdminAddUser extends ConsumerStatefulWidget {
@@ -37,7 +37,7 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
   String selectedGender = 'Male';
   String selectedCurrentRole = "Nurse";
   List<String> specialisations = [];
-  File? selectedDocument;
+  String? selectedDocumentUrl;
   DateTime? expiryDate;
   DateTime? preferredWorkDay;
   DateTime? dob;
@@ -86,7 +86,7 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                   image: DecorationImage(
                     fit: BoxFit.contain,
                     image: profilePictureUrl != null
-                        ? NetworkImage(profilePictureUrl!)
+                        ? NetworkImage(profilePictureUrl)
                         : const NetworkImage(
                       'https://cdn-icons-png.flaticon.com/128/15315/15315520.png',
                     ),
@@ -133,7 +133,7 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                 enabled: false,
                 controller: TextEditingController(
                   text: dob != null
-                      ? DateFormat('yyyy-MM-dd').format(preferredWorkDay!)
+                      ? DateFormat('yyyy-MM-dd').format(dob!)
                       : '',
                 ),
               ),
@@ -182,8 +182,9 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
             ),
             const SizedBox(height: 10),
             GestureDetector(
-              onTap: () async{
-                preferredWorkDay = await AddUserHelper.pickDate(context: context, initialDate: DateTime.now());
+              onTap: () async {
+                preferredWorkDayController.text = await AddUserHelper.showWeekPicker(context);
+
                 setState(() {
 
                 });
@@ -192,11 +193,7 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                 labelText: 'Preferred Work Days',
                 prefixIcon: const Icon(Icons.calendar_today, color: Colors.grey),
                 enabled: false,
-                controller: TextEditingController(
-                  text: preferredWorkDay != null
-                      ? DateFormat('yyyy-MM-dd').format(preferredWorkDay!)
-                      : '',
-                ),
+                controller: preferredWorkDayController,
               ),
             ),
             const SizedBox(height: 10),
@@ -259,21 +256,23 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
               },
             ),
             const SizedBox(height: 10),
-            GestureDetector(
-              onTap: (){
 
+            GestureDetector(
+              onTap: () async {
+                selectedDocumentUrl = await StorageHelper.triggerDocUpload();
               },
               child: CustomTextField(
                 labelText: 'Document',
                 prefixIcon: const Icon(Icons.file_present, color: Colors.grey),
                 enabled: false,
                 controller: TextEditingController(
-                  text: selectedDocument != null
-                      ? selectedDocument!.path.split('/').last
-                      : '',
+                  text: selectedDocumentUrl ?? '',
                 ),
               ),
             ),
+
+
+
             const SizedBox(height: 10),
             GestureDetector(
               onTap: ()async{
@@ -318,7 +317,7 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                     dob: dob,
                     specialisations: specialisations,
                     profilePicture: profilePictureUrl,
-                    document: selectedDocument,
+                    documentUrl: selectedDocumentUrl,
                     documentName: documentNameController.text.trim(),
                     expiryDate: expiryDate,
                   ),

@@ -1,4 +1,3 @@
-import 'dart:io';
 
 class UserProfile {
   String name;
@@ -11,7 +10,7 @@ class UserProfile {
   String currentRole;
   List<String> specialisations;
   String? profilePicture;
-  File? document;
+  String? documentUrl;
   String documentName;
   DateTime? expiryDate;
   DateTime? dob;
@@ -28,7 +27,7 @@ class UserProfile {
     required this.contactInformation,
     required this.currentRole,
     required this.specialisations,
-    this.document,
+    this.documentUrl,
     required this.documentName,
     this.expiryDate,
     required this.dob,
@@ -46,7 +45,7 @@ class UserProfile {
     'currentRole': currentRole,
     'specialisations': specialisations,
     'profilePicture': profilePicture,
-    'document': document?.path,
+    'document': documentUrl,
     'documentName': documentName,
     'expiryDate': expiryDate?.toIso8601String(),
     'dob': dob?.toIso8601String(),
@@ -66,7 +65,7 @@ class UserProfile {
     currentRole: json['currentRole'],
     specialisations: List<String>.from(json['specialisations']),
     profilePicture: json['profilePicture'],
-    document: json['document'] != null ? File(json['document']) : null,
+    documentUrl: json['documentUrl'],
     documentName: json['documentName'],
     expiryDate: json['expiryDate'] != null
         ? DateTime.parse(json['expiryDate'])
