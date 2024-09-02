@@ -1,25 +1,29 @@
 import 'package:alpha/core/constants/color_constants.dart';
 import 'package:alpha/custom_widgets/custom_button/general_button.dart';
 import 'package:alpha/custom_widgets/text_fields/custom_text_field.dart';
+import 'package:alpha/features/add_user/helper/media_helpers.dart';
 import 'package:extended_phone_number_input/consts/enums.dart';
 import 'package:extended_phone_number_input/phone_number_controller.dart';
 import 'package:extended_phone_number_input/phone_number_input.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import '../../../core/constants/local_image_constants.dart';
 import '../../../custom_widgets/custom_dropdown.dart';
 import '../../../models/user_profile.dart';
 import '../helper/add_user_helper.dart';
 import 'dart:io';
+import '../services/storage_services.dart';
+import '../state/profilr_pic_provider.dart';
 
-class AdminAddUser extends StatefulWidget {
+class AdminAddUser extends ConsumerStatefulWidget {
   const AdminAddUser({super.key});
 
   @override
-  State<AdminAddUser> createState() => _AdminAddUserState();
+  ConsumerState<AdminAddUser> createState() => _AdminAddUserState();
 }
 
-class _AdminAddUserState extends State<AdminAddUser> {
+
+class _AdminAddUserState extends ConsumerState<AdminAddUser> {
   String selectedRole = 'User';
   PhoneNumberInputController? phoneNumberController;
   TextEditingController emailController = TextEditingController();
@@ -29,10 +33,10 @@ class _AdminAddUserState extends State<AdminAddUser> {
   TextEditingController contactInformationController = TextEditingController();
   TextEditingController documentNameController = TextEditingController();
   TextEditingController dobController = TextEditingController();
+  TextEditingController preferredWorkDayController = TextEditingController();
   String selectedGender = 'Male';
   String selectedCurrentRole = "Nurse";
   List<String> specialisations = [];
-  String? profilePicturePath;
   File? selectedDocument;
   DateTime? expiryDate;
   DateTime? preferredWorkDay;
@@ -47,6 +51,9 @@ class _AdminAddUserState extends State<AdminAddUser> {
 
   @override
   Widget build(BuildContext context) {
+    final profilePictureUrl = ref.watch(staffProfilePicProvider);
+
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Pallete.primaryColor,
@@ -63,21 +70,36 @@ class _AdminAddUserState extends State<AdminAddUser> {
           children: [
             const SizedBox(height: 20),
             GestureDetector(
-              onTap: pickProfilePicture,
-              child: ClipOval(
-                child: profilePicturePath != null
-                    ? Image.file(
-                  File(profilePicturePath!),
-                  width: MediaQuery.of(context).size.height * 0.18,
-                  height: MediaQuery.of(context).size.height * 0.18,
-                )
-                    : Image.asset(
-                  LocalImageConstants.addUser,
-                  width: MediaQuery.of(context).size.height * 0.18,
-                  height: MediaQuery.of(context).size.height * 0.18,
+              onTap: () async {
+                await MediaHelpers.onUploadMediaClick(
+                  documentName: 'Display Picture',
+                  ref: ref,
+                  isStaffProfile: true,
+                );
+
+              },
+              child: Container(
+                width: 150,
+                height: 150,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                    fit: BoxFit.contain,
+                    image: profilePictureUrl != null
+                        ? NetworkImage(profilePictureUrl!)
+                        : const NetworkImage(
+                      'https://cdn-icons-png.flaticon.com/128/15315/15315520.png',
+                    ),
+                  ),
+                  border: Border.all(
+                    color: Colors.transparent,
+                    width: 2,
+                  ),
                 ),
               ),
             ),
+
+
             const SizedBox(height: 30),
             CustomDropDown(
               prefixIcon: Icons.person,
@@ -99,12 +121,21 @@ class _AdminAddUserState extends State<AdminAddUser> {
             ),
             const SizedBox(height: 10),
             GestureDetector(
-              onTap: pickDob,
+              onTap: () async{
+                dob = await AddUserHelper.pickDate(context: context, initialDate: DateTime(2000));
+                setState(() {
+
+                });
+              },
               child: CustomTextField(
-                controller: dobController,
                 labelText: 'Date of Birth',
                 prefixIcon: const Icon(Icons.cake, color: Colors.grey),
                 enabled: false,
+                controller: TextEditingController(
+                  text: dob != null
+                      ? DateFormat('yyyy-MM-dd').format(preferredWorkDay!)
+                      : '',
+                ),
               ),
             ),
 
@@ -151,7 +182,12 @@ class _AdminAddUserState extends State<AdminAddUser> {
             ),
             const SizedBox(height: 10),
             GestureDetector(
-              onTap: pickPreferredWorkDay,
+              onTap: () async{
+                preferredWorkDay = await AddUserHelper.pickDate(context: context, initialDate: DateTime.now());
+                setState(() {
+
+                });
+              },
               child: CustomTextField(
                 labelText: 'Preferred Work Days',
                 prefixIcon: const Icon(Icons.calendar_today, color: Colors.grey),
@@ -215,11 +251,18 @@ class _AdminAddUserState extends State<AdminAddUser> {
                 labelText: 'Specialisations',
                 prefixIcon: Icon(Icons.medical_services, color: Colors.grey),
               ),
-              onSubmitted: addSpecialisation,
+              onSubmitted: (value){
+                AddUserHelper.addSpecialisation(
+                  value: value,
+                  specialisations: specialisations
+                );
+              },
             ),
             const SizedBox(height: 10),
             GestureDetector(
-              onTap: pickDocument,
+              onTap: (){
+
+              },
               child: CustomTextField(
                 labelText: 'Document',
                 prefixIcon: const Icon(Icons.file_present, color: Colors.grey),
@@ -233,7 +276,16 @@ class _AdminAddUserState extends State<AdminAddUser> {
             ),
             const SizedBox(height: 10),
             GestureDetector(
-              onTap: pickExpiryDate,
+              onTap: ()async{
+                expiryDate = await AddUserHelper.pickDate(
+                  context: context,
+                  initialDate: DateTime.now(),
+                );
+
+                setState(() {
+
+                });
+              },
               child: CustomTextField(
                 labelText: 'Expiry Date',
                 prefixIcon: const Icon(Icons.date_range, color: Colors.grey),
@@ -260,13 +312,12 @@ class _AdminAddUserState extends State<AdminAddUser> {
                     address: addressController.text.trim(),
                     preferredWorkDays: preferredWorkDay,
                     previousEmployer: previousEmployerController.text.trim(),
-                    contactInformation:
-                    contactInformationController.text.trim(),
+                    contactInformation: contactInformationController.text.trim(),
                     currentRole: selectedCurrentRole,
                     gender: selectedGender,
                     dob: dob,
                     specialisations: specialisations,
-                    profilePicture: profilePicturePath,
+                    profilePicture: profilePictureUrl,
                     document: selectedDocument,
                     documentName: documentNameController.text.trim(),
                     expiryDate: expiryDate,
@@ -280,11 +331,11 @@ class _AdminAddUserState extends State<AdminAddUser> {
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 14,
-                      fontWeight: FontWeight.bold),
+                      fontWeight: FontWeight.bold
+                  ),
                 ),
               ),
             ),
-
           ],
         ),
       ),

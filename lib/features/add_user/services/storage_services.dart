@@ -2,85 +2,49 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart';
 
+import '../../../core/utils/api_response.dart';
+
 class StorageServices {
   static final FirebaseStorage _storage = FirebaseStorage.instance;
 
-  static Future<String?> uploadUsedDp(
-      {required File file, required String uid}) async {
-    Reference fileRef =
-        _storage.ref('users/dps').child('$uid${extension(file.path)}');
+  static Future<APIResponse<String>> uploadDp({required File file}) async {
+    try {
+      Reference fileRef = _storage
+          .ref('users/dps')
+          .child('${DateTime.now().toString()}${extension(file.path)}');
 
-    UploadTask task = fileRef.putFile(file);
+      UploadTask task = fileRef.putFile(file);
 
-    return task.then((p) {
-      if (p.state == TaskState.success) {
-        return fileRef.getDownloadURL();
+      TaskSnapshot snapshot = await task;
+      if (snapshot.state == TaskState.success) {
+        String downloadURL = await fileRef.getDownloadURL();
+        return APIResponse<String>(data: downloadURL, success: true);
+      } else {
+        return APIResponse<String>(message: 'Upload failed', success: false);
       }
-      return null;
-    });
+    } catch (e) {
+      return APIResponse<String>(message: e.toString(), success: false);
+    }
   }
 
-  static Future<String?> uploadImageToChat(
+  static Future<APIResponse<String>> uploadImageToChat(
       {required File file, required String chatID}) async {
-    Reference fileRef = _storage
-        .ref('chats/$chatID')
-        .child('${DateTime.now().toIso8601String()}${extension(file.path)}');
+    try {
+      Reference fileRef = _storage
+          .ref('chats/$chatID')
+          .child('${DateTime.now().toIso8601String()}${extension(file.path)}');
 
-    UploadTask task = fileRef.putFile(file);
+      UploadTask task = fileRef.putFile(file);
 
-    return task.then((p) {
-      if (p.state == TaskState.success) {
-        return fileRef.getDownloadURL();
+      TaskSnapshot snapshot = await task;
+      if (snapshot.state == TaskState.success) {
+        String downloadURL = await fileRef.getDownloadURL();
+        return APIResponse<String>(data: downloadURL, success: true);
+      } else {
+        return APIResponse<String>(message: 'Upload failed', success: false);
       }
-      return null;
-    });
-  }
-
-  static Future<List<String?>> uploadProductImages(
-      {required List<File> files}) async {
-    List<String?> downloadURLs = [];
-
-    for (File file in files) {
-      String fileName = file.path.split('/').last;
-      Reference fileRef = _storage
-          .ref('products/$fileName')
-          .child('${DateTime.now().toIso8601String()}${extension(file.path)}');
-      UploadTask task = fileRef.putFile(file);
-
-      String? downloadURL = await task.then((snapshot) async {
-        if (snapshot.state == TaskState.success) {
-          return await fileRef.getDownloadURL();
-        }
-        return null;
-      });
-
-      downloadURLs.add(downloadURL);
+    } catch (e) {
+      return APIResponse<String>(message: e.toString(), success: false);
     }
-
-    return downloadURLs;
-  }
-
-  static Future<List<String?>> uploadReturnOrderImage(
-      {required List<File> files}) async {
-    List<String?> downloadURLs = [];
-
-    for (File file in files) {
-      String fileName = file.path.split('/').last;
-      Reference fileRef = _storage
-          .ref('returnOrder/$fileName')
-          .child('${DateTime.now().toIso8601String()}${extension(file.path)}');
-      UploadTask task = fileRef.putFile(file);
-
-      String? downloadURL = await task.then((snapshot) async {
-        if (snapshot.state == TaskState.success) {
-          return await fileRef.getDownloadURL();
-        }
-        return null;
-      });
-
-      downloadURLs.add(downloadURL);
-    }
-
-    return downloadURLs;
   }
 }
