@@ -5,7 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../core/constants/color_constants.dart';
 import '../../../custom_widgets/circular_loader/circular_loader.dart';
+import '../../../custom_widgets/snackbar/custom_snackbar.dart';
 import '../services/storage_services.dart';
 
 class MediaHelpers {
@@ -83,7 +85,7 @@ class MediaHelpers {
                               final updatedUser = FirebaseAuth.instance.currentUser;
                               userProvider.(updatedUser);
 
-                              AuthHelpers.
+                              CustomSnackBar.showSuccessSnackbar(message: 'Display Image updated Successfully');
                             }
 
                             else{
@@ -109,9 +111,9 @@ class MediaHelpers {
                             children: [
                               Text(
                                 'Done',
-                                style: GoogleFonts.poppins(
+                                style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.blue
+                                    color: Pallete.primaryColor
                                 ),
                               ),
 
@@ -152,10 +154,10 @@ class MediaHelpers {
                             const SizedBox(
                               height: 8,
                             ),
-                            Text(
+                            const Text(
                                 'Camera',
-                                style: GoogleFonts.poppins(
-                                    color: Pallete.lightPrimaryTextColor
+                                style: TextStyle(
+                                    color: Colors.black
                                 )
                             )
                           ],
@@ -191,10 +193,10 @@ class MediaHelpers {
                             const SizedBox(
                               height: 8,
                             ),
-                            Text(
+                            const Text(
                                 'Gallery',
-                                style: GoogleFonts.poppins(
-                                    color: Pallete.lightPrimaryTextColor
+                                style: TextStyle(
+                                    color: Colors.black
                                 )
                             )
                           ],
@@ -210,14 +212,5 @@ class MediaHelpers {
     );
 
     return files!.isNotEmpty ? files : null;
-  }
-
-  static void showErrorDialog(String errorMessage, BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (context) => ErrorDialog(
-          errorMessage: errorMessage,
-        )
-    );
   }
 }
