@@ -13,24 +13,8 @@ class StuffServices {
     required UserProfile userProfile,
   }) async {
     try {
-      // Create a user data map including all fields from UserProfile
-      final userData = {
-        'email': email,
-        'phone_number': phoneNumber,
-        'role': selectedRole,
-        'name': userProfile.name,
-        'address': userProfile.address,
-        'preferred_work_days': userProfile.preferredWorkDays?.toIso8601String(),
-        'previous_employer': userProfile.previousEmployer,
-        'contact_information': userProfile.contactInformation,
-        'current_role': userProfile.currentRole,
-        'specialisations': userProfile.specialisations,
-        'profile_picture': userProfile.profilePicture,
-        'document': userProfile.documentUrl,
-        'document_name': userProfile.documentName,
-        'document_expiry_date': userProfile.expiryDate?.toIso8601String(),
-      };
 
+      final userData = userProfile.toJson();
       // Add user data to Firestore
       await _firestore.collection('users').add(userData);
 

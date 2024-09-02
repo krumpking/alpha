@@ -45,7 +45,7 @@ class UserProfile {
     'currentRole': currentRole,
     'specialisations': specialisations,
     'profilePicture': profilePicture,
-    'document': documentUrl,
+    'documentUrl': documentUrl,
     'documentName': documentName,
     'expiryDate': expiryDate?.toIso8601String(),
     'dob': dob?.toIso8601String(),
