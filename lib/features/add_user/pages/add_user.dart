@@ -3,6 +3,7 @@ import 'package:alpha/custom_widgets/custom_button/general_button.dart';
 import 'package:alpha/custom_widgets/text_fields/custom_text_field.dart';
 import 'package:alpha/features/add_user/helper/media_helpers.dart';
 import 'package:alpha/features/add_user/helper/storage_helper.dart';
+import 'package:alpha/global/global.dart';
 import 'package:extended_phone_number_input/consts/enums.dart';
 import 'package:extended_phone_number_input/phone_number_controller.dart';
 import 'package:extended_phone_number_input/phone_number_input.dart';
@@ -12,7 +13,6 @@ import 'package:intl/intl.dart';
 import '../../../custom_widgets/custom_dropdown.dart';
 import '../../../models/user_profile.dart';
 import '../helper/add_user_helper.dart';
-import 'dart:io';
 import '../state/profilr_pic_provider.dart';
 
 class AdminAddUser extends ConsumerStatefulWidget {
@@ -35,7 +35,8 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
   TextEditingController dobController = TextEditingController();
   TextEditingController preferredWorkDayController = TextEditingController();
   String selectedGender = 'Male';
-  String selectedCurrentRole = "Nurse";
+  String selectedCity = 'Harare';
+  String selectedPost = "Nurse";
   List<String> specialisations = [];
   String? selectedDocumentUrl;
   DateTime? expiryDate;
@@ -164,6 +165,18 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
               prefixIcon: const Icon(Icons.home, color: Colors.grey),
             ),
             const SizedBox(height: 10),
+            CustomDropDown(
+              prefixIcon: Icons.location_city,
+              items: zimbabweCities,
+              selectedValue: selectedCity,
+              onChanged: (value) {
+                setState(() {
+                  selectedCity = value!;
+                });
+              },
+              isEnabled: true,
+            ),
+            const SizedBox(height: 10),
             PhoneNumberInput(
               initialCountry: 'ZW',
               locale: 'fr',
@@ -217,10 +230,10 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                 'Care/Support Worker',
                 'Range'
               ],
-              selectedValue: selectedCurrentRole,
+              selectedValue: selectedPost,
               onChanged: (value) {
                 setState(() {
-                  selectedCurrentRole = value!;
+                  selectedPost = value!;
                 });
               },
               isEnabled: true,
@@ -305,6 +318,7 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                   password: "alpha1234",
                   role: selectedRole,
                   userProfile: UserProfile(
+                    post: selectedPost,
                     name: nameController.text.trim(),
                     email: emailController.text.trim(),
                     phoneNumber: phoneNumberController!.fullPhoneNumber.trim(),
@@ -312,9 +326,10 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                     preferredWorkDays: preferredWorkDay,
                     previousEmployer: previousEmployerController.text.trim(),
                     contactInformation: contactInformationController.text.trim(),
-                    currentRole: selectedCurrentRole,
+                    role: selectedRole,
                     gender: selectedGender,
                     dob: dob,
+                    city: selectedCity,
                     specialisations: specialisations,
                     profilePicture: profilePictureUrl,
                     documentUrl: selectedDocumentUrl,

@@ -7,7 +7,7 @@ class UserProfile {
   DateTime? preferredWorkDays;
   String previousEmployer;
   String contactInformation;
-  String currentRole;
+  String role;
   List<String> specialisations;
   String? profilePicture;
   String? documentUrl;
@@ -15,17 +15,21 @@ class UserProfile {
   DateTime? expiryDate;
   DateTime? dob;
   String? gender;
+  String city;
+  String post;
 
   UserProfile({
     required this.name,
     required this.email,
+    required this.city,
     required this.phoneNumber,
     required this.address,
     this.preferredWorkDays,
     this.profilePicture,
     required this.previousEmployer,
     required this.contactInformation,
-    required this.currentRole,
+    required this.role,
+    required this.post,
     required this.specialisations,
     this.documentUrl,
     required this.documentName,
@@ -42,7 +46,8 @@ class UserProfile {
     'preferredWorkDays': preferredWorkDays?.toIso8601String(),
     'previousEmployer': previousEmployer,
     'contactInformation': contactInformation,
-    'currentRole': currentRole,
+    'role': role,
+    'post': post,
     'specialisations': specialisations,
     'profilePicture': profilePicture,
     'documentUrl': documentUrl,
@@ -50,6 +55,7 @@ class UserProfile {
     'expiryDate': expiryDate?.toIso8601String(),
     'dob': dob?.toIso8601String(),
     'gender': gender,
+    'city' : city
   };
 
   factory UserProfile.fromJson(Map<String, dynamic> json) => UserProfile(
@@ -62,11 +68,13 @@ class UserProfile {
         : null,
     previousEmployer: json['previousEmployer'],
     contactInformation: json['contactInformation'],
-    currentRole: json['currentRole'],
+    role: json['role'],
+    post: json['post'],
     specialisations: List<String>.from(json['specialisations']),
     profilePicture: json['profilePicture'],
     documentUrl: json['documentUrl'],
     documentName: json['documentName'],
+    city: 'city',
     expiryDate: json['expiryDate'] != null
         ? DateTime.parse(json['expiryDate'])
         : null,
