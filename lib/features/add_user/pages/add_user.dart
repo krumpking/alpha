@@ -266,6 +266,10 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                   value: value,
                   specialisations: specialisations
                 );
+
+                setState(() {
+
+                });
               },
             ),
             const SizedBox(height: 10),
@@ -273,6 +277,10 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
             GestureDetector(
               onTap: () async {
                 selectedDocumentUrl = await StorageHelper.triggerDocUpload();
+
+                setState(() {
+
+                });
               },
               child: CustomTextField(
                 labelText: 'Document',

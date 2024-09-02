@@ -35,7 +35,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> with SingleTickerProv
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 6, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
   }
 
   @override
@@ -178,9 +178,6 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> with SingleTickerProv
               ),
               tabAlignment: TabAlignment.start,
               tabs: const [
-                Tab(text: 'Assigned Stuff'),
-                Tab(text: 'Database Stuff'),
-                Tab(text: 'Shifts Available'),
                 Tab(text: 'Nurses'),
                 Tab(text: 'Social Workers'),
                 Tab(text: 'Care/Support Workers'),
@@ -191,9 +188,6 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> with SingleTickerProv
               child: TabBarView(
                 controller: _tabController,
                 children: [
-                  _buildTabCategory(),
-                  _buildTabCategory(),
-                  _buildTabCategory(),
                   _buildTabCategory(),
                   _buildTabCategory(),
                   _buildTabCategory(),
