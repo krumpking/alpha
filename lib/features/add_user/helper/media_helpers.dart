@@ -51,12 +51,27 @@ class MediaHelpers {
                     documentName,
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  GestureDetector(
+                  files.isEmpty
+                      ? GestureDetector(
+                            onTap: Get.back,
+                            child: Container(
+                                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                                decoration: BoxDecoration(
+                                  color: Colors.red.withOpacity(0.2),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Icon(
+                                  Icons.close,
+                                  color: Pallete.primaryColor,
+                                ),
+                          ),
+                      )
+                      : GestureDetector(
                     onTap: () async {
                       if (files != null && files!.isNotEmpty) {
                         Get.dialog(
                           const CustomLoader(
-                            message: 'Logging in',
+                            message: 'Updating Display Picture',
                           ),
                           barrierDismissible: false,
                         );
@@ -126,7 +141,7 @@ class MediaHelpers {
                           )
                         ],
                       ),
-                    ),
+                    )
                   )
                 ],
               ),
