@@ -60,7 +60,6 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
   @override
   Widget build(BuildContext context) {
     final profilePictureUrl = ref.watch(staffProfilePicProvider);
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Pallete.primaryColor,
@@ -78,32 +77,60 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
             const SizedBox(height: 20),
             GestureDetector(
               onTap: () async {
-                await MediaServices.getImageFromGallery().then((file) async{
-                  if(file != null){
-                    await MediaHelpers.onUploadDpClip(files: [file], documentName: 'Display Picture', isStaffProfile: true, ref: ref);
+                await MediaServices.getImageFromGallery().then((file) async {
+                  if (file != null) {
+                    await MediaHelpers.onUploadDpClip(
+                      files: [file],
+                      documentName: 'Display Picture',
+                      isStaffProfile: true,
+                      ref: ref,
+                    );
                   }
                 });
               },
-              child: Container(
-                width: 150,
-                height: 150,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                    fit: BoxFit.contain,
-                    image: profilePictureUrl != null
-                        ? NetworkImage(profilePictureUrl)
-                        : const NetworkImage(
-                      'https://cdn-icons-png.flaticon.com/128/15315/15315520.png',
+              child: Stack(
+                children: [
+                  // Profile Picture
+                  Container(
+                    width: 150,
+                    height: 150,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: profilePictureUrl != null
+                            ? NetworkImage(profilePictureUrl)
+                            : const NetworkImage(
+                          'https://cdn-icons-png.flaticon.com/128/15315/15315520.png',
+                        ),
+                      ),
+                      border: Border.all(
+                        color: Colors.transparent,
+                        width: 2,
+                      ),
                     ),
                   ),
-                  border: Border.all(
-                    color: Colors.transparent,
-                    width: 2,
+                  // Icon Overlay
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Pallete.primaryColor
+                      ),
+                      padding: const EdgeInsets.all(8.0),
+                      child: const Icon(
+                        Icons.camera_alt,
+                        color: Colors.white,
+                        size: 24,
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
+
             const SizedBox(height: 30),
             CustomDropDown(
               prefixIcon: Icons.person,
@@ -197,7 +224,7 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
             const SizedBox(height: 10),
             CustomTextField(
               controller: contactInformationController,
-              labelText: 'Contact Information',
+              labelText: 'Previous Employer\'s Contact Information',
               prefixIcon: const Icon(Icons.phone, color: Colors.grey),
             ),
             const SizedBox(height: 10),
