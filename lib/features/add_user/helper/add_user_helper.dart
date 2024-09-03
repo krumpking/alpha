@@ -7,31 +7,17 @@ import '../../../models/user_profile.dart';
 
 class AddUserHelper {
   static void validateAndSubmitForm({
-    required String password,
-    required String email,
-    required String phoneNumber,
-    required String role,
     required UserProfile userProfile,
   }) async {
-    // Validate Password
-    if (password.isEmpty) {
-      CustomSnackBar.showErrorSnackbar(message: 'Password is required.');
-      return;
-    }
-
-    if (password.length < 8) {
-      CustomSnackBar.showErrorSnackbar(message: 'Password is too short.');
-      return;
-    }
 
     // Validate Email
-    if (!GetUtils.isEmail(email)) {
+    if (!GetUtils.isEmail(userProfile.email)) {
       CustomSnackBar.showErrorSnackbar(message: 'Please input a valid email.');
       return;
     }
 
     // Validate Phone Number
-    if (phoneNumber.isEmpty || !GetUtils.isPhoneNumber(phoneNumber)) {
+    if (userProfile.phoneNumber.isEmpty || !GetUtils.isPhoneNumber(userProfile.phoneNumber)) {
       CustomSnackBar.showErrorSnackbar(message: 'Please input a valid phone number.');
       return;
     }
@@ -41,6 +27,31 @@ class AddUserHelper {
       CustomSnackBar.showErrorSnackbar(message: 'Name is required.');
       return;
     }
+
+    if (userProfile.city.isEmpty) {
+      CustomSnackBar.showErrorSnackbar(message: 'City is required.');
+      return;
+    }
+
+
+    if (userProfile.state.isEmpty) {
+      CustomSnackBar.showErrorSnackbar(message: 'State is required.');
+      return;
+    }
+
+
+    if (userProfile.country.isEmpty) {
+      CustomSnackBar.showErrorSnackbar(message: 'Country is required.');
+      return;
+    }
+
+
+    // Validate Name
+    if (userProfile.preferredWorkDays.isEmpty) {
+      CustomSnackBar.showErrorSnackbar(message: 'Input working days');
+      return;
+    }
+
 
     // Validate Address
     if (userProfile.address.isEmpty) {
@@ -61,7 +72,7 @@ class AddUserHelper {
     }
 
     // Validate Role
-    if (role.isEmpty) {
+    if (userProfile.role.isEmpty) {
       CustomSnackBar.showErrorSnackbar(message: 'Role is required.');
       return;
     }
@@ -73,16 +84,11 @@ class AddUserHelper {
     }
 
     // Validate Document
-    if (userProfile.documentUrl == null) {
+    if (userProfile.documents.isEmpty) {
       CustomSnackBar.showErrorSnackbar(message: 'Document upload is required.');
       return;
     }
 
-    // Validate Document Expiry Date
-    if (userProfile.expiryDate == null) {
-      CustomSnackBar.showErrorSnackbar(message: 'Document expiry date is required.');
-      return;
-    }
 
     // Show loader while creating user
     Get.dialog(
@@ -93,10 +99,7 @@ class AddUserHelper {
     );
 
     await StuffServices.addStuffToFirebase(
-      email: email,
-      selectedRole: role.toLowerCase(),
-      phoneNumber: phoneNumber,
-      userProfile: userProfile, // Add userProfile to the service call
+      userProfile: userProfile
     ).then((response) {
       if (!response.success) {
         if (!Get.isSnackbarOpen) Get.back();
@@ -109,13 +112,21 @@ class AddUserHelper {
   }
 
 
-
-  static Future<DateTime?> pickDate({required BuildContext context, required DateTime initialDate,}) async {
+  static Future<DateTime?> pickDate({required BuildContext context, required DateTime initialDate, DateTime? firstDate }) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: initialDate,
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
+      firstDate: firstDate ?? DateTime.now(),
+      lastDate: DateTime(2100),
+    );
+
+    return picked;
+  }
+
+  static Future<TimeOfDay?> pickTime({required BuildContext context,}) async {
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: const TimeOfDay( hour: 6, minute: 00)
     );
 
     return picked;

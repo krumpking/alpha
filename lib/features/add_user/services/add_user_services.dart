@@ -7,9 +7,6 @@ class StuffServices {
 
   // Method to add a user to Firebase Firestore
   static Future<APIResponse<String?>> addStuffToFirebase({
-    required String email,
-    required String phoneNumber,
-    required String selectedRole,
     required UserProfile userProfile,
   }) async {
     try {

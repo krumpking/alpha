@@ -1,22 +1,25 @@
+import 'package:alpha/models/shift.dart';
+
+import 'document.dart';
 
 class UserProfile {
   String name;
   String email;
   String phoneNumber;
   String address;
-  DateTime? preferredWorkDays;
+  List<Shift> preferredWorkDays;
   String previousEmployer;
   String contactInformation;
   String role;
   List<String> specialisations;
   String? profilePicture;
-  String? documentUrl;
-  String documentName;
-  DateTime? expiryDate;
+  String city;
+  String state;
+  String country;
+  String post;
+  List<Document> documents;
   DateTime? dob;
   String? gender;
-  String city;
-  String post;
 
   UserProfile({
     required this.name,
@@ -24,16 +27,16 @@ class UserProfile {
     required this.city,
     required this.phoneNumber,
     required this.address,
-    this.preferredWorkDays,
+    required this.preferredWorkDays,
     this.profilePicture,
+    required this.country,
+    required this.state,
     required this.previousEmployer,
     required this.contactInformation,
     required this.role,
     required this.post,
     required this.specialisations,
-    this.documentUrl,
-    required this.documentName,
-    this.expiryDate,
+    required this.documents,
     required this.dob,
     required this.gender,
   });
@@ -43,19 +46,19 @@ class UserProfile {
     'email': email,
     'phoneNumber': phoneNumber,
     'address': address,
-    'preferredWorkDays': preferredWorkDays?.toIso8601String(),
+    'preferredWorkDays': preferredWorkDays.map((shift) => shift.toJson()).toList(),
     'previousEmployer': previousEmployer,
     'contactInformation': contactInformation,
     'role': role,
     'post': post,
     'specialisations': specialisations,
     'profilePicture': profilePicture,
-    'documentUrl': documentUrl,
-    'documentName': documentName,
-    'expiryDate': expiryDate?.toIso8601String(),
+    'documents': documents.map((document) => document.toJson()).toList(),
     'dob': dob?.toIso8601String(),
     'gender': gender,
-    'city' : city
+    'city': city,
+    'state': state,
+    'country': country
   };
 
   factory UserProfile.fromJson(Map<String, dynamic> json) => UserProfile(
@@ -63,22 +66,22 @@ class UserProfile {
     email: json['email'],
     phoneNumber: json['phoneNumber'],
     address: json['address'],
-    preferredWorkDays: json['preferredWorkDays'] != null
-        ? DateTime.parse(json['preferredWorkDays'])
-        : null,
+    preferredWorkDays: (json['preferredWorkDays'] as List)
+        .map((shiftJson) => Shift.fromJson(shiftJson))
+        .toList(),
     previousEmployer: json['previousEmployer'],
     contactInformation: json['contactInformation'],
     role: json['role'],
     post: json['post'],
     specialisations: List<String>.from(json['specialisations']),
     profilePicture: json['profilePicture'],
-    documentUrl: json['documentUrl'],
-    documentName: json['documentName'],
-    city: 'city',
-    expiryDate: json['expiryDate'] != null
-        ? DateTime.parse(json['expiryDate'])
-        : null,
+    documents: (json['documents'] as List)
+        .map((documentJson) => Document.fromJson(documentJson))
+        .toList(),
     dob: json['dob'] != null ? DateTime.parse(json['dob']) : null,
     gender: json['gender'],
+    city: json['city'],
+    state: json['state'],
+    country: json['country'],
   );
 }
