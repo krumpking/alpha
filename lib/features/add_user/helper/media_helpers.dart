@@ -36,7 +36,8 @@ class MediaHelpers {
 
           CustomSnackBar.showSuccessSnackbar(message: 'Display Image updated Successfully');
 
-        } else if (response.success && !isStaffProfile) {
+        }
+        else if (response.success && !isStaffProfile) {
 
           await currentUser!.updatePhotoURL(response.data).then((value){
             Get.back();
@@ -50,7 +51,8 @@ class MediaHelpers {
           if (Get.isDialogOpen!) Get.back();
 
           CustomSnackBar.showSuccessSnackbar(message: 'Display Image updated Successfully');
-        } else {
+        }
+        else {
           CustomSnackBar.showErrorSnackbar(message: 'Failed to upload image');
         }
 

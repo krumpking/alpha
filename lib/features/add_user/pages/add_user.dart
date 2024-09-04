@@ -1,4 +1,4 @@
-import 'package:alpha/features/add_user/helper/media_helpers.dart';
+import 'dart:io';
 import 'package:alpha/models/shift.dart';
 import 'package:alpha/models/document.dart';
 import 'package:alpha/core/constants/color_constants.dart';
@@ -10,13 +10,16 @@ import 'package:extended_phone_number_input/phone_number_controller.dart';
 import 'package:extended_phone_number_input/phone_number_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../../../core/utils/providers.dart';
 import '../../../custom_widgets/country_city_state/country_city_state.dart';
 import '../../../custom_widgets/custom_dropdown.dart';
+import '../../../custom_widgets/snackbar/custom_snackbar.dart';
 import '../../../models/user_profile.dart';
 import '../helper/add_user_helper.dart';
 import '../services/media_services.dart';
+import '../services/storage_services.dart';
 
 class AdminAddUser extends ConsumerStatefulWidget {
   const AdminAddUser({super.key});
@@ -50,6 +53,7 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
   String? selectedDocumentUrl;
   TextEditingController expiryDateTextEditing = TextEditingController();
   DateTime? dob;
+  File? pickedImage;
 
   @override
   void initState() {
@@ -59,7 +63,6 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
 
   @override
   Widget build(BuildContext context) {
-    final profilePictureUrl = ref.watch(ProviderUtils.staffProfilePicProvider);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Pallete.primaryColor,
@@ -77,15 +80,10 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
             const SizedBox(height: 20),
             GestureDetector(
               onTap: () async {
-                await MediaServices.getImageFromGallery().then((file) async {
-                  if (file != null) {
-                    await MediaHelpers.onUploadDpClip(
-                      files: [file],
-                      documentName: 'Display Picture',
-                      isStaffProfile: true,
-                      ref: ref,
-                    );
-                  }
+                await MediaServices.getImageFromGallery().then((file){
+                  setState(() {
+                    pickedImage = file;
+                  });
                 });
               },
               child: Stack(
@@ -94,20 +92,28 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                   Container(
                     width: 150,
                     height: 150,
+                    padding: const EdgeInsets.all(4),
+                    clipBehavior: Clip.hardEdge,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: profilePictureUrl != null
-                            ? NetworkImage(profilePictureUrl)
-                            : const NetworkImage(
-                          'https://cdn-icons-png.flaticon.com/128/15315/15315520.png',
-                        ),
-                      ),
                       border: Border.all(
-                        color: Colors.transparent,
+                        color: Pallete.primaryColor,
                         width: 2,
                       ),
+                    ),
+                    child: pickedImage != null
+                        ? ClipOval(
+                      child: Image.file(
+                        pickedImage!,
+                        fit: BoxFit.cover,
+                        width: 150,
+                        height: 150,
+                      ),
+                    )
+                        : const Icon(
+                      Icons.add_a_photo_outlined,
+                      size: 100,
+                      color: Colors.grey,
                     ),
                   ),
                   // Icon Overlay
@@ -392,13 +398,16 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                       shiftEndTimeController.clear();
                     },
                     borderRadius: 10,
-                    btnColor: Pallete.primaryColor,
+                    btnColor: Colors.white,
+                    boxBorder: Border.all(
+                      color: Pallete.primaryColor
+                    ),
                     width: 150,
                     height: 40,
-                    child: const Text(
+                    child: Text(
                       "Add Shift",
                       style: TextStyle(
-                          color: Colors.white,
+                          color: Pallete.primaryColor,
                           fontSize: 12,
                           fontWeight: FontWeight.bold
                       ),
@@ -485,13 +494,16 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                      });
                     },
                     borderRadius: 10,
-                    btnColor: Pallete.primaryColor,
+                    btnColor: Colors.white,
                     width: 150,
                     height: 40,
-                    child: const Text(
+                    boxBorder: Border.all(
+                        color: Pallete.primaryColor
+                    ),
+                    child: Text(
                       "Add Document",
                       style: TextStyle(
-                          color: Colors.white,
+                          color: Pallete.primaryColor,
                           fontSize: 12,
                           fontWeight: FontWeight.bold
                       ),
@@ -504,27 +516,65 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
             const SizedBox(height: 20),
             Center(
               child: GeneralButton(
-                onTap: () => AddUserHelper.validateAndSubmitForm(
-                  userProfile: UserProfile(
-                    post: selectedPost,
-                    name: nameController.text.trim(),
-                    email: emailController.text.trim(),
-                    phoneNumber: phoneNumberController!.fullPhoneNumber.trim(),
-                    address: addressController.text.trim(),
-                    preferredWorkDays: preferredWorkDays,
-                    previousEmployer: previousEmployerController.text.trim(),
-                    documents: documents,
-                    contactInformation: contactInformationController.text.trim(),
-                    role: selectedRole,
-                    gender: selectedGender,
-                    dob: dob,
-                    city: selectedCity!,
-                    state: selectedState!,
-                    country: selectedCountry!,
-                    specialisations: specialisations,
-                    profilePicture: profilePictureUrl,
-                  ),
-                ),
+                onTap: ()async{
+                  if (pickedImage != null) {
+                    await StorageServices.uploadDp(
+                      file: pickedImage!,
+                    ).then((response){
+                      if(response.success){
+                        AddUserHelper.validateAndSubmitForm(
+                          userProfile: UserProfile(
+                            post: selectedPost,
+                            name: nameController.text.trim(),
+                            email: emailController.text.trim(),
+                            phoneNumber: phoneNumberController!.fullPhoneNumber.trim(),
+                            address: addressController.text.trim(),
+                            preferredWorkDays: preferredWorkDays,
+                            previousEmployer: previousEmployerController.text.trim(),
+                            documents: documents,
+                            contactInformation: contactInformationController.text.trim(),
+                            role: selectedRole,
+                            gender: selectedGender,
+                            dob: dob,
+                            city: selectedCity!,
+                            state: selectedState!,
+                            country: selectedCountry!,
+                            specialisations: specialisations,
+                            profilePicture: response.data,
+                          ),
+                        );
+                      }else{
+                        CustomSnackBar.showErrorSnackbar(message: 'Failed to upload image, Please try Again');
+
+                        if (Get.isDialogOpen!) Get.back();
+                        return;
+                      }
+                    });
+                  }
+                  else{
+                    AddUserHelper.validateAndSubmitForm(
+                      userProfile: UserProfile(
+                        post: selectedPost,
+                        name: nameController.text.trim(),
+                        email: emailController.text.trim(),
+                        phoneNumber: phoneNumberController!.fullPhoneNumber.trim(),
+                        address: addressController.text.trim(),
+                        preferredWorkDays: preferredWorkDays,
+                        previousEmployer: previousEmployerController.text.trim(),
+                        documents: documents,
+                        contactInformation: contactInformationController.text.trim(),
+                        role: selectedRole,
+                        gender: selectedGender,
+                        dob: dob,
+                        city: selectedCity!,
+                        state: selectedState!,
+                        country: selectedCountry!,
+                        specialisations: specialisations,
+                        profilePicture: null,
+                      ),
+                    );
+                  }
+                },
                 borderRadius: 10,
                 btnColor: Pallete.primaryColor,
                 width: 300,
