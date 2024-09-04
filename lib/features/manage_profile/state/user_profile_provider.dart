@@ -14,7 +14,7 @@ class ProfileNotifier extends StateNotifier<AsyncValue<UserProfile>> {
 
     try {
       // Fetch users from the service
-      final APIResponse<UserProfile> response = await StuffServices.fetchUserProfile();
+      final APIResponse<UserProfile> response = await StaffServices.fetchUserProfile();
 
       if (response.success) {
         // Update state with user data if successful

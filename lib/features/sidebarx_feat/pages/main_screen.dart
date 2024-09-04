@@ -1,3 +1,4 @@
+import 'package:alpha/core/constants/dimensions.dart';
 import 'package:alpha/features/sidebarx_feat/pages/user_tabs_container.dart';
 import 'package:alpha/global/global.dart';
 import 'package:flutter/material.dart';
@@ -16,12 +17,11 @@ class MainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Builder(
       builder: (context) {
-        final isSmallScreen = Get.width < 600;
         return Scaffold(
           key: _key,
           body: Row(
             children: [
-              if (!isSmallScreen) Sidebar(controller: _controller),
+              if (!Dimensions.isSmallScreen) Sidebar(controller: _controller),
               Expanded(
                 child: Center(
                   child: selectedRole == UserRole.admin

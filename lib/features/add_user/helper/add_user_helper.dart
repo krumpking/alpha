@@ -98,7 +98,7 @@ class AddUserHelper {
       barrierDismissible: false,
     );
 
-    await StuffServices.addStuffToFirebase(
+    await StaffServices.addStuffToFirebase(
       userProfile: userProfile
     ).then((response) {
       if (!response.success) {

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:alpha/core/constants/color_constants.dart';
+import 'package:alpha/custom_widgets/cards/category_card.dart';
 import 'package:alpha/custom_widgets/cards/task_item.dart';
 import 'package:alpha/custom_widgets/text_fields/custom_text_field.dart';
 import 'package:alpha/features/home/services/dummy.dart';
@@ -8,7 +9,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/constants/dimensions.dart';
-import '../../../custom_widgets/cards/staff_card.dart';
 import '../../../custom_widgets/sidebar/user_drawer.dart';
 
 class UserHomeScreen extends StatefulWidget {
@@ -140,7 +140,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> with SingleTickerProvid
 
                   List<String>? imagesLinks = List<String>.from(stuffCard['images']);
 
-                  return StuffCard(
+                  return CategoryCard(
                     color: randomColor,
                     title: stuffCard['title'].toString(),
                     count: int.parse(stuffCard['count'].toString()),

@@ -10,8 +10,8 @@ class ProviderUtils{
   static final staffProfilePicProvider = StateProvider<String?>((ref) => null);
 
 
-  static final stuffProvider = StateNotifierProvider<StuffNotifier, AsyncValue<List<Map<String, dynamic>>>>((ref) {
-    return StuffNotifier();
+  static final staffProvider = StateNotifierProvider<StaffNotifier, AsyncValue<List<UserProfile>>>((ref) {
+    return StaffNotifier();
   });
 
 

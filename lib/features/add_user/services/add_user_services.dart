@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../../../core/utils/api_response.dart';
 import '../../../models/user_profile.dart';
 
-class StuffServices {
+class StaffServices {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   // Method to add a user to Firebase Firestore
@@ -43,19 +43,22 @@ class StuffServices {
   }
 
 
-  // Method to fetch all users from Firebase Firestore
-  static Future<APIResponse<List<Map<String, dynamic>>>> fetchAllUsers() async {
+// Method to fetch all users from Firebase Firestore
+  static Future<APIResponse<List<UserProfile>>> fetchAllUsers() async {
     try {
       // Fetch all documents from the 'users' collection
       final QuerySnapshot<Map<String, dynamic>> userSnapshot = await _firestore.collection('users').get();
 
-      // Map the documents to a list of user data
-      final usersData = userSnapshot.docs.map((doc) => doc.data()).toList();
+      // Map the documents to a list of UserProfile objects
+      final List<UserProfile> users = userSnapshot.docs
+          .map((doc) => UserProfile.fromJson(doc.data()))
+          .toList();
 
-      return APIResponse(success: true, data: usersData, message: 'Users retrieved successfully');
+      return APIResponse(success: true, data: users, message: 'Users retrieved successfully');
     } catch (e) {
       return APIResponse(success: false, message: e.toString());
     }
   }
+
 }
 

@@ -1,3 +1,4 @@
+import 'package:alpha/features/add_shift/add_shift.dart';
 import 'package:alpha/features/add_user/pages/add_user.dart';
 import 'package:alpha/features/add_user/pages/view_users.dart';
 import 'package:alpha/features/auth/handlers/auth_handler.dart';
@@ -31,20 +32,7 @@ class RoutesHelper {
   static String adminAddUserScreen = '/addUser';
   static String viewUserScreen = '/viewUsers';
   static String userProfileScreen = '/profile';
-
-
-  static getWelcomeRoute (String name)=> "$welcomeScreen?name=$name";
-  static getInitialRoute (String name)=> initialScreen;
-  static getSplashScreenRoute (String name)=> splashScreen;
-  static getEmailVerificationScreenRoute (String name)=> "$emailVerificationScreen?name=$name";
-  static getSuccessfulVerificationScreenRoute (String name)=> "$successfulVerificationScreen?name=$name";
-  static getLoginRoute (String name)=> "$loginScreen?name=$name";
-  static getForgotPasswordRoute (String name)=> "$forgotPasswordScreen?name=$name";
-  static getAdminHomeRoute (String name)=> "$adminHomeScreen?name=$name";
-  static getUserHomeRoute (String name)=> "$userHomeScreen?name=$name";
-  static getAdminStatsRoute (String name)=> "$adminStatsScreen?name=$name";
-  static getAdminAddUserRoute (String name)=> "$adminAddUserScreen?name=$name";
-  static getAdminViewUserRoute (String name)=> "$viewUserScreen?name=$name";
+  static String addUserShiftScreen = '/addShift';
 
 
   static List<GetPage> routes = [
@@ -102,6 +90,13 @@ class RoutesHelper {
         name: adminAddUserScreen,
         page: ()=> const AdminAddUser()
     ),
+
+
+    GetPage(
+        name: addUserShiftScreen,
+        page: ()=> const AddUserShift()
+    ),
+
 
     GetPage(
         name: viewUserScreen,
