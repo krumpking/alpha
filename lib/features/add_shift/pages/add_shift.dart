@@ -168,7 +168,7 @@ class _AddUserShiftState extends State<AddUserShift> {
 
             Center(
               child: GeneralButton(
-                onTap: ()=> ShiftHelpers.validateForm(
+                onTap: ()=> ShiftHelpers.validateAndSubmitShift(
                   documentName: _documentNameController.text,
                   currentUser: currentUser!,
                   hoursCompleted: int.parse(_hoursController.text),
