@@ -1,4 +1,4 @@
-import 'package:alpha/features/add_shift/add_shift.dart';
+import 'package:alpha/features/add_shift/pages/add_shift.dart';
 import 'package:alpha/features/add_user/pages/add_user.dart';
 import 'package:alpha/features/add_user/pages/view_users.dart';
 import 'package:alpha/features/auth/handlers/auth_handler.dart';
@@ -16,6 +16,7 @@ import 'package:get/get.dart';
 import '../../features/auth/pages/email_verification_success.dart';
 import '../../features/auth/pages/login_page.dart';
 import '../../features/auth/pages/resend_reset_email_screen.dart';
+import '../../models/user_profile.dart';
 
 class RoutesHelper {
   static String welcomeScreen = '/welcome';
@@ -94,7 +95,11 @@ class RoutesHelper {
 
     GetPage(
         name: addUserShiftScreen,
-        page: ()=> const AddUserShift()
+        page: (){
+          final UserProfile selectedUser = Get.arguments as UserProfile;
+
+          return AddUserShift(selectedUser: selectedUser);
+        }
     ),
 
 

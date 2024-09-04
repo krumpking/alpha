@@ -50,7 +50,7 @@ class StaffCard extends StatelessWidget {
                     title: 'Add Shift',
                     icon: Icons.calendar_month,
                     value: 1,
-                    onTap: ()=>Get.toNamed(RoutesHelper.addUserShiftScreen)
+                    onTap: ()=>Get.toNamed(RoutesHelper.addUserShiftScreen, arguments: user)
                 ),
               ],
               icon: const Icon(Icons.more_vert),
