@@ -1,4 +1,5 @@
 import 'package:alpha/models/document.dart';
+import 'package:alpha/models/shift.dart';
 import 'package:intl/intl.dart';
 
 class ProfileHelpers{
@@ -25,5 +26,22 @@ class ProfileHelpers{
       statusText = 'Valid';
      return statusText;
     }
+  }
+
+
+  static String shiftHours(Shift shift){
+    // Parse the start and end times to DateTime objects
+    final DateTime startTime = DateFormat('HH:mm').parse(shift.startTime);
+    final DateTime endTime = DateFormat('HH:mm').parse(shift.endTime);
+
+    // Calculate the duration
+    final Duration shiftDuration = endTime.difference(startTime);
+
+    // Get the total hours and minutes
+    final int hours = shiftDuration.inHours;
+    final int minutes = shiftDuration.inMinutes.remainder(60);
+
+    // Format the shift duration as a string
+    return'${hours}h ${minutes}m';
   }
 }

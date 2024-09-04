@@ -16,12 +16,11 @@ class _DocumentsTabState extends State<DocumentsTab> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView.builder(
-        itemCount: widget.documents.length, // Specify the number of items
+        itemCount: widget.documents.length,
         itemBuilder: (context, index) {
-          // Fetch the document at the current index
+
           final document = widget.documents[index];
 
-          // Use the document's data to populate the TaskItemCard
           return DocumentCard(
             document: document,
           );
