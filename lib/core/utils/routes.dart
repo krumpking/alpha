@@ -5,7 +5,7 @@ import 'package:alpha/features/auth/pages/email_verification.dart';
 import 'package:alpha/features/auth/pages/forgot_password.dart';
 import 'package:alpha/features/home/pages/admin_home_screen.dart';
 import 'package:alpha/features/home/pages/user_home_screen.dart';
-import 'package:alpha/features/manage_profile/manage_profile_screen.dart';
+import 'package:alpha/features/manage_profile/pages/manage_profile_screen.dart';
 import 'package:alpha/features/statistics/pages/admin_stuff_stats.dart';
 import 'package:alpha/features/welcome/pages/onboard.dart';
 import 'package:alpha/features/welcome/pages/splash.dart';

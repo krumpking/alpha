@@ -4,15 +4,14 @@ import 'package:alpha/custom_widgets/custom_button/general_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../state/stuff_provider.dart';
+import '../../../core/utils/providers.dart';
 
 class AdminViewUsers extends ConsumerWidget {
   const AdminViewUsers({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Watch the stuffProvider for user state changes
-    final userState = ref.watch(stuffProvider);
+    final userState = ref.watch(ProviderUtils.stuffProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -91,7 +90,7 @@ class AdminViewUsers extends ConsumerWidget {
                 ElevatedButton(
                   onPressed: () {
                     // Add logic to retry fetching users
-                    ref.read(stuffProvider.notifier).fetchUsers();
+                    ref.read(ProviderUtils.stuffProvider.notifier).fetchUsers();
                   },
                   child: const Text('Retry'),
                 ),

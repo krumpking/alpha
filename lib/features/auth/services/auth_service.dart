@@ -1,4 +1,5 @@
 import 'package:alpha/core/utils/routes.dart';
+import 'package:alpha/models/user_profile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
@@ -147,7 +148,6 @@ class AuthServices {
       return APIResponse(success: false, message: 'Role fetching failed: no user found with the specified email');
     }
   }
-
 
   static Future<APIResponse<void>> requestVerificationCode({
     required String phoneNumber,

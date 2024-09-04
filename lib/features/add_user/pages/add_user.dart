@@ -11,12 +11,12 @@ import 'package:extended_phone_number_input/phone_number_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import '../../../core/utils/providers.dart';
 import '../../../custom_widgets/country_city_state/country_city_state.dart';
 import '../../../custom_widgets/custom_dropdown.dart';
 import '../../../models/user_profile.dart';
 import '../helper/add_user_helper.dart';
 import '../services/media_services.dart';
-import '../state/profilr_pic_provider.dart';
 
 class AdminAddUser extends ConsumerStatefulWidget {
   const AdminAddUser({super.key});
@@ -59,7 +59,7 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
 
   @override
   Widget build(BuildContext context) {
-    final profilePictureUrl = ref.watch(staffProfilePicProvider);
+    final profilePictureUrl = ref.watch(ProviderUtils.staffProfilePicProvider);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Pallete.primaryColor,

@@ -1,17 +1,23 @@
+import 'package:alpha/core/utils/providers.dart';
+import 'package:alpha/features/auth/state/authentication_provider.dart';
+import 'package:alpha/features/manage_profile/pages/documents_tab.dart';
+import 'package:alpha/features/manage_profile/pages/notes_tab.dart';
+import 'package:alpha/features/manage_profile/pages/shifts_tab.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
-import '../../core/constants/color_constants.dart';
-import '../../core/constants/dimensions.dart';
-import '../../custom_widgets/cards/task_item.dart';
+import '../../../core/constants/color_constants.dart';
+import '../../../core/constants/dimensions.dart';
+import '../../../custom_widgets/cards/task_item.dart';
 
-class ProfileScreen extends StatefulWidget {
+class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProviderStateMixin{
+class _ProfileScreenState extends ConsumerState<ProfileScreen> with SingleTickerProviderStateMixin{
   late TabController _tabController;
 
 
@@ -30,6 +36,9 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
 
   @override
   Widget build(BuildContext context) {
+    final userProfileAsync = ref.watch(ProviderUtils.profileProvider);
+
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -89,44 +98,52 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
             )
         ),
       ),
+
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              TabBar(
-                controller: _tabController,
-                physics: const BouncingScrollPhysics(),
-                isScrollable: true,
-                unselectedLabelStyle: TextStyle(
-                    color: Pallete.greyAccent,
-                    fontSize: 14
+          child: userProfileAsync.when(
+            data: (userProfile) => Column(
+              children: [
+                TabBar(
+                  controller: _tabController,
+                  physics: const BouncingScrollPhysics(),
+                  isScrollable: true,
+                  unselectedLabelStyle:
+                  TextStyle(color: Pallete.greyAccent, fontSize: 14),
+                  labelStyle: const TextStyle(
+                      fontSize: 14, fontWeight: FontWeight.bold),
+                  tabAlignment: TabAlignment.center,
+                  tabs: const [
+                    Tab(text: 'Documents'),
+                    Tab(text: 'Assigned Shifts'),
+                    Tab(text: 'Notes'),
+                  ],
                 ),
-                labelStyle: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold
-                ),
-                tabAlignment: TabAlignment.center,
-                tabs: const [
-                  Tab(text: 'Documents'),
-                  Tab(text: 'Assigned Shifts'),
-                  Tab(text: 'Noted'),
-                ],
-              ),
-
-              SizedBox(
+                SizedBox(
                   height: 600,
                   child: TabBarView(
                     controller: _tabController,
                     children: [
-                      _buildTabCategory(),
-                      _buildTabCategory(),
-                      _buildTabCategory(),
+                      DocumentsTab(
+                        documents: userProfile.documents,
+                      ),
+                      ShiftsTab(
+                        shifts: userProfile.preferredWorkDays,
+                      ),
+                      NotesTab(
+                        notes: [],
+                      ),
                     ],
-                  )
-              ),
-            ],
+                  ),
+                ),
+              ],
+            ),
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (error, stackTrace) => Center(
+              child: Text('Error: $error'), // Show error message
+            ),
           ),
         ),
       ),

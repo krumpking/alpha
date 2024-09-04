@@ -1,3 +1,4 @@
+import 'package:alpha/core/utils/providers.dart';
 import 'package:alpha/core/utils/shared_pref.dart';
 import 'package:alpha/features/auth/pages/login_page.dart';
 import 'package:alpha/features/welcome/pages/onboard.dart';
@@ -60,7 +61,7 @@ class AuthHandler extends ConsumerWidget {
 
                   // Handle email verification
                   WidgetsBinding.instance.addPostFrameCallback((_) async {
-                    ref.read(userProvider.notifier).updateUser(user);
+                    ref.read(ProviderUtils.userProvider.notifier).updateUser(user);
 
                     if (user.providerData.any((info) => info.providerId == 'phone')) {
                       // Phone authenticated user, handle accordingly
