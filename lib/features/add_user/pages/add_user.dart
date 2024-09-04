@@ -41,7 +41,8 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
   TextEditingController shiftDayController = TextEditingController();
   TextEditingController shiftStartTimeController = TextEditingController();
   TextEditingController shiftEndTimeController = TextEditingController();
-  TextEditingController specilizationTextEditingController = TextEditingController();
+  TextEditingController specilizationTextEditingController =
+      TextEditingController();
   String selectedGender = 'Male';
   String? selectedCity;
   String? selectedState;
@@ -78,9 +79,10 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
         child: ListView(
           children: [
             const SizedBox(height: 20),
-            GestureDetector(
+            Center(
+                child: GestureDetector(
               onTap: () async {
-                await MediaServices.getImageFromGallery().then((file){
+                await MediaServices.getImageFromGallery().then((file) {
                   setState(() {
                     pickedImage = file;
                   });
@@ -103,18 +105,18 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                     ),
                     child: pickedImage != null
                         ? ClipOval(
-                      child: Image.file(
-                        pickedImage!,
-                        fit: BoxFit.cover,
-                        width: 150,
-                        height: 150,
-                      ),
-                    )
+                            child: Image.network(
+                              pickedImage!.path,
+                              fit: BoxFit.cover,
+                              width: 150,
+                              height: 150,
+                            ),
+                          )
                         : const Icon(
-                      Icons.add_a_photo_outlined,
-                      size: 100,
-                      color: Colors.grey,
-                    ),
+                            Icons.add_a_photo_outlined,
+                            size: 100,
+                            color: Colors.grey,
+                          ),
                   ),
                   // Icon Overlay
                   Positioned(
@@ -122,9 +124,7 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                     right: 0,
                     child: Container(
                       decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Pallete.primaryColor
-                      ),
+                          shape: BoxShape.circle, color: Pallete.primaryColor),
                       padding: const EdgeInsets.all(8.0),
                       child: const Icon(
                         Icons.camera_alt,
@@ -135,7 +135,7 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                   ),
                 ],
               ),
-            ),
+            )),
 
             const SizedBox(height: 30),
             CustomDropDown(
@@ -158,7 +158,10 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
             const SizedBox(height: 10),
             GestureDetector(
               onTap: () async {
-                dob = await AddUserHelper.pickDate(context: context, initialDate: DateTime(2000), firstDate: DateTime(1900));
+                dob = await AddUserHelper.pickDate(
+                    context: context,
+                    initialDate: DateTime(2000),
+                    firstDate: DateTime(1900));
                 setState(() {});
               },
               child: CustomTextField(
@@ -166,14 +169,15 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                 prefixIcon: const Icon(Icons.cake, color: Colors.grey),
                 enabled: false,
                 controller: TextEditingController(
-                  text: dob != null ? DateFormat('yyyy-MM-dd').format(dob!) : '',
+                  text:
+                      dob != null ? DateFormat('yyyy-MM-dd').format(dob!) : '',
                 ),
               ),
             ),
             const SizedBox(height: 10),
             CustomDropDown(
               prefixIcon: Icons.transgender,
-              items: const ['Male', 'Female', 'Other'],
+              items: const ['Male', 'Female'],
               selectedValue: selectedGender,
               onChanged: (value) {
                 setState(() {
@@ -236,7 +240,12 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
             const SizedBox(height: 10),
             CustomDropDown(
               prefixIcon: Icons.work,
-              items: const ['Nurse', 'Social Worker', 'Care/Support Worker', 'Range'],
+              items: const [
+                'Nurse',
+                'Social Worker',
+                'Care/Support Worker',
+                'Range'
+              ],
               selectedValue: selectedPost,
               onChanged: (value) {
                 setState(() {
@@ -259,16 +268,25 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                   Wrap(
                     spacing: 8.0,
                     runSpacing: 4.0,
-                    children: specialisations.map((spec) => Chip(
-                      label: Text(spec, style: const TextStyle(fontSize: 10, color: Colors.white),),
-                      backgroundColor:  Pallete.primaryColor.withOpacity(0.7),
-                      deleteIcon: const Icon(Icons.close, color: Colors.white,),
-                      onDeleted: () {
-                        setState(() {
-                          specialisations.remove(spec);
-                        });
-                      },
-                    ))
+                    children: specialisations
+                        .map((spec) => Chip(
+                              label: Text(
+                                spec,
+                                style: const TextStyle(
+                                    fontSize: 10, color: Colors.white),
+                              ),
+                              backgroundColor:
+                                  Pallete.primaryColor.withOpacity(0.7),
+                              deleteIcon: const Icon(
+                                Icons.close,
+                                color: Colors.white,
+                              ),
+                              onDeleted: () {
+                                setState(() {
+                                  specialisations.remove(spec);
+                                });
+                              },
+                            ))
                         .toList(),
                   ),
                   const SizedBox(
@@ -277,13 +295,12 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                   CustomTextField(
                     labelText: 'Specialisations',
                     controller: specilizationTextEditingController,
-                    prefixIcon: const Icon(Icons.medical_services, color: Colors.grey),
-                    onSubmitted: (value){
+                    prefixIcon:
+                        const Icon(Icons.medical_services, color: Colors.grey),
+                    onSubmitted: (value) {
                       setState(() {
                         AddUserHelper.addSpecialisation(
-                            value: value!,
-                            specialisations: specialisations
-                        );
+                            value: value!, specialisations: specialisations);
 
                         specilizationTextEditingController.text = '';
                       });
@@ -296,7 +313,6 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
             const SizedBox(height: 10),
             const Divider(),
 
-
             Container(
               child: Column(
                 children: [
@@ -308,9 +324,16 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                   Wrap(
                     children: preferredWorkDays.map((shift) {
                       return Chip(
-                        label: Text('${shift.day}: ${shift.startTime} - ${shift.endTime}', style: const TextStyle(fontSize: 10, color: Colors.white),),
-                        backgroundColor:  Pallete.primaryColor.withOpacity(0.7),
-                        deleteIcon: const Icon(Icons.close, color: Colors.white,),
+                        label: Text(
+                          '${shift.day}: ${shift.startTime} - ${shift.endTime}',
+                          style: const TextStyle(
+                              fontSize: 10, color: Colors.white),
+                        ),
+                        backgroundColor: Pallete.primaryColor.withOpacity(0.7),
+                        deleteIcon: const Icon(
+                          Icons.close,
+                          color: Colors.white,
+                        ),
                         onDeleted: () {
                           setState(() {
                             preferredWorkDays.remove(shift);
@@ -321,24 +344,32 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                   ),
                   CustomTextField(
                     controller: shiftDayController,
-                    prefixIcon: const Icon(Icons.calendar_month, color: Colors.grey,),
+                    prefixIcon: const Icon(
+                      Icons.calendar_month,
+                      color: Colors.grey,
+                    ),
                     labelText: 'Day of the Week',
                   ),
-
                   const SizedBox(height: 10),
-
                   Row(
                     children: [
                       Expanded(
                         child: GestureDetector(
-                          onTap: () async{
-                            await AddUserHelper.pickTime(context: context).then((timeOfDay) {
+                          onTap: () async {
+                            await AddUserHelper.pickTime(context: context)
+                                .then((timeOfDay) {
                               setState(() {
                                 if (timeOfDay != null) {
                                   final now = DateTime.now();
-                                  final dateTime = DateTime(now.year, now.month, now.day, timeOfDay.hour, timeOfDay.minute);
+                                  final dateTime = DateTime(
+                                      now.year,
+                                      now.month,
+                                      now.day,
+                                      timeOfDay.hour,
+                                      timeOfDay.minute);
 
-                                  String formattedTime = DateFormat('HH:mm').format(dateTime);
+                                  String formattedTime =
+                                      DateFormat('HH:mm').format(dateTime);
                                   shiftStartTimeController.text = formattedTime;
                                 }
                               });
@@ -347,23 +378,32 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                           child: CustomTextField(
                             enabled: false,
                             controller: shiftStartTimeController,
-                            prefixIcon: const Icon(Icons.watch_later_outlined, color: Colors.grey,),
+                            prefixIcon: const Icon(
+                              Icons.watch_later_outlined,
+                              color: Colors.grey,
+                            ),
                             labelText: 'Start Time',
                           ),
                         ),
                       ),
-
                       const SizedBox(width: 10),
                       Expanded(
                         child: GestureDetector(
                           onTap: () async {
-                            await AddUserHelper.pickTime(context: context).then((timeOfDay) {
+                            await AddUserHelper.pickTime(context: context)
+                                .then((timeOfDay) {
                               setState(() {
                                 if (timeOfDay != null) {
                                   final now = DateTime.now();
-                                  final dateTime = DateTime(now.year, now.month, now.day, timeOfDay.hour, timeOfDay.minute);
+                                  final dateTime = DateTime(
+                                      now.year,
+                                      now.month,
+                                      now.day,
+                                      timeOfDay.hour,
+                                      timeOfDay.minute);
 
-                                  String formattedTime = DateFormat('HH:mm').format(dateTime);
+                                  String formattedTime =
+                                      DateFormat('HH:mm').format(dateTime);
                                   shiftEndTimeController.text = formattedTime;
                                 }
                               });
@@ -372,16 +412,17 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                           child: CustomTextField(
                             enabled: false,
                             controller: shiftEndTimeController,
-                            prefixIcon: const Icon(Icons.watch_later_outlined, color: Colors.grey,),
+                            prefixIcon: const Icon(
+                              Icons.watch_later_outlined,
+                              color: Colors.grey,
+                            ),
                             labelText: 'End Time',
                           ),
                         ),
                       ),
                     ],
                   ),
-
                   const SizedBox(height: 10),
-
                   GeneralButton(
                     onTap: () {
                       setState(() {
@@ -399,9 +440,7 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                     },
                     borderRadius: 10,
                     btnColor: Colors.white,
-                    boxBorder: Border.all(
-                      color: Pallete.primaryColor
-                    ),
+                    boxBorder: Border.all(color: Pallete.primaryColor),
                     width: 150,
                     height: 40,
                     child: Text(
@@ -409,8 +448,7 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                       style: TextStyle(
                           color: Pallete.primaryColor,
                           fontSize: 12,
-                          fontWeight: FontWeight.bold
-                      ),
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],
@@ -436,9 +474,14 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                   Wrap(
                     children: documents.map((document) {
                       return Chip(
-                        label: Text(document.documentName , style: const TextStyle(fontSize: 10, color: Colors.white)),
-                        backgroundColor:  Pallete.primaryColor.withOpacity(0.7),
-                        deleteIcon: const Icon(Icons.close, color: Colors.white,),
+                        label: Text(document.documentName,
+                            style: const TextStyle(
+                                fontSize: 10, color: Colors.white)),
+                        backgroundColor: Pallete.primaryColor.withOpacity(0.7),
+                        deleteIcon: const Icon(
+                          Icons.close,
+                          color: Colors.white,
+                        ),
                         onDeleted: () {
                           setState(() {
                             documents.remove(document);
@@ -451,15 +494,19 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                   CustomTextField(
                     controller: documentNameController,
                     labelText: 'Document Name',
-                    prefixIcon: const Icon(Icons.description, color: Colors.grey),
+                    prefixIcon:
+                        const Icon(Icons.description, color: Colors.grey),
                   ),
                   const SizedBox(height: 10),
                   GestureDetector(
                     onTap: () async {
-                      await AddUserHelper.pickDate(context: context, initialDate: DateTime.now()).then((date) {
+                      await AddUserHelper.pickDate(
+                              context: context, initialDate: DateTime.now())
+                          .then((date) {
                         setState(() {
                           if (date != null) {
-                            String formattedDate = DateFormat('yyyy/MM/dd').format(date);
+                            String formattedDate =
+                                DateFormat('yyyy/MM/dd').format(date);
                             expiryDateTextEditing.text = formattedDate;
                           }
                         });
@@ -468,45 +515,47 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                     child: CustomTextField(
                       enabled: false,
                       controller: expiryDateTextEditing,
-                      prefixIcon: const Icon(Icons.calendar_month, color: Colors.grey,),
+                      prefixIcon: const Icon(
+                        Icons.calendar_month,
+                        color: Colors.grey,
+                      ),
                       labelText: 'Expiry Date',
                     ),
                   ),
                   const SizedBox(height: 10),
                   GeneralButton(
                     onTap: () async {
-                     await StorageHelper.triggerDocUpload().then((documentUrl){
-                       if(documentUrl != null){
-                         selectedDocumentUrl = documentUrl;
+                      await StorageHelper.triggerDocUpload()
+                          .then((documentUrl) {
+                        if (documentUrl != null) {
+                          selectedDocumentUrl = documentUrl;
 
-                         setState(() {
-                           documents.add(
-                             Document(
-                               documentName: documentNameController.text.trim(),
-                               documentUrl: selectedDocumentUrl!,
-                               expiryDate: expiryDateTextEditing.text,
-                             ),
-                           );
-                           documentNameController.clear();
-                           expiryDateTextEditing.clear();
-                         });
-                       }
-                     });
+                          setState(() {
+                            documents.add(
+                              Document(
+                                documentName:
+                                    documentNameController.text.trim(),
+                                documentUrl: selectedDocumentUrl!,
+                                expiryDate: expiryDateTextEditing.text,
+                              ),
+                            );
+                            documentNameController.clear();
+                            expiryDateTextEditing.clear();
+                          });
+                        }
+                      });
                     },
                     borderRadius: 10,
                     btnColor: Colors.white,
                     width: 150,
                     height: 40,
-                    boxBorder: Border.all(
-                        color: Pallete.primaryColor
-                    ),
+                    boxBorder: Border.all(color: Pallete.primaryColor),
                     child: Text(
                       "Add Document",
                       style: TextStyle(
                           color: Pallete.primaryColor,
                           fontSize: 12,
-                          fontWeight: FontWeight.bold
-                      ),
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],
@@ -516,23 +565,26 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
             const SizedBox(height: 20),
             Center(
               child: GeneralButton(
-                onTap: ()async{
+                onTap: () async {
                   if (pickedImage != null) {
                     await StorageServices.uploadDp(
                       file: pickedImage!,
-                    ).then((response){
-                      if(response.success){
+                    ).then((response) {
+                      if (response.success) {
                         AddUserHelper.validateAndSubmitForm(
                           userProfile: UserProfile(
                             post: selectedPost,
                             name: nameController.text.trim(),
                             email: emailController.text.trim(),
-                            phoneNumber: phoneNumberController!.fullPhoneNumber.trim(),
+                            phoneNumber:
+                                phoneNumberController!.fullPhoneNumber.trim(),
                             address: addressController.text.trim(),
                             preferredWorkDays: preferredWorkDays,
-                            previousEmployer: previousEmployerController.text.trim(),
+                            previousEmployer:
+                                previousEmployerController.text.trim(),
                             documents: documents,
-                            contactInformation: contactInformationController.text.trim(),
+                            contactInformation:
+                                contactInformationController.text.trim(),
                             role: selectedRole,
                             gender: selectedGender,
                             dob: dob,
@@ -543,26 +595,30 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                             profilePicture: response.data,
                           ),
                         );
-                      }else{
-                        CustomSnackBar.showErrorSnackbar(message: 'Failed to upload image, Please try Again');
+                      } else {
+                        CustomSnackBar.showErrorSnackbar(
+                            message:
+                                'Failed to upload image, Please try Again');
 
                         if (Get.isDialogOpen!) Get.back();
                         return;
                       }
                     });
-                  }
-                  else{
+                  } else {
                     AddUserHelper.validateAndSubmitForm(
                       userProfile: UserProfile(
                         post: selectedPost,
                         name: nameController.text.trim(),
                         email: emailController.text.trim(),
-                        phoneNumber: phoneNumberController!.fullPhoneNumber.trim(),
+                        phoneNumber:
+                            phoneNumberController!.fullPhoneNumber.trim(),
                         address: addressController.text.trim(),
                         preferredWorkDays: preferredWorkDays,
-                        previousEmployer: previousEmployerController.text.trim(),
+                        previousEmployer:
+                            previousEmployerController.text.trim(),
                         documents: documents,
-                        contactInformation: contactInformationController.text.trim(),
+                        contactInformation:
+                            contactInformationController.text.trim(),
                         role: selectedRole,
                         gender: selectedGender,
                         dob: dob,
@@ -583,8 +639,7 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 14,
-                      fontWeight: FontWeight.bold
-                  ),
+                      fontWeight: FontWeight.bold),
                 ),
               ),
             ),

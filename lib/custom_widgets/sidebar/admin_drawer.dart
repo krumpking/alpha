@@ -112,6 +112,9 @@ class _AdminDrawerState extends State<AdminDrawer> {
                 style: TextStyle(fontSize: 16),
               ),
               trailing: const Icon(Icons.navigate_next),
+              onTap: () {
+                Get.toNamed(RoutesHelper.adminHomeScreen);
+              },
             ),
             ListTile(
               leading: Icon(
