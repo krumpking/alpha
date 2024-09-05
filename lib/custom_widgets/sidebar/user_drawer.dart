@@ -124,7 +124,7 @@ class _UserDrawerState extends State<UserDrawer> {
               ),
               trailing: const Icon(Icons.navigate_next),
               onTap: () {
-                Get.toNamed(RoutesHelper.userProfileScreen);
+                Get.toNamed(RoutesHelper.userProfileScreen, arguments: widget.user.email);
               },
             ),
             ListTile(

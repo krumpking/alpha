@@ -22,12 +22,11 @@ class StaffServices {
     }
   }
 
-  static Future<APIResponse<UserProfile>> fetchUserProfile() async {
-    final email = FirebaseAuth.instance.currentUser!.email;
+  static Future<APIResponse<UserProfile>> fetchUserProfile({required String profileEmail}) async {
     final usersRef = FirebaseFirestore.instance.collection('users');
 
     // Query the collection to find a user document with the specified email
-    final querySnapshot = await usersRef.where('email', isEqualTo: email).get();
+    final querySnapshot = await usersRef.where('email', isEqualTo: profileEmail).get();
 
     // Check if any documents are found
     if (querySnapshot.docs.isNotEmpty) {

@@ -84,7 +84,11 @@ class RoutesHelper {
 
     GetPage(
         name: userProfileScreen,
-        page: ()=> const ProfileScreen()
+        page: (){
+          final String email = Get.arguments as String;
+
+          return UserProfileScreen(profileEmail: email);
+        }
     ),
 
     GetPage(

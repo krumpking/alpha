@@ -1,4 +1,3 @@
-import 'package:alpha/features/add_shift/services/add_shif_services.dart';
 import 'package:alpha/models/document.dart';
 import 'package:alpha/models/user_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -171,7 +170,7 @@ class _AddUserShiftState extends State<AddUserShift> {
                 onTap: ()=> ShiftHelpers.validateAndSubmitShift(
                   documentName: _documentNameController.text,
                   currentUser: currentUser!,
-                  hoursCompleted: int.parse(_hoursController.text),
+                  hoursCompleted: int.parse(_hoursController.text ?? '0'),
                   isCompleted: _isCompleted,
                   selectedUser: widget.selectedUser
                 ),

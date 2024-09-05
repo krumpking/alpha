@@ -20,8 +20,9 @@ class ProviderUtils{
   });
 
 
-  static final profileProvider = StateNotifierProvider<ProfileNotifier, AsyncValue<UserProfile>>((ref) {
-    return ProfileNotifier();
+  static final profileProvider = StateNotifierProvider.family<ProfileNotifier, AsyncValue<UserProfile>, String>((ref, profileEmail) {
+    return ProfileNotifier(profileEmail: profileEmail);
   });
+
 
 }
