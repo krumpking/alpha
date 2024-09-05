@@ -1,24 +1,29 @@
 import 'dart:math';
 
 import 'package:alpha/core/constants/color_constants.dart';
+import 'package:alpha/core/constants/local_image_constants.dart';
 import 'package:alpha/custom_widgets/cards/category_card.dart';
 import 'package:alpha/custom_widgets/cards/task_item.dart';
 import 'package:alpha/custom_widgets/text_fields/custom_text_field.dart';
 import 'package:alpha/features/home/services/dummy.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../core/constants/dimensions.dart';
+import '../../../core/utils/providers.dart';
 import '../../../custom_widgets/sidebar/user_drawer.dart';
 
-class UserHomeScreen extends StatefulWidget {
+class UserHomeScreen extends ConsumerStatefulWidget {
   const UserHomeScreen({super.key});
 
   @override
-  State<UserHomeScreen> createState() => _UserHomeScreenState();
+  ConsumerState<UserHomeScreen> createState() => _UserHomeScreenState();
 }
 
-class _UserHomeScreenState extends State<UserHomeScreen> with SingleTickerProviderStateMixin {
+class _UserHomeScreenState extends ConsumerState<UserHomeScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final List<Color> colors = [
     Colors.blue,
@@ -46,6 +51,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> with SingleTickerProvid
 
   @override
   Widget build(BuildContext context) {
+    final userProfileAsync = ref.watch(ProviderUtils.profileProvider(user!.email!));
+
     return Scaffold(
       key: _key,
       drawer: Dimensions.isSmallScreen ? UserDrawer(user: user!,) : null,
@@ -72,27 +79,50 @@ class _UserHomeScreenState extends State<UserHomeScreen> with SingleTickerProvid
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(16)
                       ),
-                      child: Image.network(
-                        "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                      child: CachedNetworkImage(
+                        imageUrl: user!.photoURL ?? '',
+                        placeholder: (context, url) => Skeletonizer(
+                          enabled: true,
+                          child: SizedBox(
+                            child: Image.asset(
+                              LocalImageConstants.logo,
+                              width: 120,
+                              height: 120,
+                            ),
+
+                          ),
+                        ),
+                        errorWidget: (context, url, error) => const Icon(Icons.error),
+                        fit: BoxFit.cover,
+                        width: 120,
+                        height: 120,
                       ),
-                    ),
+
+      ),
                     const SizedBox(
                       width: 16,
                     ),
-                    const Column(
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Max Rosco',
-                          style: TextStyle(
+                          user!.displayName ?? '',
+                          style: const TextStyle(
                               fontWeight: FontWeight.bold
                           ),
                         ),
-                        Text(
-                          'Mental Health Nurse',
-                          style: TextStyle(
-                            fontSize: 12
+                        userProfileAsync.when(
+                          data: (userProfile) => Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                userProfile.post,
+                                style: const TextStyle(fontSize: 12),
+                              ),
+                            ],
                           ),
+                          loading: () => const Skeletonizer(child: Text('Post  ', style: TextStyle(fontSize: 12),)),
+                          error: (error, stackTrace) => Text('Error: $error'),
                         ),
                       ],
                     ),

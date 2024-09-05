@@ -1,4 +1,5 @@
 import 'package:alpha/core/utils/routes.dart';
+import 'package:alpha/features/add_user/services/add_user_services.dart';
 import 'package:alpha/models/user_profile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -63,13 +64,10 @@ class AuthServices {
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        // User not found in FirebaseAuth, check Firestore
-        final userDoc = await FirebaseFirestore.instance
-            .collection('users')
-            .where('email', isEqualTo: emailAddress)
-            .get();
 
-        if (userDoc.docs.isNotEmpty) {
+        final userDoc = await StaffServices.fetchUserProfile(profileEmail: emailAddress);
+
+        if (userDoc.data != null) {
           try {
             final UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
                 email: emailAddress,
@@ -77,6 +75,11 @@ class AuthServices {
             );
 
             if(userCredential.user != null){
+              await userCredential.user!.updateProfile(
+                displayName: userDoc.data!.name,
+                photoURL: userDoc.data!.profilePicture!.isNotEmpty || userDoc.data!.profilePicture != null ? userDoc.data!.profilePicture : null,
+              );
+
               await userCredential.user!.sendEmailVerification();
             }
             return APIResponse(success: true, data: userCredential.user, message: 'User profile found and login successful');

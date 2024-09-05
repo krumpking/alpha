@@ -9,7 +9,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import '../../sidebarx_feat/pages/main_screen.dart';
 import '../helpers/helpers.dart';
-import '../state/authentication_provider.dart';
 
 class AuthHandler extends ConsumerWidget {
   const AuthHandler({super.key});

@@ -3,12 +3,15 @@ import 'package:alpha/features/manage_profile/pages/documents_tab.dart';
 import 'package:alpha/features/manage_profile/pages/notes_tab.dart';
 import 'package:alpha/features/manage_profile/pages/shifts_tab.dart';
 import 'package:alpha/models/user_profile.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import '../../../core/constants/color_constants.dart';
 import '../../../core/constants/dimensions.dart';
-import '../../../custom_widgets/cards/task_item.dart';
+import '../../../core/constants/local_image_constants.dart';
 
 class UserProfileScreen extends ConsumerStatefulWidget {
   final String profileEmail;
@@ -20,6 +23,7 @@ class UserProfileScreen extends ConsumerStatefulWidget {
 
 class _ProfileScreenState extends ConsumerState<UserProfileScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  final user = FirebaseAuth.instance.currentUser;
 
   @override
   void initState() {
@@ -48,43 +52,96 @@ class _ProfileScreenState extends ConsumerState<UserProfileScreen> with SingleTi
               children: [
                 Row(
                   children: [
-                    if (Dimensions.isSmallScreen)
-                      IconButton(
+                    if (Dimensions.isSmallScreen) IconButton(
                         onPressed: () {
                           Get.back();
                         },
                         icon: const Icon(Icons.arrow_back),
                       ),
-                    Container(
-                      width: 120,
-                      height: 120,
-                      clipBehavior: Clip.hardEdge,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Image.network(
-                        "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 16,
-                    ),
-                    // Display user name and role from profile data
                     userProfileAsync.when(
-                      data: (userProfile) => Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      data: (userProfile) =>  Row(
                         children: [
-                          Text(
-                            userProfile.name,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          Container(
+                            width: 120,
+                            height: 120,
+                            clipBehavior: Clip.hardEdge,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: CachedNetworkImage(
+                              imageUrl: userProfile.profilePicture!,
+                              placeholder: (context, url) => Skeletonizer(
+                                enabled: true,
+                                child: SizedBox(
+                                  child: Image.asset(
+                                    LocalImageConstants.logo,
+                                    width: 120,
+                                    height: 120,
+                                  ),
+
+                                ),
+                              ),
+                              errorWidget: (context, url, error) => const Icon(Icons.error),
+                              fit: BoxFit.cover,
+                              width: 120,
+                              height: 120,
+                            ),
+
                           ),
-                          Text(
-                            userProfile.role,
-                            style: const TextStyle(fontSize: 12),
+                          const SizedBox(
+                            width: 16,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                userProfile.name,
+                                style: const TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                userProfile.post,
+                                style: const TextStyle(fontSize: 12),
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                      loading: () => const CircularProgressIndicator(),
+                      loading: () => Skeletonizer(
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 120,
+                              height: 120,
+                              clipBehavior: Clip.hardEdge,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              child: Image.asset(
+                                LocalImageConstants.logo,
+                                width: 120,
+                                height: 120,
+                              ),
+
+                            ),
+                            const SizedBox(
+                              width: 16,
+                            ),
+                            const Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "userProfile.name",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  "userProfile.post",
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                              ],
+                            ),
+                          ],
+                        )
+                      ),
                       error: (error, stackTrace) => Text('Error: $error'),
                     ),
                   ],
@@ -130,7 +187,7 @@ class _ProfileScreenState extends ConsumerState<UserProfileScreen> with SingleTi
                       ShiftsTab(shifts: userProfile.preferredWorkDays),
 
                       // Notes Tab
-                      NotesTab(notes: []),
+                      const NotesTab(notes: []),
                     ],
                   ),
                 ),
@@ -145,42 +202,4 @@ class _ProfileScreenState extends ConsumerState<UserProfileScreen> with SingleTi
       ),
     );
   }
-  Widget _buildTabCategory(){
-    return SizedBox(
-      height: 800,
-      child: ListView(
-        physics: const BouncingScrollPhysics(),
-        children: const [
-          TaskItemCard(
-            name: 'NHS Shifts',
-            role: 'Hospital',
-            time: '12/08/24 1:00pm - 2:00pm',
-            type: 'Available',
-          ),
-
-          TaskItemCard(
-            name: 'NHS Shifts',
-            role: 'Hospital',
-            time: '12/08/24 1:00pm - 2:00pm',
-            type: 'Available',
-          ),
-
-          TaskItemCard(
-            name: 'NHS Shifts',
-            role: 'Hospital',
-            time: '12/08/24 1:00pm - 2:00pm',
-            type: 'Available',
-          ),
-
-          TaskItemCard(
-            name: 'NHS Shifts',
-            role: 'Hospital',
-            time: '12/08/24 1:00pm - 2:00pm',
-            type: 'Available',
-          ),
-        ],
-      ),
-    );
-  }
-
 }

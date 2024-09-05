@@ -2,7 +2,6 @@ import 'dart:math';
 import 'package:alpha/core/constants/color_constants.dart';
 import 'package:alpha/core/constants/dimensions.dart';
 import 'package:alpha/custom_widgets/cards/category_card.dart';
-import 'package:alpha/custom_widgets/cards/task_item.dart';
 import 'package:alpha/custom_widgets/text_fields/custom_text_field.dart';
 import 'package:alpha/features/home/services/dummy.dart';
 import 'package:alpha/models/user_profile.dart';

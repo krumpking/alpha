@@ -1,5 +1,4 @@
 import 'package:alpha/core/constants/color_constants.dart';
-import 'package:alpha/core/utils/logs.dart';
 import 'package:alpha/core/utils/routes.dart';
 import 'package:alpha/models/user_profile.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +47,9 @@ class StaffCard extends StatelessWidget {
                       title: 'View Profile',
                       icon: Icons.remove_red_eye_outlined,
                       value: 0,
-                      onTap: ()=>()
+                      onTap: () {
+                        Get.toNamed(RoutesHelper.userProfileScreen, arguments: user.email);
+                      },
                   ),
 
                   buildPopUpOption(
