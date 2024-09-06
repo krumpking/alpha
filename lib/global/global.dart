@@ -3,38 +3,7 @@ enum UserRole {
   admin
 }
 
-List<String> zimbabweCities = [
-  'Harare',
-  'Bulawayo',
-  'Chitungwiza',
-  'Mutare',
-  'Epworth',
-  'Gweru',
-  'Kwekwe',
-  'Kadoma',
-  'Masvingo',
-  'Chinhoyi',
-  'Marondera',
-  'Norton',
-  'Chegutu',
-  'Bindura',
-  'Zvishavane',
-  'Victoria Falls',
-  'Hwange',
-  'Redcliff',
-  'Rusape',
-  'Chiredzi',
-  'Kariba',
-  'Karoi',
-  'Beitbridge',
-  'Chipinge',
-  'Shurugwi',
-  'Gokwe',
-  'Murehwa',
-  'Mvurwi',
-  'Ruwa',
-  'Plumtree',
-  'Mhangura',
-  'Mutoko',
-  'Tsholotsho',
-];
+enum FeedbackTag {
+  alpha,
+  hospital
+}
