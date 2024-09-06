@@ -14,7 +14,7 @@ class ShiftServices {
     try {
       await FirebaseFirestore.instance.collection('shifts').add({
         'date_added': Timestamp.now(),
-        'added_by': currentUser.uid,
+        'added_by': currentUser.email,
         'hours_completed': hoursCompleted,
         'document_name': documentName,
         'is_completed': isCompleted,

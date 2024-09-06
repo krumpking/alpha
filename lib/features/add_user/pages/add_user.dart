@@ -318,13 +318,29 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                     );
                   }).toList(),
                 ),
-                CustomTextField(
-                  controller: shiftDayController,
-                  prefixIcon: const Icon(
-                    Icons.calendar_month,
-                    color: Colors.grey,
+                GestureDetector(
+                  onTap: () async {
+                    await AddUserHelper.pickDate(
+                        context: context, initialDate: DateTime.now())
+                        .then((date) {
+                      setState(() {
+                        if (date != null) {
+                          String formattedDate =
+                          DateFormat('yyyy/MM/dd').format(date);
+                          shiftDayController.text = formattedDate;
+                        }
+                      });
+                    });
+                  },
+                  child: CustomTextField(
+                    enabled: false,
+                    controller: shiftDayController,
+                    prefixIcon: const Icon(
+                      Icons.calendar_month,
+                      color: Colors.grey,
+                    ),
+                    labelText: 'Shift Date',
                   ),
-                  labelText: 'Day of the Week',
                 ),
                 const SizedBox(height: 10),
                 Row(
