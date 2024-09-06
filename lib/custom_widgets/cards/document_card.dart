@@ -2,10 +2,6 @@ import 'package:alpha/core/constants/color_constants.dart';
 import 'package:alpha/features/manage_profile/helpers/profile_helpers.dart';
 import 'package:alpha/models/document.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:path/path.dart';
-import 'package:url_launcher/url_launcher.dart';
-import '../../features/add_user/services/storage_services.dart';
 
 class DocumentCard extends StatelessWidget {
   final Document document;
@@ -33,29 +29,28 @@ class DocumentCard extends StatelessWidget {
             trailing: PopupMenuButton<int>(
               onSelected: (int selectedValue) async {
                 switch (selectedValue) {
-                  case 0: // View
-                    await _viewDocument(document.documentUrl);
+                  case 0:
+                    await ProfileHelpers.viewDocument(document.documentUrl);
                     break;
-                  case 1: // Download
-                    await _downloadDocument(document.documentUrl);
+                  case 1:
+                    await ();
                     break;
                 }
               },
               itemBuilder: (BuildContext context) => [
                 buildPopUpOption(
-                  title: 'View',
-                  icon: Icons.remove_red_eye_outlined,
+                  title: 'Download',
+                  icon: Icons.download,
                   value: 0,
                   onTap: () {
                     // View logic handled in onSelected
                   },
                 ),
                 buildPopUpOption(
-                  title: 'Download',
-                  icon: Icons.download,
+                  title: 'Delete',
+                  icon: Icons.delete,
                   value: 1,
                   onTap: () {
-                    // Download logic handled in onSelected
                   },
                 ),
               ],
@@ -121,22 +116,5 @@ class DocumentCard extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  Future<void> _viewDocument(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      Get.snackbar('Error', 'Could not open the document.');
-    }
-  }
-
-  Future<void> _downloadDocument(String url) async {
-    final response = await StorageServices.downloadAndDecodeFile(url, 'downloads/${basename(url)}');
-    if (response.success) {
-      Get.snackbar('Success', 'Document downloaded successfully.');
-    } else {
-      Get.snackbar('Error', response.message ?? 'Failed to download document.');
-    }
   }
 }

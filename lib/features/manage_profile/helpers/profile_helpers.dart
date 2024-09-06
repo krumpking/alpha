@@ -1,6 +1,8 @@
 import 'package:alpha/models/document.dart';
 import 'package:alpha/models/shift.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfileHelpers{
   static String documentStatus(Document document){
@@ -43,5 +45,13 @@ class ProfileHelpers{
 
     // Format the shift duration as a string
     return'${hours}h ${minutes}m';
+  }
+
+  static Future<void> viewDocument(String url) async {
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      Get.snackbar('Error', 'Could not open the document.');
+    }
   }
 }
