@@ -27,6 +27,39 @@ class DocumentCard extends StatelessWidget {
           ListTile(
             contentPadding: EdgeInsets.zero,
             title: Text(document.documentName, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+            trailing: PopupMenuButton<int>(
+              onSelected: (int selectedValue) {
+                // Handle the selected value
+                switch (selectedValue) {
+                  case 0:
+                  // Perform some action for Edit
+                    break;
+                  case 1:
+                  // Perform some action for Delete
+                    break;
+                }
+              },
+              itemBuilder: (BuildContext context) => [
+                buildPopUpOption(
+                  title: 'View',
+                  icon: Icons.remove_red_eye_outlined,
+                  value: 0,
+                  onTap: () {
+
+                  },
+                ),
+
+                buildPopUpOption(
+                    title: 'Download',
+                    icon: Icons.download,
+                    value: 1,
+                    onTap: (){
+
+                    }
+                ),
+              ],
+              icon: const Icon(Icons.more_vert),
+            ),
           ),
           const Divider(
             color: Colors.grey,
@@ -69,6 +102,20 @@ class DocumentCard extends StatelessWidget {
               ),
             ],
           ),
+        ],
+      ),
+    );
+  }
+
+  dynamic buildPopUpOption({required String title, required IconData icon, required int value, required void Function() onTap}){
+    return PopupMenuItem<int>(
+      onTap: onTap,
+      value: value,
+      child: Row(
+        children: [
+          Icon(icon, color: Colors.black54),
+          const SizedBox(width: 8),
+          Text(title, style: const TextStyle(fontSize: 12),),
         ],
       ),
     );

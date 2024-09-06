@@ -12,6 +12,7 @@ import '../../../core/utils/providers.dart';
 import '../../../custom_widgets/sidebar/admin_drawer.dart';
 import 'admin_tabs/staff_tab.dart';
 
+
 class AdminHomeScreen extends ConsumerStatefulWidget {
   const AdminHomeScreen({super.key});
 
@@ -45,7 +46,7 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen> with SingleTi
 
   @override
   Widget build(BuildContext context) {
-    final userState = ref.watch(ProviderUtils.staffProvider);
+    final staffState = ref.watch(ProviderUtils.staffProvider,);
 
     return Scaffold(
       key: _key,
@@ -104,7 +105,7 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen> with SingleTi
           ),
         ),
       ),
-      body: userState.when(
+      body: staffState.when(
         data: (users) => _buildContent(users),
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stackTrace) => Center(child: Text('Error: $error')),

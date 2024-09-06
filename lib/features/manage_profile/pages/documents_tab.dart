@@ -1,7 +1,6 @@
 import 'package:alpha/models/document.dart';
 import 'package:flutter/material.dart';
 import '../../../custom_widgets/cards/document_card.dart';
-import '../../../custom_widgets/cards/task_item.dart';
 
 class DocumentsTab extends StatefulWidget {
   final List<Document> documents;
@@ -18,9 +17,7 @@ class _DocumentsTabState extends State<DocumentsTab> {
       body: ListView.builder(
         itemCount: widget.documents.length,
         itemBuilder: (context, index) {
-
           final document = widget.documents[index];
-
           return DocumentCard(
             document: document,
           );

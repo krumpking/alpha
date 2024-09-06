@@ -190,7 +190,6 @@ class AddUserHelper {
     if (value.isNotEmpty && !specialisations.contains(value)) {
         specialisations.add(value);
     }
-
     return specialisations;
   }
 

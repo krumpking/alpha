@@ -1,3 +1,4 @@
+import 'package:alpha/core/utils/logs.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../../core/utils/api_response.dart';
@@ -55,6 +56,7 @@ class StaffServices {
 
       return APIResponse(success: true, data: users, message: 'Users retrieved successfully');
     } catch (e) {
+      DevLogs.logError(e.toString());
       return APIResponse(success: false, message: e.toString());
     }
   }
