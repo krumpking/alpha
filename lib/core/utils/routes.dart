@@ -1,7 +1,5 @@
 import 'package:alpha/features/feedback/pages/add_feedback.dart';
 import 'package:alpha/features/shift/pages/add_hours_worked.dart';
-import 'package:alpha/features/add_user/pages/add_user.dart';
-import 'package:alpha/features/add_user/pages/view_users.dart';
 import 'package:alpha/features/auth/handlers/auth_handler.dart';
 import 'package:alpha/features/auth/pages/email_verification.dart';
 import 'package:alpha/features/auth/pages/forgot_password.dart';
@@ -11,6 +9,8 @@ import 'package:alpha/features/manage_profile/pages/manage_profile_screen.dart';
 import 'package:alpha/features/statistics/pages/admin_stuff_stats.dart';
 import 'package:alpha/features/welcome/pages/onboard.dart';
 import 'package:alpha/features/welcome/pages/splash.dart';
+import 'package:alpha/features/workers/pages/add_user.dart';
+import 'package:alpha/features/workers/pages/view_users.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
