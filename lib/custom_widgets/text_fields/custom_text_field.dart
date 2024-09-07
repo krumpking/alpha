@@ -9,6 +9,7 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController? controller;
   final String? labelText;
   final void Function(String?)? onChanged;
+  final void Function(String?)? onSubmitted;
   final bool? obscureText;
   final TextStyle? labelStyle;
   final TextStyle? inputTextStyle;
@@ -18,7 +19,7 @@ class CustomTextField extends StatelessWidget {
   final Widget? suffixIconButton;
   final bool? enabled;
 
-  const CustomTextField({super.key, this.maxLength, this.controller, this.fillColor, this.filled, this.defaultBoarderColor, this.focusedBoarderColor, required this.labelText, this.labelStyle, this.inputTextStyle, this.keyBoardType, required this.prefixIcon, this.obscureText, this.suffixIconButton, this.enabled, this.onChanged});
+  const CustomTextField({super.key, this.maxLength, this.controller, this.fillColor, this.filled, this.defaultBoarderColor, this.focusedBoarderColor, required this.labelText, this.labelStyle, this.inputTextStyle, this.keyBoardType, required this.prefixIcon, this.obscureText, this.suffixIconButton, this.enabled, this.onChanged, this.onSubmitted});
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +29,7 @@ class CustomTextField extends StatelessWidget {
       obscureText: obscureText ?? false,
       controller: controller,
       onChanged: onChanged,
+      onSubmitted: onSubmitted,
       enabled: enabled ?? true,
       decoration: InputDecoration(
         fillColor: fillColor,

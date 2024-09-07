@@ -112,7 +112,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                     ),
 
                     const Text(
-                      'Congratulations your account awaits. Verify your email to start Shopping and Experience a world of unrivaled Deals and personalized Offers.',
+                      'Congratulations your account awaits. Verify your email to start and get going.',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 12,
@@ -158,11 +158,12 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                       child: RichText(
                         text: TextSpan(
                             style: const TextStyle(
-                                fontSize: 12,
+                              fontSize: 12,
+                              color: Colors.black
                             ),
                             children: [
                               const TextSpan(
-                                  text: "Didn't receive the email?"
+                                  text: "Didn't receive the email? "
                               ),
 
                               TextSpan(

@@ -4,15 +4,14 @@ import 'package:alpha/custom_widgets/custom_button/general_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../state/stuff_provider.dart';
+import '../../../core/utils/providers.dart';
 
 class AdminViewUsers extends ConsumerWidget {
   const AdminViewUsers({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Watch the stuffProvider for user state changes
-    final userState = ref.watch(stuffProvider);
+    final userState = ref.watch(ProviderUtils.staffProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -55,14 +54,14 @@ class AdminViewUsers extends ConsumerWidget {
                       color: Pallete.primaryColor,
                     ),
                     title: Text(
-                        user['email'] ?? 'No Email',
+                        user.email,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 14
                       ),
                     ),
                     subtitle: Text(
-                        user['phone_number'] ?? '',
+                        user.phoneNumber,
                       style:  TextStyle(
                         color: Colors.grey.shade600,
                           fontSize: 12
@@ -70,7 +69,7 @@ class AdminViewUsers extends ConsumerWidget {
                     ),
 
                     trailing: Text(
-                      user['role'] ?? '',
+                      user.post,
                       style:  TextStyle(
                           color: Colors.grey.shade600,
                           fontSize: 12
@@ -91,7 +90,7 @@ class AdminViewUsers extends ConsumerWidget {
                 ElevatedButton(
                   onPressed: () {
                     // Add logic to retry fetching users
-                    ref.read(stuffProvider.notifier).fetchUsers();
+                    ref.read(ProviderUtils.staffProvider.notifier).fetchUsers();
                   },
                   child: const Text('Retry'),
                 ),
