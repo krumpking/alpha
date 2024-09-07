@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:alpha/core/utils/files.dart';
+import 'package:alpha/core/utils/logs.dart';
 import 'package:alpha/custom_widgets/text_fields/custome_phone_input.dart';
 import 'package:alpha/models/shift.dart';
 import 'package:alpha/models/document.dart';
@@ -39,7 +41,8 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
   TextEditingController shiftDayController = TextEditingController();
   TextEditingController shiftStartTimeController = TextEditingController();
   TextEditingController shiftEndTimeController = TextEditingController();
-  TextEditingController specilizationTextEditingController = TextEditingController();
+  TextEditingController specilizationTextEditingController =
+      TextEditingController();
   String selectedGender = 'Male';
   String? selectedCity;
   String? selectedState;
@@ -51,7 +54,7 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
   String? selectedDocumentUrl;
   TextEditingController expiryDateTextEditing = TextEditingController();
   DateTime? dob;
-  File? pickedImage;
+  dynamic? pickedImage;
 
   @override
   void initState() {
@@ -103,12 +106,13 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                     ),
                     child: pickedImage != null
                         ? ClipOval(
-                            child: Image.file(
-                              pickedImage!,
-                              fit: BoxFit.cover,
-                              width: 150,
-                              height: 150,
-                            ),
+                            child: Center(
+                                child: Text(
+                              "Image Added",
+                              style: TextStyle(
+                                  color: Pallete.primaryColor,
+                                  fontWeight: FontWeight.bold),
+                            )),
                           )
                         : const Icon(
                             Icons.add_a_photo_outlined,
@@ -191,7 +195,11 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
               prefixIcon: const Icon(Icons.email_outlined, color: Colors.grey),
             ),
             const SizedBox(height: 10),
-            CustomPhoneInput(labelText: 'Phone Number', pickFromContactsIcon: const Icon(Icons.perm_contact_cal), controller: phoneNumberController,),
+            CustomPhoneInput(
+              labelText: 'Phone Number',
+              pickFromContactsIcon: const Icon(Icons.perm_contact_cal),
+              controller: phoneNumberController,
+            ),
             const SizedBox(height: 10),
             CustomTextField(
               controller: addressController,
@@ -215,7 +223,11 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
               prefixIcon: const Icon(Icons.business_center, color: Colors.grey),
             ),
             const SizedBox(height: 10),
-            CustomPhoneInput(labelText: 'Previous Employer\'s Contact Information', pickFromContactsIcon: const Icon(Icons.perm_contact_cal), controller: contactInformationController,),
+            CustomPhoneInput(
+              labelText: 'Previous Employer\'s Contact Information',
+              pickFromContactsIcon: const Icon(Icons.perm_contact_cal),
+              controller: contactInformationController,
+            ),
             const SizedBox(height: 10),
             CustomDropDown(
               prefixIcon: Icons.work,
@@ -302,8 +314,8 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                     return Chip(
                       label: Text(
                         '${shift.day}: ${shift.startTime} - ${shift.endTime}',
-                        style: const TextStyle(
-                            fontSize: 10, color: Colors.white),
+                        style:
+                            const TextStyle(fontSize: 10, color: Colors.white),
                       ),
                       backgroundColor: Pallete.primaryColor.withOpacity(0.7),
                       deleteIcon: const Icon(
@@ -321,12 +333,12 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                 GestureDetector(
                   onTap: () async {
                     await AddUserHelper.pickDate(
-                        context: context, initialDate: DateTime.now())
+                            context: context, initialDate: DateTime.now())
                         .then((date) {
                       setState(() {
                         if (date != null) {
                           String formattedDate =
-                          DateFormat('yyyy/MM/dd').format(date);
+                              DateFormat('yyyy/MM/dd').format(date);
                           shiftDayController.text = formattedDate;
                         }
                       });
@@ -353,12 +365,8 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                             setState(() {
                               if (timeOfDay != null) {
                                 final now = DateTime.now();
-                                final dateTime = DateTime(
-                                    now.year,
-                                    now.month,
-                                    now.day,
-                                    timeOfDay.hour,
-                                    timeOfDay.minute);
+                                final dateTime = DateTime(now.year, now.month,
+                                    now.day, timeOfDay.hour, timeOfDay.minute);
 
                                 String formattedTime =
                                     DateFormat('HH:mm').format(dateTime);
@@ -387,12 +395,8 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                             setState(() {
                               if (timeOfDay != null) {
                                 final now = DateTime.now();
-                                final dateTime = DateTime(
-                                    now.year,
-                                    now.month,
-                                    now.day,
-                                    timeOfDay.hour,
-                                    timeOfDay.minute);
+                                final dateTime = DateTime(now.year, now.month,
+                                    now.day, timeOfDay.hour, timeOfDay.minute);
 
                                 String formattedTime =
                                     DateFormat('HH:mm').format(dateTime);
@@ -484,8 +488,7 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                 CustomTextField(
                   controller: documentNameController,
                   labelText: 'Document Name',
-                  prefixIcon:
-                      const Icon(Icons.description, color: Colors.grey),
+                  prefixIcon: const Icon(Icons.description, color: Colors.grey),
                 ),
                 const SizedBox(height: 10),
                 GestureDetector(
@@ -515,7 +518,8 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                 const SizedBox(height: 10),
                 GeneralButton(
                   onTap: () async {
-                    await StorageHelper.triggerDocUpload()
+                    await StorageHelper.triggerDocUpload(
+                            documentNameController.text.trim())
                         .then((documentUrl) {
                       if (documentUrl != null) {
                         selectedDocumentUrl = documentUrl;
@@ -523,8 +527,7 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                         setState(() {
                           documents.add(
                             Document(
-                              documentName:
-                                  documentNameController.text.trim(),
+                              documentName: documentNameController.text.trim(),
                               documentUrl: selectedDocumentUrl!,
                               expiryDate: expiryDateTextEditing.text,
                             ),
@@ -556,8 +559,10 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
               child: GeneralButton(
                 onTap: () async {
                   if (pickedImage != null) {
-                    await StorageServices.uploadDp(
-                      file: pickedImage!,
+                    await StorageServices.uploadFileAsUint8List(
+                      location: 'users/dps',
+                      uploadfile: pickedImage!.files.single.bytes,
+                      fileName: pickedImage!.files.single.name,
                     ).then((response) {
                       if (response.success) {
                         AddUserHelper.validateAndSubmitForm(
@@ -572,7 +577,8 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                             previousEmployer:
                                 previousEmployerController.text.trim(),
                             documents: documents,
-                            contactInformation: contactInformationController!.fullPhoneNumber,
+                            contactInformation:
+                                contactInformationController!.fullPhoneNumber,
                             role: selectedRole,
                             gender: selectedGender,
                             dob: dob,
@@ -605,7 +611,8 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                         previousEmployer:
                             previousEmployerController.text.trim(),
                         documents: documents,
-                        contactInformation: contactInformationController!.fullPhoneNumber,
+                        contactInformation:
+                            contactInformationController!.fullPhoneNumber,
                         role: selectedRole,
                         gender: selectedGender,
                         dob: dob,

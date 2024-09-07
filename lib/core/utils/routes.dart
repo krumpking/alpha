@@ -1,3 +1,4 @@
+import 'package:alpha/features/add_feedback/pages/add_feedback.dart';
 import 'package:alpha/features/add_shift/pages/add_shift.dart';
 import 'package:alpha/features/add_user/pages/add_user.dart';
 import 'package:alpha/features/add_user/pages/view_users.dart';
@@ -34,106 +35,59 @@ class RoutesHelper {
   static String viewUserScreen = '/viewUsers';
   static String userProfileScreen = '/profile';
   static String addUserShiftScreen = '/addShift';
-
+  static String addUserFeedbackScreen = '/addFeedback';
 
   static List<GetPage> routes = [
-    GetPage(
-        name: welcomeScreen,
-        page: ()=> WelcomePage()
-    ),
-
-    GetPage(
-        name: initialScreen,
-        page: ()=> const AuthHandler()
-    ),
-
-    GetPage(
-        name: splashScreen,
-        page: ()=> const SplashScreen()
-    ),
-
-
+    GetPage(name: welcomeScreen, page: () => WelcomePage()),
+    GetPage(name: initialScreen, page: () => const AuthHandler()),
+    GetPage(name: splashScreen, page: () => const SplashScreen()),
     GetPage(
         name: emailVerificationScreen,
-        page: (){
+        page: () {
           final user = Get.arguments as User;
-          
-          return EmailVerificationScreen(user: user);
-        }
-    ),
 
+          return EmailVerificationScreen(user: user);
+        }),
     GetPage(
         name: resendVerificationEmailScreen,
-        page: (){
+        page: () {
           final String email = Get.arguments as String;
 
           return ResendResetEmailScreen(email: email);
-        }
-    ),
-
-    GetPage(
-        name: loginScreen,
-        page: ()=> const LoginScreen()
-    ),
-
-
-    GetPage(
-        name: adminHomeScreen,
-        page: ()=> const AdminHomeScreen()
-    ),
-
+        }),
+    GetPage(name: loginScreen, page: () => const LoginScreen()),
+    GetPage(name: adminHomeScreen, page: () => const AdminHomeScreen()),
     GetPage(
         name: userProfileScreen,
-        page: (){
+        page: () {
           final String email = Get.arguments as String;
 
           return UserProfileScreen(profileEmail: email);
-        }
-    ),
-
-    GetPage(
-        name: adminAddUserScreen,
-        page: ()=> const AdminAddUser()
-    ),
-
-
+        }),
+    GetPage(name: adminAddUserScreen, page: () => const AdminAddUser()),
     GetPage(
         name: addUserShiftScreen,
-        page: (){
+        page: () {
           final UserProfile selectedUser = Get.arguments as UserProfile;
 
           return AddUserShift(selectedUser: selectedUser);
-        }
-    ),
-
-
-    GetPage(
-        name: viewUserScreen,
-        page: ()=> const AdminViewUsers()
-    ),
-
-
-    GetPage(
-        name: adminStatsScreen,
-        page: ()=> const AdminStuffStats()
-    ),
-
-
-    GetPage(
-        name: userHomeScreen,
-        page: ()=> const UserHomeScreen()
-    ),
-
-
+        }),
+    GetPage(name: viewUserScreen, page: () => const AdminViewUsers()),
+    GetPage(name: adminStatsScreen, page: () => const AdminStuffStats()),
+    GetPage(name: userHomeScreen, page: () => const UserHomeScreen()),
     GetPage(
         name: successfulVerificationScreen,
-        page: ()=> const AccountVerificationSuccessful()
-    ),
-
+        page: () => const AccountVerificationSuccessful()),
+    GetPage(name: forgotPasswordScreen, page: () => ForgotPasswordScreen()),
     GetPage(
-        name: forgotPasswordScreen,
-        page: ()=> ForgotPasswordScreen()
-    ),
-  ];
+        name: addUserFeedbackScreen,
+        page: () {
+          final UserProfile selectedUser = Get.arguments as UserProfile;
 
+          return AddFeedbackScreen(
+            selectedUser: selectedUser,
+            shiftId: '',
+          );
+        }),
+  ];
 }

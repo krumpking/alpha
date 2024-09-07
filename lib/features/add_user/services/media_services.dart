@@ -1,22 +1,25 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class MediaServices {
   static final ImagePicker _imagePicker = ImagePicker();
 
+  static Future<dynamic?> getImageFromGallery() async {
+    var fileResult = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+      allowCompression: true,
+    );
 
-
-  static Future<File?> getImageFromGallery() async {
-    final XFile? file = await _imagePicker.pickImage(source: ImageSource.gallery);
-
-    if(file != null){
-      return File(file.path);
+    if (fileResult != null) {
+      return fileResult;
     }
 
     return null;
   }
+
   static Future<List<File>?> getMultipleImagesFromGallery() async {
     final List<XFile> files = await _imagePicker.pickMultiImage();
 
@@ -27,11 +30,13 @@ class MediaServices {
     return null;
   }
 
-
-  static Future<File?> pickDocument() async {
+  static Future<dynamic> pickDocument() async {
     final result = await FilePicker.platform.pickFiles(type: FileType.any);
-    if (result != null && result.files.single.path != null) {
-      return File(result.files.single.path!);
+    if (result != null && result.files.single.bytes != null) {
+      return {
+        "bytes": result.files.single.bytes,
+        "name": result.files.single.name
+      };
     }
     return null;
   }
@@ -40,5 +45,4 @@ class MediaServices {
     final bytes = await file.readAsBytes();
     return base64Encode(bytes);
   }
-
 }

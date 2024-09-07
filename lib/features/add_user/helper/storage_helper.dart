@@ -8,13 +8,15 @@ import '../services/media_services.dart';
 import '../services/storage_services.dart';
 import 'package:path/path.dart' as path;
 
-
-class StorageHelper{
-  static Future<String?> triggerDocUpload() async{
+class StorageHelper {
+  static Future<String?> triggerDocUpload(String documentName) async {
     final selectedFile = await MediaServices.pickDocument();
 
-    if (selectedFile != null) {
+    Get.log('File ${selectedFile['bytes']}');
 
+    Get.log('Name ${selectedFile['name']}');
+
+    if (selectedFile != null) {
       Get.dialog(
         const CustomLoader(
           message: 'Uploading Document',
@@ -22,13 +24,10 @@ class StorageHelper{
         barrierDismissible: false,
       );
 
-
-      // Convert the file to Base64 string
-      final base64String = await MediaServices.fileToBase64(selectedFile);
-
-      final response = await StorageServices.uploadFileAsBase64(
-        base64String: base64String,
-        fileName: path.basename(selectedFile.path),
+      final response = await StorageServices.uploadFileAsUint8List(
+        location: 'documents',
+        uploadfile: selectedFile['bytes'],
+        fileName: selectedFile['name'],
       );
 
       if (response.success) {
@@ -36,12 +35,12 @@ class StorageHelper{
 
         if (Get.isDialogOpen!) Get.back();
 
-        CustomSnackBar.showSuccessSnackbar(message: 'Document uploaded Successfully');
+        CustomSnackBar.showSuccessSnackbar(
+            message: 'Document uploaded Successfully');
 
         return response.data!;
       } else {
         DevLogs.logError("File upload failed: ${response.message}");
-
       }
     }
     return null;

@@ -38,14 +38,14 @@ class _AddUserShiftState extends State<AddUserShift> {
         iconTheme: const IconThemeData(color: Colors.white),
         title: Text(
           widget.selectedUser.name,
-          style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+          style:
+              const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
-
             Container(
               width: 150,
               height: 150,
@@ -63,21 +63,17 @@ class _AddUserShiftState extends State<AddUserShift> {
                 color: Pallete.primaryColor,
               ),
             ),
-
             Text(
-              'Add Shift',
+              'Add Shift Done',
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Pallete.primaryColor,
-                fontWeight: FontWeight.bold,
-                fontSize: 16
-              ),
+                  color: Pallete.primaryColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16),
             ),
-
             const SizedBox(
               height: 24,
             ),
-
             CustomTextField(
               keyBoardType: TextInputType.number,
               controller: _hoursController,
@@ -94,14 +90,13 @@ class _AddUserShiftState extends State<AddUserShift> {
                   child: CustomTextField(
                     controller: _documentNameController,
                     labelText: 'Document Name',
-                    prefixIcon: const Icon(Icons.description, color: Colors.grey),
+                    prefixIcon:
+                        const Icon(Icons.description, color: Colors.grey),
                   ),
                 ),
-
                 const SizedBox(
                   width: 6,
                 ),
-
                 Expanded(
                   child: GeneralButton(
                       onTap: () async {
@@ -113,36 +108,26 @@ class _AddUserShiftState extends State<AddUserShift> {
                       btnColor: Colors.white,
                       width: 60,
                       height: 50,
-                      boxBorder: Border.all(
-                          color: Pallete.primaryColor
-                      ),
+                      boxBorder: Border.all(color: Pallete.primaryColor),
                       child: Icon(
                         Icons.upload,
                         color: Pallete.primaryColor,
-                      )
-                  ),
+                      )),
                 )
               ],
             ),
-
             const SizedBox(
               height: 12,
             ),
-
             Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 12
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 12),
               decoration: BoxDecoration(
-                border: Border.all(
-                  color: Pallete.greyAccent
-                ),
-                borderRadius: BorderRadius.circular(10)
-              ),
+                  border: Border.all(color: Pallete.greyAccent),
+                  borderRadius: BorderRadius.circular(10)),
               child: ListTile(
                 contentPadding: EdgeInsets.zero,
                 title: const Text(
-                    'Is Completed?',
+                  'Is Completed?',
                   style: TextStyle(
                     fontSize: 12,
                   ),
@@ -159,21 +144,17 @@ class _AddUserShiftState extends State<AddUserShift> {
                 ),
               ),
             ),
-
-
             const SizedBox(
               height: 20,
             ),
-
             Center(
               child: GeneralButton(
-                onTap: ()=> ShiftHelpers.validateAndSubmitShift(
-                  documentName: _documentNameController.text,
-                  currentUser: currentUser!,
-                  hoursCompleted: int.parse(_hoursController.text ?? '0'),
-                  isCompleted: _isCompleted,
-                  selectedUser: widget.selectedUser
-                ),
+                onTap: () => ShiftHelpers.validateAndSubmitShift(
+                    documentName: _documentNameController.text,
+                    currentUser: currentUser!,
+                    hoursCompleted: int.parse(_hoursController.text ?? '0'),
+                    isCompleted: _isCompleted,
+                    selectedUser: widget.selectedUser),
                 borderRadius: 10,
                 btnColor: Pallete.primaryColor,
                 width: 300,
@@ -182,8 +163,7 @@ class _AddUserShiftState extends State<AddUserShift> {
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 14,
-                      fontWeight: FontWeight.bold
-                  ),
+                      fontWeight: FontWeight.bold),
                 ),
               ),
             ),

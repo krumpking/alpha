@@ -11,58 +11,55 @@ import '../../../custom_widgets/snackbar/custom_snackbar.dart';
 import '../../auth/state/authentication_provider.dart';
 
 class MediaHelpers {
+  // static Future<void> onUploadDpClip({required List<File> files, required String documentName, required bool isStaffProfile, required WidgetRef ref}) async {
+  //   if (files.isNotEmpty) {
+  //     Get.dialog(
+  //       const CustomLoader(
+  //         message: 'Updating Display Picture',
+  //       ),
+  //       barrierDismissible: false,
+  //     );
 
-  static Future<void> onUploadDpClip({required List<File> files, required String documentName, required bool isStaffProfile, required WidgetRef ref}) async {
-    if (files.isNotEmpty) {
-      Get.dialog(
-        const CustomLoader(
-          message: 'Updating Display Picture',
-        ),
-        barrierDismissible: false,
-      );
+  //     if (documentName == 'Display Picture') {
+  //       final currentUser = FirebaseAuth.instance.currentUser;
+  //       // Use the new function to upload staff profile picture
+  //       final response = await StorageServices.uploadDp(
+  //         file: files[0],
+  //       );
 
-      if (documentName == 'Display Picture') {
-        final currentUser = FirebaseAuth.instance.currentUser;
-        // Use the new function to upload staff profile picture
-        final response = await StorageServices.uploadDp(
-          file: files[0],
-        );
+  //       if (response.success  && isStaffProfile) {
+  //         ref.read(ProviderUtils.staffProfilePicProvider.notifier).state = response.data;
 
-        if (response.success  && isStaffProfile) {
-          ref.read(ProviderUtils.staffProfilePicProvider.notifier).state = response.data;
+  //         if (Get.isDialogOpen!) Get.back();
 
+  //         CustomSnackBar.showSuccessSnackbar(message: 'Display Image updated Successfully');
 
-          if (Get.isDialogOpen!) Get.back();
+  //       }
+  //       else if (response.success && !isStaffProfile) {
 
-          CustomSnackBar.showSuccessSnackbar(message: 'Display Image updated Successfully');
+  //         await currentUser!.updatePhotoURL(response.data).then((value){
+  //           Get.back();
+  //         });
 
-        }
-        else if (response.success && !isStaffProfile) {
+  //         final updatedUser = FirebaseAuth.instance.currentUser;
 
-          await currentUser!.updatePhotoURL(response.data).then((value){
-            Get.back();
-          });
+  //         ref.read(ProviderUtils.userProvider.notifier).updateUser(updatedUser);
 
-          final updatedUser = FirebaseAuth.instance.currentUser;
+  //         if (Get.isDialogOpen!) Get.back();
 
+  //         CustomSnackBar.showSuccessSnackbar(message: 'Display Image updated Successfully');
+  //       }
+  //       else {
+  //         CustomSnackBar.showErrorSnackbar(message: 'Failed to upload image');
+  //       }
 
-          ref.read(ProviderUtils.userProvider.notifier).updateUser(updatedUser);
-
-          if (Get.isDialogOpen!) Get.back();
-
-          CustomSnackBar.showSuccessSnackbar(message: 'Display Image updated Successfully');
-        }
-        else {
-          CustomSnackBar.showErrorSnackbar(message: 'Failed to upload image');
-        }
-
-        Get.back();
-      } else {
-        // Handle other document types if necessary
-      }
-    } else {
-      CustomSnackBar.showErrorSnackbar(message: 'Please select your $documentName Image');
-      return;
-    }
-  }
+  //       Get.back();
+  //     } else {
+  //       // Handle other document types if necessary
+  //     }
+  //   } else {
+  //     CustomSnackBar.showErrorSnackbar(message: 'Please select your $documentName Image');
+  //     return;
+  //   }
+  // }
 }

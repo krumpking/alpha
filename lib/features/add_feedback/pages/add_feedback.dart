@@ -1,18 +1,23 @@
+import 'package:alpha/core/utils/logs.dart';
+import 'package:alpha/core/utils/routes.dart';
 import 'package:alpha/features/add_feedback/helpers/helpers.dart';
 import 'package:alpha/global/global.dart';
 import 'package:alpha/models/user_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import '../../../core/constants/color_constants.dart';
 import '../../../custom_widgets/custom_button/general_button.dart';
 import '../../../custom_widgets/custom_switch/custom_switch.dart';
 import '../../../custom_widgets/text_fields/custom_text_field.dart';
+import 'package:get/get.dart';
 
 class AddFeedbackScreen extends StatefulWidget {
-  final UserProfile  selectedUser;
+  final UserProfile selectedUser;
   final String shiftId;
 
-  const AddFeedbackScreen({super.key, required this.selectedUser, required this.shiftId});
+  const AddFeedbackScreen(
+      {super.key, required this.selectedUser, required this.shiftId});
 
   @override
   State<AddFeedbackScreen> createState() => _AddFeedbackScreenState();
@@ -25,6 +30,11 @@ class _AddFeedbackScreenState extends State<AddFeedbackScreen> {
   FeedbackTag? feedbackTag;
   bool _isAlpha = false;
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,14 +45,14 @@ class _AddFeedbackScreenState extends State<AddFeedbackScreen> {
         iconTheme: const IconThemeData(color: Colors.white),
         title: Text(
           widget.selectedUser.name,
-          style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+          style:
+              const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
-
             Container(
               width: 150,
               height: 150,
@@ -60,21 +70,17 @@ class _AddFeedbackScreenState extends State<AddFeedbackScreen> {
                 color: Pallete.primaryColor,
               ),
             ),
-
             Text(
               'Add Feedback',
               textAlign: TextAlign.center,
               style: TextStyle(
                   color: Pallete.primaryColor,
                   fontWeight: FontWeight.bold,
-                  fontSize: 16
-              ),
+                  fontSize: 16),
             ),
-
             const SizedBox(
               height: 24,
             ),
-
             CustomTextField(
               keyBoardType: TextInputType.text,
               controller: feedbackTitleController,
@@ -89,57 +95,20 @@ class _AddFeedbackScreenState extends State<AddFeedbackScreen> {
               labelText: 'Description',
               prefixIcon: const Icon(Icons.description, color: Colors.grey),
             ),
-
             const SizedBox(
               height: 12,
             ),
-
-            Container(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 12
-              ),
-              decoration: BoxDecoration(
-                  border: Border.all(
-                      color: Pallete.greyAccent
-                  ),
-                  borderRadius: BorderRadius.circular(10)
-              ),
-              child: ListTile(
-                contentPadding: EdgeInsets.zero,
-                title: const Text(
-                  'Feedback Tag',
-                  style: TextStyle(
-                    fontSize: 12,
-                  ),
-                ),
-                trailing: CustomSwitch(
-                  height: 25,
-                  activeColor: Pallete.primaryColor,
-                  value: _isAlpha,
-                  onChanged: (bool value) {
-                    setState(() {
-                      _isAlpha = value;
-                    });
-                  },
-                ),
-              ),
-            ),
-
-
-            const SizedBox(
-              height: 20,
-            ),
-
             Center(
               child: GeneralButton(
-                onTap: ()=> FeedbackHelper.validateAndSubmitShift(
-                  feedbackTag: feedbackTag!,
-                  description: descriptionController.text.trim(),
-                  currentUser: currentUser!,
-                  feedbackTitle: feedbackTitleController.text.trim(),
-                  selectedUser: widget.selectedUser,
-                  shiftId: widget.shiftId,
-                ),
+                onTap: () => {
+                  FeedbackHelper.validateAndSubmitShift(
+                    description: descriptionController.text.trim(),
+                    currentUser: currentUser!,
+                    feedbackTitle: feedbackTitleController.text.trim(),
+                    selectedUser: widget.selectedUser,
+                    shiftId: widget.shiftId,
+                  )
+                },
                 borderRadius: 10,
                 btnColor: Pallete.primaryColor,
                 width: 300,
@@ -148,8 +117,7 @@ class _AddFeedbackScreenState extends State<AddFeedbackScreen> {
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 14,
-                      fontWeight: FontWeight.bold
-                  ),
+                      fontWeight: FontWeight.bold),
                 ),
               ),
             ),

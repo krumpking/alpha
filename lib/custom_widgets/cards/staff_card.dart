@@ -25,7 +25,8 @@ class StaffCard extends StatelessWidget {
           children: [
             ListTile(
               contentPadding: EdgeInsets.zero,
-              title: Text(user.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+              title: Text(user.name,
+                  style: const TextStyle(fontWeight: FontWeight.bold)),
               subtitle: Text(
                 user.post,
                 style: const TextStyle(fontSize: 12),
@@ -35,29 +36,36 @@ class StaffCard extends StatelessWidget {
                   // Handle the selected value
                   switch (selectedValue) {
                     case 0:
-                    // Perform some action for Edit
+                      // Perform some action for Edit
                       break;
                     case 1:
-                    // Perform some action for Delete
+                      // Perform some action for Delete
                       break;
                   }
                 },
                 itemBuilder: (BuildContext context) => [
                   buildPopUpOption(
-                      title: 'View Profile',
-                      icon: Icons.remove_red_eye_outlined,
-                      value: 0,
-                      onTap: () {
-                        Get.toNamed(RoutesHelper.userProfileScreen, arguments: user.email);
-                      },
+                    title: 'View Profile',
+                    icon: Icons.remove_red_eye_outlined,
+                    value: 0,
+                    onTap: () {
+                      Get.toNamed(RoutesHelper.userProfileScreen,
+                          arguments: user.email);
+                    },
                   ),
-
                   buildPopUpOption(
-                      title: 'Add Shift',
+                      title: 'Add Hours worked',
                       icon: Icons.calendar_month,
                       value: 1,
-                      onTap: ()=>Get.toNamed(RoutesHelper.addUserShiftScreen, arguments: user)
-                  ),
+                      onTap: () => Get.toNamed(RoutesHelper.addUserShiftScreen,
+                          arguments: user)),
+                  buildPopUpOption(
+                      title: 'Add Feedback',
+                      icon: Icons.feedback,
+                      value: 2,
+                      onTap: () => Get.toNamed(
+                          RoutesHelper.addUserFeedbackScreen,
+                          arguments: user)),
                 ],
                 icon: const Icon(Icons.more_vert),
               ),
@@ -68,30 +76,21 @@ class StaffCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 RichText(
-                  text: TextSpan(
-                      children: [
-                        const TextSpan(
-                            text: 'Shift:  ',
-                            style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.black
-                            )
-                        ),
-
-                        TextSpan(
-                            text: '${user.preferredWorkDays[0].day} ${user.preferredWorkDays[0].startTime}-${user.preferredWorkDays[0].endTime}',
-                            style: TextStyle(
-                                fontSize: 12,
-                                color: Pallete.primaryColor
-                            )
-                        ),
-                      ]
-                  ),
-
+                  text: TextSpan(children: [
+                    const TextSpan(
+                        text: 'Shift:  ',
+                        style: TextStyle(fontSize: 12, color: Colors.black)),
+                    TextSpan(
+                        text:
+                            '${user.preferredWorkDays[0].day} ${user.preferredWorkDays[0].startTime}-${user.preferredWorkDays[0].endTime}',
+                        style: TextStyle(
+                            fontSize: 12, color: Pallete.primaryColor)),
+                  ]),
                 ),
                 const SizedBox(height: 4),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
                     color: Colors.green,
                     borderRadius: BorderRadius.circular(12),
@@ -109,7 +108,11 @@ class StaffCard extends StatelessWidget {
     );
   }
 
-  dynamic buildPopUpOption({required String title, required IconData icon, required int value, required void Function() onTap}){
+  dynamic buildPopUpOption(
+      {required String title,
+      required IconData icon,
+      required int value,
+      required void Function() onTap}) {
     return PopupMenuItem<int>(
       onTap: onTap,
       value: value,
@@ -117,7 +120,10 @@ class StaffCard extends StatelessWidget {
         children: [
           Icon(icon, color: Colors.black54),
           const SizedBox(width: 8),
-          Text(title, style: const TextStyle(fontSize: 12),),
+          Text(
+            title,
+            style: const TextStyle(fontSize: 12),
+          ),
         ],
       ),
     );
