@@ -1,5 +1,5 @@
-import 'package:alpha/features/add_feedback/pages/add_feedback.dart';
-import 'package:alpha/features/add_shift/pages/add_shift.dart';
+import 'package:alpha/features/feedback/pages/add_feedback.dart';
+import 'package:alpha/features/shift/pages/add_hours_worked.dart';
 import 'package:alpha/features/add_user/pages/add_user.dart';
 import 'package:alpha/features/add_user/pages/view_users.dart';
 import 'package:alpha/features/auth/handlers/auth_handler.dart';

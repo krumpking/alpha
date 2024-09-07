@@ -1,5 +1,5 @@
 import 'package:alpha/custom_widgets/snackbar/custom_snackbar.dart';
-import 'package:alpha/features/add_user/services/add_user_services.dart';
+import 'package:alpha/features/workers/services/add_user_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../custom_widgets/circular_loader/circular_loader.dart';
@@ -9,7 +9,6 @@ class AddUserHelper {
   static void validateAndSubmitForm({
     required UserProfile userProfile,
   }) async {
-
     // Validate Email
     if (!GetUtils.isEmail(userProfile.email)) {
       CustomSnackBar.showErrorSnackbar(message: 'Please input a valid email.');
@@ -17,8 +16,10 @@ class AddUserHelper {
     }
 
     // Validate Phone Number
-    if (userProfile.phoneNumber.isEmpty || !GetUtils.isPhoneNumber(userProfile.phoneNumber)) {
-      CustomSnackBar.showErrorSnackbar(message: 'Please input a valid phone number.');
+    if (userProfile.phoneNumber.isEmpty ||
+        !GetUtils.isPhoneNumber(userProfile.phoneNumber)) {
+      CustomSnackBar.showErrorSnackbar(
+          message: 'Please input a valid phone number.');
       return;
     }
 
@@ -33,25 +34,21 @@ class AddUserHelper {
       return;
     }
 
-
     if (userProfile.state.isEmpty) {
       CustomSnackBar.showErrorSnackbar(message: 'State is required.');
       return;
     }
-
 
     if (userProfile.country.isEmpty) {
       CustomSnackBar.showErrorSnackbar(message: 'Country is required.');
       return;
     }
 
-
     // Validate Name
     if (userProfile.preferredWorkDays.isEmpty) {
       CustomSnackBar.showErrorSnackbar(message: 'Input working days');
       return;
     }
-
 
     // Validate Address
     if (userProfile.address.isEmpty) {
@@ -61,13 +58,15 @@ class AddUserHelper {
 
     // Validate Previous Employer
     if (userProfile.previousEmployer.isEmpty) {
-      CustomSnackBar.showErrorSnackbar(message: 'Previous Employer is required.');
+      CustomSnackBar.showErrorSnackbar(
+          message: 'Previous Employer is required.');
       return;
     }
 
     // Validate Contact Information
     if (userProfile.contactInformation.isEmpty) {
-      CustomSnackBar.showErrorSnackbar(message: 'Contact Information is required.');
+      CustomSnackBar.showErrorSnackbar(
+          message: 'Contact Information is required.');
       return;
     }
 
@@ -79,7 +78,8 @@ class AddUserHelper {
 
     // Validate Specialisations
     if (userProfile.specialisations.isEmpty) {
-      CustomSnackBar.showErrorSnackbar(message: 'At least one specialisation is required.');
+      CustomSnackBar.showErrorSnackbar(
+          message: 'At least one specialisation is required.');
       return;
     }
 
@@ -89,7 +89,6 @@ class AddUserHelper {
       return;
     }
 
-
     // Show loader while creating user
     Get.dialog(
       const CustomLoader(
@@ -98,21 +97,24 @@ class AddUserHelper {
       barrierDismissible: false,
     );
 
-    await StaffServices.addStuffToFirebase(
-      userProfile: userProfile
-    ).then((response) {
+    await StaffServices.addStuffToFirebase(userProfile: userProfile)
+        .then((response) {
       if (!response.success) {
         if (!Get.isSnackbarOpen) Get.back();
-        CustomSnackBar.showErrorSnackbar(message: response.message ?? 'Something went wrong');
+        CustomSnackBar.showErrorSnackbar(
+            message: response.message ?? 'Something went wrong');
       } else {
         if (Get.isDialogOpen!) Get.back();
-        CustomSnackBar.showSuccessSnackbar(message: 'User account created successfully');
+        CustomSnackBar.showSuccessSnackbar(
+            message: 'User account created successfully');
       }
     });
   }
 
-
-  static Future<DateTime?> pickDate({required BuildContext context, required DateTime initialDate, DateTime? firstDate }) async {
+  static Future<DateTime?> pickDate(
+      {required BuildContext context,
+      required DateTime initialDate,
+      DateTime? firstDate}) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: initialDate,
@@ -123,11 +125,11 @@ class AddUserHelper {
     return picked;
   }
 
-  static Future<TimeOfDay?> pickTime({required BuildContext context,}) async {
+  static Future<TimeOfDay?> pickTime({
+    required BuildContext context,
+  }) async {
     final picked = await showTimePicker(
-      context: context,
-      initialTime: const TimeOfDay( hour: 6, minute: 00)
-    );
+        context: context, initialTime: const TimeOfDay(hour: 6, minute: 00));
 
     return picked;
   }
@@ -138,8 +140,13 @@ class AddUserHelper {
       builder: (BuildContext context) {
         List<String> selectedDays = [];
         List<String> weekDays = [
-          'Monday', 'Tuesday', 'Wednesday', 'Thursday',
-          'Friday', 'Saturday', 'Sunday'
+          'Monday',
+          'Tuesday',
+          'Wednesday',
+          'Thursday',
+          'Friday',
+          'Saturday',
+          'Sunday'
         ];
 
         return AlertDialog(
@@ -167,10 +174,7 @@ class AddUserHelper {
             },
           ),
           actions: <Widget>[
-            TextButton(
-              onPressed: Get.back,
-              child: const Text('Cancel')
-            ),
+            TextButton(onPressed: Get.back, child: const Text('Cancel')),
             TextButton(
               child: const Text('OK'),
               onPressed: () {
@@ -185,13 +189,11 @@ class AddUserHelper {
     return selectedDays!.join(', ');
   }
 
-
-  static List<String> addSpecialisation({required String value, required List<String> specialisations}) {
+  static List<String> addSpecialisation(
+      {required String value, required List<String> specialisations}) {
     if (value.isNotEmpty && !specialisations.contains(value)) {
-        specialisations.add(value);
+      specialisations.add(value);
     }
     return specialisations;
   }
-
-
 }

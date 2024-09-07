@@ -4,7 +4,7 @@ part 'feedback_model.g.dart';
 
 @JsonSerializable()
 class FeedbackModel {
-  final DateTime date;
+  final String date;
   final String addedBy;
   final String feedackTitle;
   final String description;

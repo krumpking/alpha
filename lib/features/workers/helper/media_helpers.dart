@@ -2,7 +2,7 @@ import 'package:alpha/core/utils/providers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:alpha/features/add_user/services/storage_services.dart';
+import 'package:alpha/features/workers/services/storage_services.dart';
 import 'package:get/get.dart';
 import 'dart:io';
 import '../../../core/constants/color_constants.dart';

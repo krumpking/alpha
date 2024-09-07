@@ -8,7 +8,7 @@ part of 'feedback_model.dart';
 
 FeedbackModel _$FeedbackModelFromJson(Map<String, dynamic> json) =>
     FeedbackModel(
-      date: DateTime.parse(json['date'] as String),
+      date: json['date'] as String,
       addedBy: json['addedBy'] as String,
       feedackTitle: json['feedackTitle'] as String,
       description: json['description'] as String,
@@ -17,7 +17,7 @@ FeedbackModel _$FeedbackModelFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$FeedbackModelToJson(FeedbackModel instance) =>
     <String, dynamic>{
-      'date': instance.date.toIso8601String(),
+      'date': instance.date,
       'addedBy': instance.addedBy,
       'feedackTitle': instance.feedackTitle,
       'description': instance.description,

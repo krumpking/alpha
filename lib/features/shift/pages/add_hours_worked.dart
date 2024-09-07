@@ -1,3 +1,4 @@
+import 'package:alpha/features/workers/helper/storage_helper.dart';
 import 'package:alpha/models/document.dart';
 import 'package:alpha/models/user_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,6 +23,7 @@ class _AddUserShiftState extends State<AddUserShift> {
   bool _isCompleted = false;
   User? currentUser;
   List<Document> documents = [];
+  String selectedDocumentUrl = "";
 
   @override
   void initState() {
@@ -100,9 +102,15 @@ class _AddUserShiftState extends State<AddUserShift> {
                 Expanded(
                   child: GeneralButton(
                       onTap: () async {
-                        // await StorageHelper.triggerDocUpload().then((documentUrl){
-                        //
-                        // });
+                        await StorageHelper.triggerDocUpload(
+                                _documentNameController.text)
+                            .then((documentUrl) {
+                          if (documentUrl != null) {
+                            setState(() {
+                              selectedDocumentUrl = documentUrl;
+                            });
+                          }
+                        });
                       },
                       borderRadius: 10,
                       btnColor: Colors.white,
@@ -154,12 +162,13 @@ class _AddUserShiftState extends State<AddUserShift> {
                     currentUser: currentUser!,
                     hoursCompleted: int.parse(_hoursController.text ?? '0'),
                     isCompleted: _isCompleted,
-                    selectedUser: widget.selectedUser),
+                    selectedUser: widget.selectedUser,
+                    documentUrl: selectedDocumentUrl),
                 borderRadius: 10,
                 btnColor: Pallete.primaryColor,
                 width: 300,
                 child: const Text(
-                  "Add Shift",
+                  "Add Hours worked",
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 14,

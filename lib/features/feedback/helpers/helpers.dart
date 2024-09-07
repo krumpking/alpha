@@ -1,5 +1,5 @@
 import 'package:alpha/core/utils/logs.dart';
-import 'package:alpha/features/add_feedback/services/services.dart';
+import 'package:alpha/features/feedback/services/services.dart';
 import 'package:alpha/global/global.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
@@ -8,7 +8,7 @@ import '../../../custom_widgets/snackbar/custom_snackbar.dart';
 import '../../../models/user_profile.dart';
 
 class FeedbackHelper {
-  static void validateAndSubmitShift(
+  static void validateAndSubmitFeedback(
       {required User currentUser,
       required UserProfile selectedUser,
       required String description,
@@ -42,7 +42,7 @@ class FeedbackHelper {
     );
 
     // Submit the shift
-    await FeedbackServices.submitShift(
+    await FeedbackServices.submitFeedback(
             currentUser: currentUser,
             selectedUser: selectedUser,
             description: description,

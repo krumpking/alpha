@@ -1,5 +1,5 @@
-import 'package:alpha/features/add_feedback/services/services.dart';
-import 'package:alpha/features/add_feedback/models/feedback_model.dart';
+import 'package:alpha/features/feedback/services/services.dart';
+import 'package:alpha/features/feedback/models/feedback_model.dart';
 import 'package:alpha/models/user_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

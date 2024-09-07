@@ -1,6 +1,6 @@
 import 'package:alpha/core/utils/logs.dart';
 import 'package:alpha/core/utils/routes.dart';
-import 'package:alpha/features/add_feedback/helpers/helpers.dart';
+import 'package:alpha/features/feedback/helpers/helpers.dart';
 import 'package:alpha/global/global.dart';
 import 'package:alpha/models/user_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -101,7 +101,7 @@ class _AddFeedbackScreenState extends State<AddFeedbackScreen> {
             Center(
               child: GeneralButton(
                 onTap: () => {
-                  FeedbackHelper.validateAndSubmitShift(
+                  FeedbackHelper.validateAndSubmitFeedback(
                     description: descriptionController.text.trim(),
                     currentUser: currentUser!,
                     feedbackTitle: feedbackTitleController.text.trim(),

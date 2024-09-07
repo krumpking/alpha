@@ -1,9 +1,9 @@
-import 'package:alpha/features/add_feedback/models/feedback_model.dart';
-import 'package:alpha/features/add_feedback/state/feedback_state.dart';
+import 'package:alpha/features/feedback/models/feedback_model.dart';
+import 'package:alpha/features/feedback/state/feedback_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../features/add_user/state/stuff_provider.dart';
+import '../../features/workers/state/stuff_provider.dart';
 import '../../features/auth/state/authentication_provider.dart';
 import '../../features/manage_profile/state/user_profile_provider.dart';
 import '../../models/user_profile.dart';

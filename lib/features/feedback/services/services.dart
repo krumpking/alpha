@@ -1,5 +1,5 @@
 import 'package:alpha/core/utils/logs.dart';
-import 'package:alpha/features/add_feedback/models/feedback_model.dart';
+import 'package:alpha/features/feedback/models/feedback_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../../core/utils/api_response.dart';
@@ -9,21 +9,24 @@ import '../../../models/user_profile.dart';
 class FeedbackServices {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  static Future<APIResponse<void>> submitShift({
+  static Future<APIResponse<void>> submitFeedback({
     required User currentUser,
     required UserProfile selectedUser,
     required String description,
     required String shiftId,
     required String feedbackTitle,
   }) async {
+    var feedback = FeedbackModel(
+      date: DateTime.now().toString(),
+      addedBy: currentUser.email!,
+      feedackTitle: feedbackTitle,
+      description: description,
+      userEmail: selectedUser.email,
+    );
     try {
-      await FirebaseFirestore.instance.collection('feedback').add({
-        'date': Timestamp.now(),
-        'added_by': currentUser.email,
-        'title': feedbackTitle,
-        'description': description,
-        'user_email': selectedUser.email
-      });
+      await FirebaseFirestore.instance
+          .collection('feedback')
+          .add(feedback.toJson());
       return APIResponse(success: true);
     } catch (e) {
       return APIResponse(
@@ -55,6 +58,8 @@ class FeedbackServices {
           .collection('feedback')
           .where('userEmail', isEqualTo: email)
           .get();
+
+      DevLogs.logInfo('Fetched feedback for ${userSnapshot.docs} users');
 
       // Map the documents to a list of UserProfile objects
       final List<FeedbackModel> feedback = userSnapshot.docs
