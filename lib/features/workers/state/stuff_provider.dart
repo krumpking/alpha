@@ -1,16 +1,11 @@
-
+import 'package:alpha/models/user_profile.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/utils/api_response.dart';
 import '../services/add_user_services.dart';
 
-// Define a provider for the list of users
-final stuffProvider = StateNotifierProvider<StuffNotifier, AsyncValue<List<Map<String, dynamic>>>>((ref) {
-  return StuffNotifier();
-});
-
-class StuffNotifier extends StateNotifier<AsyncValue<List<Map<String, dynamic>>>> {
-  StuffNotifier() : super(const AsyncValue.loading()) {
+class StaffNotifier extends StateNotifier<AsyncValue<List<UserProfile>>> {
+  StaffNotifier() : super(const AsyncValue.loading()) {
     fetchUsers();
   }
 
@@ -20,7 +15,7 @@ class StuffNotifier extends StateNotifier<AsyncValue<List<Map<String, dynamic>>>
 
     try {
       // Fetch users from the service
-      final APIResponse<List<Map<String, dynamic>>> response = await StuffServices.fetchAllUsers();
+      final APIResponse<List<UserProfile>> response = await StaffServices.fetchAllUsers();
 
       if (response.success) {
         // Update state with user data if successful

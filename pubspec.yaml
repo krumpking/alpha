@@ -2,7 +2,7 @@ name: alpha
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -31,7 +31,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
@@ -52,6 +51,18 @@ dependencies:
   sidebarx: ^0.17.1
   cached_network_image: ^3.4.0
   skeletonizer: ^1.4.2
+  file_picker: ^8.0.7
+  intl: ^0.19.0
+  firebase_storage: ^12.2.0
+  path: ^1.9.0
+  image_picker: ^1.1.2
+  csc_picker: ^0.2.7
+  open_filex: ^4.5.0
+  dio: ^5.7.0
+  path_provider: ^2.1.4
+  url_launcher: ^6.3.0
+  syncfusion_flutter_pdfviewer: ^26.2.13
+  json_annotation: ^4.9.0
 
 dev_dependencies:
   flutter_test:
@@ -63,13 +74,14 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^4.0.0
+  json_serializable: ^6.8.0
+  build_runner: ^2.4.9
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

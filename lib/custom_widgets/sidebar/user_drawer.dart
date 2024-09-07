@@ -1,4 +1,5 @@
 import 'package:alpha/core/constants/local_image_constants.dart';
+import 'package:alpha/core/utils/routes.dart';
 import 'package:alpha/core/utils/shared_pref.dart';
 import 'package:alpha/features/auth/services/auth_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -122,7 +123,9 @@ class _UserDrawerState extends State<UserDrawer> {
                 style: TextStyle(fontSize: 16),
               ),
               trailing: const Icon(Icons.navigate_next),
-              onTap: () {},
+              onTap: () {
+                Get.toNamed(RoutesHelper.userProfileScreen, arguments: widget.user.email);
+              },
             ),
             ListTile(
               leading: Icon(

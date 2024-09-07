@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import '../../../core/utils/routes.dart';
 import '../../../core/utils/shared_pref.dart';
 import '../../../custom_widgets/circular_loader/circular_loader.dart';
+import '../../../custom_widgets/snackbar/custom_snackbar.dart';
 import '../../../global/global.dart';
 import '../services/auth_service.dart';
 
@@ -73,38 +74,17 @@ class AuthHelpers {
     required String email,
   }) async {
     if (password.isEmpty) {
-      Get.snackbar(
-        'Error',
-        'Password is required.',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-        duration: const Duration(seconds: 3),
-      );
+      CustomSnackBar.showErrorSnackbar(message: 'Password is required.');
       return;
     }
 
     if (password.length < 8) {
-      Get.snackbar(
-        'Error',
-        'Password is too short.',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-        duration: const Duration(seconds: 3),
-      );
+      CustomSnackBar.showErrorSnackbar(message: 'Password too Short');
       return;
     }
 
     if (!GetUtils.isEmail(email)) {
-      Get.snackbar(
-        'Error',
-        'Please input a valid email.',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-        duration: const Duration(seconds: 3),
-      );
+      CustomSnackBar.showErrorSnackbar(message: 'Please input a valid email');
       return;
     }
 
@@ -121,37 +101,16 @@ class AuthHelpers {
     ).then((response) {
       if (!response.success && response.message != 'No user found for that email.') {
         if (!Get.isSnackbarOpen) Get.back();
-        Get.snackbar(
-          'Error',
-          response.message ?? 'Something went wrong',
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-          duration: const Duration(seconds: 3),
-        );
+        CustomSnackBar.showErrorSnackbar(message: response.message ?? 'Something went wrong');
       } else if (!response.success && response.message == 'No user found for that email.') {
         if (!Get.isSnackbarOpen) Get.back();
-        Get.snackbar(
-          'Error',
-          response.message ?? 'Something went wrong',
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-          duration: const Duration(seconds: 3),
-        );
+        CustomSnackBar.showErrorSnackbar(message: response.message ?? 'Something went wrong',);
       } else {
         if (Get.isDialogOpen!) Get.back();
 
         // Show success snackbar
-        Get.snackbar(
-          'Success',
-          'Login successful!',
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
-          duration: const Duration(seconds: 3),
-        );
 
+        CustomSnackBar.showSuccessSnackbar(message: 'Login Successful',);
         Get.offAllNamed(RoutesHelper.initialScreen);
       }
     });
