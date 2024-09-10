@@ -1,6 +1,7 @@
 import 'package:alpha/core/constants/color_constants.dart';
 import 'package:alpha/core/utils/routes.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -15,6 +16,8 @@ class AdminStuffStats extends StatefulWidget {
 }
 
 class _AdminStuffStatsState extends State<AdminStuffStats> {
+  final user = FirebaseAuth.instance.currentUser;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +37,7 @@ class _AdminStuffStatsState extends State<AdminStuffStats> {
               children: [
                 ClipOval(
                   child: CachedNetworkImage(
-                    imageUrl: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                    imageUrl: user!.photoURL ?? "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
                     width: MediaQuery.of(context).size.height * 0.18,
                     height: MediaQuery.of(context).size.height * 0.18,
                     fit: BoxFit.cover,
@@ -50,9 +53,9 @@ class _AdminStuffStatsState extends State<AdminStuffStats> {
                   ),
                 ),
 
-                const Text(
-                  'Alpha Imperial',
-                  style: TextStyle(
+                Text(
+                  user!.displayName ?? 'Alpha Imperial',
+                  style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                       fontSize: 20

@@ -49,19 +49,20 @@ class AdminViewUsers extends ConsumerWidget {
                   ),
                   child: ListTile(
                     contentPadding: EdgeInsets.zero,
-                    leading:  Icon(
-                      Icons.person,
-                      color: Pallete.primaryColor,
+                    leading:  CircleAvatar(
+                      backgroundImage: NetworkImage(
+                        user.profilePicture ?? ''
+                      ),
                     ),
                     title: Text(
-                        user.email,
+                        user.name,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 14
                       ),
                     ),
                     subtitle: Text(
-                        user.phoneNumber,
+                        "${user.email}\n${user.phoneNumber }",
                       style:  TextStyle(
                         color: Colors.grey.shade600,
                           fontSize: 12

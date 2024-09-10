@@ -76,20 +76,21 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen> with SingleTi
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: Image.network(
-                        "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                        user!.photoURL ?? '',
+                        fit: BoxFit.cover,
                       ),
                     ),
                     const SizedBox(width: 16),
-                    const Column(
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Alpha Profile',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          user!.displayName ?? '',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          'Time to save the world',
-                          style: TextStyle(fontSize: 12),
+                          user!.email ?? '',
+                          style: const TextStyle(fontSize: 12),
                         ),
                       ],
                     ),
