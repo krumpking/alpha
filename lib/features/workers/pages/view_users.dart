@@ -1,6 +1,7 @@
 import 'package:alpha/core/constants/color_constants.dart';
 import 'package:alpha/core/utils/routes.dart';
 import 'package:alpha/custom_widgets/custom_button/general_button.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -49,11 +50,15 @@ class AdminViewUsers extends ConsumerWidget {
                   ),
                   child: ListTile(
                     contentPadding: EdgeInsets.zero,
-                    leading:  CircleAvatar(
-                      backgroundImage: NetworkImage(
-                        user.profilePicture ?? ''
+                    leading:  CachedNetworkImage(
+                      imageUrl: user.profilePicture ?? '',
+                      placeholder: (context, url) => const CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => const Icon(Icons.error),
+                      imageBuilder: (context, imageProvider) => CircleAvatar(
+                        backgroundImage: imageProvider,
                       ),
                     ),
+
                     title: Text(
                         user.name,
                       style: const TextStyle(
