@@ -61,5 +61,28 @@ class StaffServices {
     }
   }
 
+
+  // Method to count users based on posts
+  static Future<APIResponse<Map<String, int>>> countUsersByRole() async {
+    try {
+      final usersRef = _firestore.collection('users');
+
+      // Queries for each role
+      final careSupportWorkersCount = (await usersRef.where(
+          'post', isEqualTo: 'Care/Support Worker').get()).docs.length;
+      final socialWorkersCount = (await usersRef.where(
+          'post', isEqualTo: 'Social Worker').get()).docs.length;
+      final nursesCount = (await usersRef.where('post', isEqualTo: 'Nurse')
+          .get()).docs.length;
+
+      return APIResponse(success: true, data: {
+        'Care and Support Workers': careSupportWorkersCount,
+        'Social Workers': socialWorkersCount,
+        'Nurses': nursesCount,
+      }, message: 'User counts retrieved successfully');
+    } catch (e) {
+      return APIResponse(success: false, message: e.toString());
+    }
+  }
 }
 

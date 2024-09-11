@@ -1,6 +1,3 @@
-import 'dart:io';
-import 'package:alpha/core/utils/files.dart';
-import 'package:alpha/core/utils/logs.dart';
 import 'package:alpha/custom_widgets/text_fields/custome_phone_input.dart';
 import 'package:alpha/models/shift.dart';
 import 'package:alpha/models/document.dart';
@@ -41,8 +38,7 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
   TextEditingController shiftDayController = TextEditingController();
   TextEditingController shiftStartTimeController = TextEditingController();
   TextEditingController shiftEndTimeController = TextEditingController();
-  TextEditingController specilizationTextEditingController =
-      TextEditingController();
+  TextEditingController specializationTextEditingController = TextEditingController();
   String selectedGender = 'Male';
   String? selectedCity;
   String? selectedState;
@@ -54,7 +50,7 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
   String? selectedDocumentUrl;
   TextEditingController expiryDateTextEditing = TextEditingController();
   DateTime? dob;
-  dynamic? pickedImage;
+  dynamic pickedImage;
 
   @override
   void initState() {
@@ -284,7 +280,7 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                 ),
                 CustomTextField(
                   labelText: 'Specialisations',
-                  controller: specilizationTextEditingController,
+                  controller: specializationTextEditingController,
                   prefixIcon:
                       const Icon(Icons.medical_services, color: Colors.grey),
                   onSubmitted: (value) {
@@ -292,7 +288,7 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                       AddUserHelper.addSpecialisation(
                           value: value!, specialisations: specialisations);
 
-                      specilizationTextEditingController.text = '';
+                      specializationTextEditingController.text = '';
                     });
                   },
                 ),
@@ -559,7 +555,7 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
               child: GeneralButton(
                 onTap: () async {
                   if (pickedImage != null) {
-                    await StorageServices.uploadFileAsUint8List(
+                    await StorageServices.uploadDocumentAsUint8List(
                       location: 'users/dps',
                       uploadfile: pickedImage!.files.single.bytes,
                       fileName: pickedImage!.files.single.name,
@@ -570,15 +566,12 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                             post: selectedPost,
                             name: nameController.text.trim(),
                             email: emailController.text.trim(),
-                            phoneNumber:
-                                phoneNumberController!.fullPhoneNumber.trim(),
+                            phoneNumber: phoneNumberController!.fullPhoneNumber.trim(),
                             address: addressController.text.trim(),
                             preferredWorkDays: preferredWorkDays,
-                            previousEmployer:
-                                previousEmployerController.text.trim(),
+                            previousEmployer:previousEmployerController.text.trim(),
                             documents: documents,
-                            contactInformation:
-                                contactInformationController!.fullPhoneNumber,
+                            contactInformation: contactInformationController!.fullPhoneNumber,
                             role: selectedRole,
                             gender: selectedGender,
                             dob: dob,
