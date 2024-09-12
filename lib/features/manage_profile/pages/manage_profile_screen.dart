@@ -88,6 +88,9 @@ class _ProfileScreenState extends ConsumerState<UserProfileScreen>
                               ),
                               errorWidget: (context, url, error) =>
                                   const Icon(Icons.error),
+                              errorListener: (e) {
+                                DevLogs.logError('Error: $e');
+                              },
                               fit: BoxFit.cover,
                               width: 120,
                               height: 120,
