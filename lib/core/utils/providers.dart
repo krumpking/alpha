@@ -3,6 +3,7 @@ import 'package:alpha/features/feedback/state/feedback_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../features/statistics/state/count_provider.dart';
 import '../../features/workers/state/stuff_provider.dart';
 import '../../features/auth/state/authentication_provider.dart';
 import '../../features/manage_profile/state/user_profile_provider.dart';
@@ -31,4 +32,9 @@ class ProviderUtils {
       AsyncValue<UserProfile>, String>((ref, profileEmail) {
     return ProfileNotifier(profileEmail: profileEmail);
   });
+
+  static final staffCountProvider = StateNotifierProvider<StaffCountNotifier, AsyncValue<Map<String, int>>>((ref) {
+    return StaffCountNotifier();
+  });
+
 }

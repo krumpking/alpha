@@ -1,6 +1,3 @@
-import 'dart:io';
-import 'package:alpha/core/utils/files.dart';
-import 'package:alpha/core/utils/logs.dart';
 import 'package:alpha/custom_widgets/text_fields/custome_phone_input.dart';
 import 'package:alpha/models/shift.dart';
 import 'package:alpha/models/document.dart';
@@ -11,15 +8,12 @@ import 'package:alpha/features/workers/helper/storage_helper.dart';
 import 'package:extended_phone_number_input/phone_number_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../../../custom_widgets/country_city_state/country_city_state.dart';
 import '../../../custom_widgets/custom_dropdown.dart';
-import '../../../custom_widgets/snackbar/custom_snackbar.dart';
 import '../../../models/user_profile.dart';
 import '../helper/add_user_helper.dart';
 import '../services/media_services.dart';
-import '../services/storage_services.dart';
 
 class AdminAddUser extends ConsumerStatefulWidget {
   const AdminAddUser({super.key});
@@ -41,8 +35,7 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
   TextEditingController shiftDayController = TextEditingController();
   TextEditingController shiftStartTimeController = TextEditingController();
   TextEditingController shiftEndTimeController = TextEditingController();
-  TextEditingController specilizationTextEditingController =
-      TextEditingController();
+  TextEditingController specializationTextEditingController = TextEditingController();
   String selectedGender = 'Male';
   String? selectedCity;
   String? selectedState;
@@ -54,7 +47,7 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
   String? selectedDocumentUrl;
   TextEditingController expiryDateTextEditing = TextEditingController();
   DateTime? dob;
-  dynamic? pickedImage;
+  dynamic pickedImage;
 
   @override
   void initState() {
@@ -284,7 +277,7 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                 ),
                 CustomTextField(
                   labelText: 'Specialisations',
-                  controller: specilizationTextEditingController,
+                  controller: specializationTextEditingController,
                   prefixIcon:
                       const Icon(Icons.medical_services, color: Colors.grey),
                   onSubmitted: (value) {
@@ -292,7 +285,7 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                       AddUserHelper.addSpecialisation(
                           value: value!, specialisations: specialisations);
 
-                      specilizationTextEditingController.text = '';
+                      specializationTextEditingController.text = '';
                     });
                   },
                 ),
@@ -559,45 +552,29 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
               child: GeneralButton(
                 onTap: () async {
                   if (pickedImage != null) {
-                    await StorageServices.uploadFileAsUint8List(
-                      location: 'users/dps',
-                      uploadfile: pickedImage!.files.single.bytes,
+                    AddUserHelper.validateAndSubmitForm(
+                      pickedImageBytes: pickedImage!.files.single.bytes,
                       fileName: pickedImage!.files.single.name,
-                    ).then((response) {
-                      if (response.success) {
-                        AddUserHelper.validateAndSubmitForm(
-                          userProfile: UserProfile(
-                            post: selectedPost,
-                            name: nameController.text.trim(),
-                            email: emailController.text.trim(),
-                            phoneNumber:
-                                phoneNumberController!.fullPhoneNumber.trim(),
-                            address: addressController.text.trim(),
-                            preferredWorkDays: preferredWorkDays,
-                            previousEmployer:
-                                previousEmployerController.text.trim(),
-                            documents: documents,
-                            contactInformation:
-                                contactInformationController!.fullPhoneNumber,
-                            role: selectedRole,
-                            gender: selectedGender,
-                            dob: dob,
-                            city: selectedCity!,
-                            state: selectedState!,
-                            country: selectedCountry!,
-                            specialisations: specialisations,
-                            profilePicture: response.data,
-                          ),
-                        );
-                      } else {
-                        CustomSnackBar.showErrorSnackbar(
-                            message:
-                                'Failed to upload image, Please try Again');
+                      userProfile: UserProfile(
+                        post: selectedPost,
+                        name: nameController.text.trim(),
+                        email: emailController.text.trim(),
+                        phoneNumber: phoneNumberController!.fullPhoneNumber.trim(),
+                        address: addressController.text.trim(),
+                        preferredWorkDays: preferredWorkDays,
+                        previousEmployer:previousEmployerController.text.trim(),
+                        documents: documents,
+                        contactInformation: contactInformationController!.fullPhoneNumber,
+                        role: selectedRole,
+                        gender: selectedGender,
+                        dob: dob,
+                        city: selectedCity!,
+                        state: selectedState!,
+                        country: selectedCountry!,
+                        specialisations: specialisations,
+                      ),
+                    );
 
-                        if (Get.isDialogOpen!) Get.back();
-                        return;
-                      }
-                    });
                   } else {
                     AddUserHelper.validateAndSubmitForm(
                       userProfile: UserProfile(
