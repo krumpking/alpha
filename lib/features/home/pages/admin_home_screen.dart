@@ -12,7 +12,6 @@ import '../../../core/utils/providers.dart';
 import '../../../custom_widgets/sidebar/admin_drawer.dart';
 import 'admin_tabs/staff_tab.dart';
 
-
 class AdminHomeScreen extends ConsumerStatefulWidget {
   const AdminHomeScreen({super.key});
 
@@ -20,7 +19,8 @@ class AdminHomeScreen extends ConsumerStatefulWidget {
   ConsumerState<AdminHomeScreen> createState() => _AdminHomeScreenState();
 }
 
-class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen> with SingleTickerProviderStateMixin {
+class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final List<Color> colors = [
     Colors.blue,
@@ -46,11 +46,17 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen> with SingleTi
 
   @override
   Widget build(BuildContext context) {
-    final staffState = ref.watch(ProviderUtils.staffProvider,);
+    final staffState = ref.watch(
+      ProviderUtils.staffProvider,
+    );
 
     return Scaffold(
       key: _key,
-      drawer: Dimensions.isSmallScreen ? AdminDrawer(user: user!,) : null,
+      drawer: Dimensions.isSmallScreen
+          ? AdminDrawer(
+              user: user!,
+            )
+          : null,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         bottom: PreferredSize(
@@ -61,7 +67,7 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen> with SingleTi
               children: [
                 Row(
                   children: [
-                    if(Dimensions.isSmallScreen)
+                    if (Dimensions.isSmallScreen)
                       IconButton(
                         onPressed: () {
                           _key.currentState!.openDrawer();
@@ -138,7 +144,8 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen> with SingleTi
                 final stuffCard = jsonData[index];
                 final randomColor = colors[Random().nextInt(colors.length)];
 
-                List<String>? imagesLinks = List<String>.from(stuffCard['images']);
+                List<String>? imagesLinks =
+                    List<String>.from(stuffCard['images']);
 
                 return CategoryCard(
                   color: randomColor,
@@ -182,9 +189,24 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen> with SingleTi
             child: TabBarView(
               controller: _tabController,
               children: [
-                StaffTab(users: users.where((user) => user.post.toLowerCase() == 'nurse' && user.role.toLowerCase() == 'user').toList()),
-                StaffTab(users: users.where((user) => user.post.toLowerCase() == 'social worker' && user.role.toLowerCase() == 'user').toList()),
-                StaffTab(users: users.where((user) => user.post.toLowerCase() == 'care/support worker' && user.role.toLowerCase() == 'user').toList()),
+                StaffTab(
+                    users: users
+                        .where((user) =>
+                            user.post.toLowerCase() == 'nurse' &&
+                            user.role.toLowerCase() == 'user')
+                        .toList()),
+                StaffTab(
+                    users: users
+                        .where((user) =>
+                            user.post.toLowerCase() == 'social worker' &&
+                            user.role.toLowerCase() == 'user')
+                        .toList()),
+                StaffTab(
+                    users: users
+                        .where((user) =>
+                            user.post.toLowerCase() == 'care/support worker' &&
+                            user.role.toLowerCase() == 'user')
+                        .toList()),
               ],
             ),
           ),
