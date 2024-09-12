@@ -35,6 +35,9 @@ class AdminStuffStats extends ConsumerWidget {
                     child: CachedNetworkImage(
                       imageUrl: FirebaseAuth.instance.currentUser!.photoURL ?? "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
                       width: MediaQuery.of(context).size.height * 0.18,
+                      httpHeaders: const {
+                        "Content-Type": "image/jpeg",
+                      },
                       height: MediaQuery.of(context).size.height * 0.18,
                       fit: BoxFit.cover,
                       placeholder: (context, url) => Skeletonizer(
