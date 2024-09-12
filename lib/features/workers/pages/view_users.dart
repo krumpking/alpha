@@ -96,7 +96,7 @@ class AdminViewUsers extends ConsumerWidget {
                 ElevatedButton(
                   onPressed: () {
                     // Add logic to retry fetching users
-                    ref.read(ProviderUtils.staffProvider.notifier).fetchUsers();
+                    ref.read(ProviderUtils.staffProvider.notifier).streamUsers();
                   },
                   child: const Text('Retry'),
                 ),

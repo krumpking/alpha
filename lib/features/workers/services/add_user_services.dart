@@ -12,9 +12,22 @@ class StaffServices {
     required UserProfile userProfile,
   }) async {
     try {
+      // Query Firestore to check if a user with the same email already exists
+      final querySnapshot = await _firestore
+          .collection('users')
+          .where('email', isEqualTo: userProfile.email)
+          .get();
 
+      // If a user with the same email exists, return an error
+      if (querySnapshot.docs.isNotEmpty) {
+        return APIResponse(
+            success: false,
+            message: 'User with the same email already exists'
+        );
+      }
+
+      // If no user with the same email, proceed with adding the user
       final userData = userProfile.toJson();
-      // Add user data to Firestore
       await _firestore.collection('users').add(userData);
 
       return APIResponse(success: true, data: '', message: 'User added successfully');
@@ -22,6 +35,8 @@ class StaffServices {
       return APIResponse(success: false, message: e.toString());
     }
   }
+
+
 
   static Future<APIResponse<UserProfile>> fetchUserProfile({required String profileEmail}) async {
     final usersRef = FirebaseFirestore.instance.collection('users');
@@ -44,21 +59,12 @@ class StaffServices {
 
 
 // Method to fetch all users from Firebase Firestore
-  static Future<APIResponse<List<UserProfile>>> fetchAllUsers() async {
-    try {
-      // Fetch all documents from the 'users' collection
-      final QuerySnapshot<Map<String, dynamic>> userSnapshot = await _firestore.collection('users').get();
-
-      // Map the documents to a list of UserProfile objects
-      final List<UserProfile> users = userSnapshot.docs
+  static Stream<List<UserProfile>> streamAllUsers() {
+    return _firestore.collection('users').snapshots().map((snapshot) {
+      return snapshot.docs
           .map((doc) => UserProfile.fromJson(doc.data()))
           .toList();
-
-      return APIResponse(success: true, data: users, message: 'Users retrieved successfully');
-    } catch (e) {
-      DevLogs.logError(e.toString());
-      return APIResponse(success: false, message: e.toString());
-    }
+    });
   }
 
 

@@ -1,5 +1,3 @@
-import 'dart:nativewrappers/_internal/vm/lib/typed_data_patch.dart';
-
 import 'package:alpha/custom_widgets/snackbar/custom_snackbar.dart';
 import 'package:alpha/features/workers/services/add_user_services.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +9,7 @@ import '../services/storage_services.dart';
 class AddUserHelper {
   static Future<void> validateAndSubmitForm({
     required UserProfile userProfile,
-    Uint8List? pickedImageBytes,
+    dynamic pickedImageBytes,
     String? fileName,
   }) async {
     // Validate Email
