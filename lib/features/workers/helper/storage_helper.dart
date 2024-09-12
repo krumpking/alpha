@@ -24,7 +24,7 @@ class StorageHelper {
         barrierDismissible: false,
       );
 
-      final response = await StorageServices.uploadFileAsUint8List(
+      final response = await StorageServices.uploadDocumentAsUint8List(
         location: 'documents',
         uploadfile: selectedFile['bytes'],
         fileName: selectedFile['name'],

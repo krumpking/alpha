@@ -4,10 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../custom_widgets/circular_loader/circular_loader.dart';
 import '../../../models/user_profile.dart';
+import '../services/storage_services.dart';
 
 class AddUserHelper {
-  static void validateAndSubmitForm({
+  static Future<void> validateAndSubmitForm({
     required UserProfile userProfile,
+    dynamic pickedImageBytes,
+    String? fileName,
   }) async {
     // Validate Email
     if (!GetUtils.isEmail(userProfile.email)) {
@@ -44,7 +47,7 @@ class AddUserHelper {
       return;
     }
 
-    // Validate Name
+    // Validate Work Days
     if (userProfile.preferredWorkDays.isEmpty) {
       CustomSnackBar.showErrorSnackbar(message: 'Input working days');
       return;
@@ -97,6 +100,27 @@ class AddUserHelper {
       barrierDismissible: false,
     );
 
+    // Upload profile picture if picked
+    String? profilePictureUrl;
+    if (pickedImageBytes != null && fileName != null) {
+      final uploadResponse = await StorageServices.uploadDocumentAsUint8List(
+        location: 'users/dps',
+        uploadfile: pickedImageBytes,
+        fileName: fileName,
+      );
+
+      if (!uploadResponse.success) {
+        if (!Get.isSnackbarOpen) Get.back();
+        CustomSnackBar.showErrorSnackbar(
+            message: uploadResponse.message ?? 'Failed to upload image, Please try again');
+        return;
+      }
+
+      profilePictureUrl = uploadResponse.data;
+    }
+
+    userProfile = userProfile.copyWith(profilePicture: profilePictureUrl);
+
     await StaffServices.addStuffToFirebase(userProfile: userProfile)
         .then((response) {
       if (!response.success) {
@@ -110,6 +134,7 @@ class AddUserHelper {
       }
     });
   }
+
 
   static Future<DateTime?> pickDate(
       {required BuildContext context,

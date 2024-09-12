@@ -1,6 +1,7 @@
 import 'package:alpha/core/constants/color_constants.dart';
 import 'package:alpha/core/utils/routes.dart';
 import 'package:alpha/custom_widgets/custom_button/general_button.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -49,19 +50,24 @@ class AdminViewUsers extends ConsumerWidget {
                   ),
                   child: ListTile(
                     contentPadding: EdgeInsets.zero,
-                    leading:  Icon(
-                      Icons.person,
-                      color: Pallete.primaryColor,
+                    leading:  CachedNetworkImage(
+                      imageUrl: user.profilePicture ?? '',
+                      placeholder: (context, url) => const CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => const Icon(Icons.error),
+                      imageBuilder: (context, imageProvider) => CircleAvatar(
+                        backgroundImage: imageProvider,
+                      ),
                     ),
+
                     title: Text(
-                        user.email,
+                        user.name,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 14
                       ),
                     ),
                     subtitle: Text(
-                        user.phoneNumber,
+                        "${user.email}\n${user.phoneNumber }",
                       style:  TextStyle(
                         color: Colors.grey.shade600,
                           fontSize: 12
@@ -90,7 +96,7 @@ class AdminViewUsers extends ConsumerWidget {
                 ElevatedButton(
                   onPressed: () {
                     // Add logic to retry fetching users
-                    ref.read(ProviderUtils.staffProvider.notifier).fetchUsers();
+                    ref.read(ProviderUtils.staffProvider.notifier).streamUsers();
                   },
                   child: const Text('Retry'),
                 ),

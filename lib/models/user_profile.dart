@@ -84,4 +84,44 @@ class UserProfile {
     state: json['state'],
     country: json['country'],
   );
+
+  UserProfile copyWith({
+    String? name,
+    String? email,
+    String? phoneNumber,
+    String? address,
+    List<Shift>? preferredWorkDays,
+    String? previousEmployer,
+    String? contactInformation,
+    String? role,
+    List<String>? specialisations,
+    String? profilePicture,
+    String? city,
+    String? state,
+    String? country,
+    String? post,
+    List<Document>? documents,
+    DateTime? dob,
+    String? gender,
+  }) {
+    return UserProfile(
+      name: name ?? this.name,
+      email: email ?? this.email,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      address: address ?? this.address,
+      preferredWorkDays: preferredWorkDays ?? this.preferredWorkDays,
+      previousEmployer: previousEmployer ?? this.previousEmployer,
+      contactInformation: contactInformation ?? this.contactInformation,
+      role: role ?? this.role,
+      specialisations: specialisations ?? this.specialisations,
+      profilePicture: profilePicture ?? this.profilePicture,
+      city: city ?? this.city,
+      state: state ?? this.state,
+      country: country ?? this.country,
+      post: post ?? this.post,
+      documents: documents ?? this.documents,
+      dob: dob ?? this.dob,
+      gender: gender ?? this.gender,
+    );
+  }
 }
