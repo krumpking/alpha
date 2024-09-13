@@ -191,7 +191,7 @@ class _ProfileScreenState extends ConsumerState<UserProfileScreen>
                       DocumentsTab(documents: userProfile.documents),
 
                       // Shifts Tab
-                      ShiftsTab(shifts: userProfile.preferredWorkDays),
+                      ShiftsTab(shifts: []),
 
                       // Notes Tab
                       const NotesTab(notes: []),

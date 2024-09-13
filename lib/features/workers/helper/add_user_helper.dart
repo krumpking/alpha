@@ -47,12 +47,6 @@ class AddUserHelper {
       return;
     }
 
-    // Validate Work Days
-    if (userProfile.preferredWorkDays.isEmpty) {
-      CustomSnackBar.showErrorSnackbar(message: 'Input working days');
-      return;
-    }
-
     // Validate Address
     if (userProfile.address!.isEmpty) {
       CustomSnackBar.showErrorSnackbar(message: 'Address is required.');

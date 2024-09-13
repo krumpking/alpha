@@ -84,7 +84,7 @@ class StaffCard extends StatelessWidget {
                         style: TextStyle(fontSize: 12, color: Colors.black)),
                     TextSpan(
                         text:
-                            '${user.preferredWorkDays[0].date} ${user.preferredWorkDays[0].startTime}-${user.preferredWorkDays[0].endTime}',
+                            '12/34/56',
                         style: TextStyle(
                             fontSize: 12, color: Pallete.primaryColor)),
                   ]),

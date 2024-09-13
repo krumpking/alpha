@@ -7,7 +7,6 @@ class UserProfile {
   String? email;
   String? phoneNumber;
   String? address;
-  List<Shift> preferredWorkDays;
   String? previousEmployer;
   String? contactInformation;
   String? role;
@@ -27,7 +26,6 @@ class UserProfile {
     required this.city,
     required this.phoneNumber,
     required this.address,
-    required this.preferredWorkDays,
     this.profilePicture,
     required this.country,
     required this.state,
@@ -46,7 +44,6 @@ class UserProfile {
     'email': email,
     'phoneNumber': phoneNumber,
     'address': address,
-    'preferredWorkDays': preferredWorkDays.map((shift) => shift.toJson()).toList(),
     'previousEmployer': previousEmployer,
     'contactInformation': contactInformation,
     'role': role,
@@ -66,9 +63,6 @@ class UserProfile {
     email: json['email'] ?? '',
     phoneNumber: json['phoneNumber'] ?? '',
     address: json['address'] ?? '',
-    preferredWorkDays: (json['preferredWorkDays'] as List)
-        .map((shiftJson) => Shift.fromJson(shiftJson))
-        .toList(),
     previousEmployer: json['previousEmployer'] ?? '',
     contactInformation: json['contactInformation'] ?? '',
     role: json['role'] ?? '',
@@ -109,7 +103,6 @@ class UserProfile {
       email: email ?? this.email,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       address: address ?? this.address,
-      preferredWorkDays: preferredWorkDays ?? this.preferredWorkDays,
       previousEmployer: previousEmployer ?? this.previousEmployer,
       contactInformation: contactInformation ?? this.contactInformation,
       role: role ?? this.role,

@@ -35,7 +35,7 @@ class Shift {
     'startTime': startTime,
     'endTime': endTime,
     'duration': duration,
-    'date': date,
+    'day': date,
     'dateAdded': dateAdded,
     'addedBy': addedBy,
     'contactPersonNumber': contactPersonNumber,
@@ -46,18 +46,20 @@ class Shift {
   };
 
   factory Shift.fromJson(Map<String, dynamic> json) => Shift(
-    shiftId: json['shiftId'],
-    placeName: json['placeName'],
-    startTime: json['startTime'],
-    endTime: json['endTime'],
-    duration: json['duration'],
-    date: json['date'],
-    dateAdded: json['dateAdded'],
-    addedBy: json['addedBy'],
-    contactPersonNumber: json['contactPersonNumber'],
-    contactPersonAltNumber: json['contactPersonAltNumber'],
-    staffEmail: json['staffEmail'],
-    done: json['done'],
-    notes: json['notes'],
+    shiftId: json['shiftId'] ?? '',
+    placeName: json['placeName'] ?? '',
+    startTime: json['startTime'] ?? '',
+    endTime: json['endTime'] ?? '',
+    duration: json['duration'] ?? '',
+    date: json['day'] ?? '',
+    dateAdded: json['dateAdded'] ?? '',
+    addedBy: json['addedBy'] ?? '',
+    contactPersonNumber: json['contactPersonNumber'] ?? '',
+    contactPersonAltNumber: json['contactPersonAltNumber'] ?? '',
+    staffEmail: json['staffEmail'] ?? '',
+    done: json['done'] ?? '',
+    notes: json['notes'] ?? '',
   );
+
 }
+

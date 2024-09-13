@@ -293,159 +293,6 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
             ),
 
             const SizedBox(height: 10),
-            const Divider(),
-
-            Column(
-              children: [
-                const Text(
-                  'Preferred Work Days',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 10),
-                Wrap(
-                  children: preferredWorkDays.map((shift) {
-                    return Chip(
-                      label: Text(
-                        '${shift.date}: ${shift.startTime} - ${shift.endTime}',
-                        style:
-                            const TextStyle(fontSize: 10, color: Colors.white),
-                      ),
-                      backgroundColor: Pallete.primaryColor.withOpacity(0.7),
-                      deleteIcon: const Icon(
-                        Icons.close,
-                        color: Colors.white,
-                      ),
-                      onDeleted: () {
-                        setState(() {
-                          preferredWorkDays.remove(shift);
-                        });
-                      },
-                    );
-                  }).toList(),
-                ),
-                GestureDetector(
-                  onTap: () async {
-                    await AddUserHelper.pickDate(
-                            context: context, initialDate: DateTime.now())
-                        .then((date) {
-                      setState(() {
-                        if (date != null) {
-                          String formattedDate =
-                              DateFormat('yyyy/MM/dd').format(date);
-                          shiftDayController.text = formattedDate;
-                        }
-                      });
-                    });
-                  },
-                  child: CustomTextField(
-                    enabled: false,
-                    controller: shiftDayController,
-                    prefixIcon: const Icon(
-                      Icons.calendar_month,
-                      color: Colors.grey,
-                    ),
-                    labelText: 'Shift Date',
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () async {
-                          await AddUserHelper.pickTime(context: context)
-                              .then((timeOfDay) {
-                            setState(() {
-                              if (timeOfDay != null) {
-                                final now = DateTime.now();
-                                final dateTime = DateTime(now.year, now.month,
-                                    now.day, timeOfDay.hour, timeOfDay.minute);
-
-                                String formattedTime =
-                                    DateFormat('HH:mm').format(dateTime);
-                                shiftStartTimeController.text = formattedTime;
-                              }
-                            });
-                          });
-                        },
-                        child: CustomTextField(
-                          enabled: false,
-                          controller: shiftStartTimeController,
-                          prefixIcon: const Icon(
-                            Icons.watch_later_outlined,
-                            color: Colors.grey,
-                          ),
-                          labelText: 'Start Time',
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () async {
-                          await AddUserHelper.pickTime(context: context)
-                              .then((timeOfDay) {
-                            setState(() {
-                              if (timeOfDay != null) {
-                                final now = DateTime.now();
-                                final dateTime = DateTime(now.year, now.month,
-                                    now.day, timeOfDay.hour, timeOfDay.minute);
-
-                                String formattedTime =
-                                    DateFormat('HH:mm').format(dateTime);
-                                shiftEndTimeController.text = formattedTime;
-                              }
-                            });
-                          });
-                        },
-                        child: CustomTextField(
-                          enabled: false,
-                          controller: shiftEndTimeController,
-                          prefixIcon: const Icon(
-                            Icons.watch_later_outlined,
-                            color: Colors.grey,
-                          ),
-                          labelText: 'End Time',
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                // GeneralButton(
-                //   onTap: () {
-                //     setState(() {
-                //       preferredWorkDays.add(
-                //         Shift(
-                //           date: shiftDayController.text.trim(),
-                //           startTime: shiftStartTimeController.text.trim(),
-                //           endTime: shiftEndTimeController.text.trim(),
-                //         ),
-                //       );
-                //     });
-                //     shiftDayController.clear();
-                //     shiftStartTimeController.clear();
-                //     shiftEndTimeController.clear();
-                //   },
-                //   borderRadius: 10,
-                //   btnColor: Colors.white,
-                //   boxBorder: Border.all(color: Pallete.primaryColor),
-                //   width: 150,
-                //   height: 40,
-                //   child: Text(
-                //     "Add Shift",
-                //     style: TextStyle(
-                //         color: Pallete.primaryColor,
-                //         fontSize: 12,
-                //         fontWeight: FontWeight.bold),
-                //   ),
-                // ),
-              ],
-            ),
-
-            const SizedBox(
-              height: 10,
-            ),
 
             const Divider(),
 
@@ -561,7 +408,6 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                         email: emailController.text.trim(),
                         phoneNumber: phoneNumberController!.fullPhoneNumber.trim(),
                         address: addressController.text.trim(),
-                        preferredWorkDays: preferredWorkDays,
                         previousEmployer:previousEmployerController.text.trim(),
                         documents: documents,
                         contactInformation: contactInformationController!.fullPhoneNumber,
@@ -584,7 +430,6 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                         phoneNumber:
                             phoneNumberController!.fullPhoneNumber.trim(),
                         address: addressController.text.trim(),
-                        preferredWorkDays: preferredWorkDays,
                         previousEmployer:
                             previousEmployerController.text.trim(),
                         documents: documents,
