@@ -6,6 +6,7 @@ import 'package:alpha/features/auth/pages/forgot_password.dart';
 import 'package:alpha/features/home/pages/admin_home_screen.dart';
 import 'package:alpha/features/home/pages/user_home_screen.dart';
 import 'package:alpha/features/manage_profile/pages/manage_profile_screen.dart';
+import 'package:alpha/features/shift/pages/add_user_shift.dart';
 import 'package:alpha/features/statistics/pages/admin_stuff_stats.dart';
 import 'package:alpha/features/welcome/pages/onboard.dart';
 import 'package:alpha/features/welcome/pages/splash.dart';
@@ -34,7 +35,8 @@ class RoutesHelper {
   static String adminAddUserScreen = '/addUser';
   static String viewUserScreen = '/viewUsers';
   static String userProfileScreen = '/profile';
-  static String addUserShiftScreen = '/addShift';
+  static String addShiftsDoneScreen = '/addShiftsDone';
+  static String addShiftsScreen = '/addShift';
   static String addUserFeedbackScreen = '/addFeedback';
 
   static List<GetPage> routes = [
@@ -66,10 +68,16 @@ class RoutesHelper {
         }),
     GetPage(name: adminAddUserScreen, page: () => const AdminAddUser()),
     GetPage(
-        name: addUserShiftScreen,
+        name: addShiftsDoneScreen,
         page: () {
           final UserProfile selectedUser = Get.arguments as UserProfile;
 
+          return AddShiftsDone(selectedUser: selectedUser);
+        }),
+    GetPage(
+        name: addShiftsScreen,
+        page: () {
+          final UserProfile selectedUser = Get.arguments as UserProfile;
           return AddUserShift(selectedUser: selectedUser);
         }),
     GetPage(name: viewUserScreen, page: () => const AdminViewUsers()),

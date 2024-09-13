@@ -9,15 +9,15 @@ import '../../../custom_widgets/custom_switch/custom_switch.dart';
 import '../../../custom_widgets/text_fields/custom_text_field.dart';
 import '../helpers/shift_helpers.dart';
 
-class AddUserShift extends StatefulWidget {
+class AddShiftsDone extends StatefulWidget {
   final UserProfile selectedUser;
-  const AddUserShift({super.key, required this.selectedUser});
+  const AddShiftsDone({super.key, required this.selectedUser});
 
   @override
-  State<AddUserShift> createState() => _AddUserShiftState();
+  State<AddShiftsDone> createState() => _AddShiftsDoneState();
 }
 
-class _AddUserShiftState extends State<AddUserShift> {
+class _AddShiftsDoneState extends State<AddShiftsDone> {
   final TextEditingController _hoursController = TextEditingController();
   final TextEditingController _documentNameController = TextEditingController();
   bool _isCompleted = false;

@@ -1,4 +1,5 @@
 import 'package:alpha/features/shift/services/add_shif_services.dart';
+import 'package:alpha/models/shift.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import '../../../custom_widgets/circular_loader/circular_loader.dart';
@@ -65,6 +66,72 @@ class ShiftHelpers {
         if (Get.isDialogOpen!) Get.back();
         CustomSnackBar.showSuccessSnackbar(
             message: 'Shift submitted successfully');
+      }
+    });
+  }
+
+
+  static void addUserShift({
+    required Shift shift
+  }) async {
+    // Validate Place Name
+    if (shift.placeName.isEmpty) {
+      CustomSnackBar.showErrorSnackbar(message: 'Place name is required.');
+      return;
+    }
+
+    // Validate Start Time
+    if (shift.startTime.isEmpty) {
+      CustomSnackBar.showErrorSnackbar(message: 'Start time is required.');
+      return;
+    }
+
+    // Validate End Time
+    if (shift.endTime.isEmpty) {
+      CustomSnackBar.showErrorSnackbar(message: 'End time is required.');
+      return;
+    }
+
+    // Validate Date
+    if (shift.date.isEmpty) {
+      CustomSnackBar.showErrorSnackbar(message: 'Shift date is required.');
+      return;
+    }
+
+    // Validate Contact Person
+    if (shift.contactPersonNumber.isEmpty || !GetUtils.isPhoneNumber(shift.contactPersonNumber)) {
+      CustomSnackBar.showErrorSnackbar(
+          message: 'Valid contact person number is required.');
+      return;
+    }
+
+    // Validate Alternative Contact (Optional but still checked if provided)
+    if (shift.contactPersonAltNumber.isNotEmpty && !GetUtils.isPhoneNumber(shift.contactPersonAltNumber)) {
+      CustomSnackBar.showErrorSnackbar(
+          message: 'Valid alternative contact number is required.');
+      return;
+    }
+
+    // Show loader while submitting shift
+    Get.dialog(
+      const CustomLoader(
+        message: 'Submitting shift',
+      ),
+      barrierDismissible: false,
+    );
+
+    // Submit the shift
+    await ShiftServices.submitUserShift(
+      shift: shift
+    ).then((response) {
+      if (!response.success) {
+        if (Get.isDialogOpen!) Get.back();
+        CustomSnackBar.showErrorSnackbar(
+            message: response.message ?? 'Failed to submit shift');
+      } else {
+        if (Get.isDialogOpen!) Get.back();
+        CustomSnackBar.showSuccessSnackbar(
+            message: 'Shift added successfully');
       }
     });
   }

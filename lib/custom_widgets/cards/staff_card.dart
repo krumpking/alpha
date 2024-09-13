@@ -55,19 +55,34 @@ class StaffCard extends StatelessWidget {
                           arguments: user.email);
                     },
                   ),
+
+
+                  buildPopUpOption(
+                      title: 'Add Shift',
+                      icon: Icons.calendar_month,
+                      value: 1,
+                      onTap: () => Get.toNamed(RoutesHelper.addShiftsScreen,
+                          arguments: user
+                      )
+                  ),
+
                   buildPopUpOption(
                       title: 'Add Hours worked',
                       icon: Icons.calendar_month,
-                      value: 1,
-                      onTap: () => Get.toNamed(RoutesHelper.addUserShiftScreen,
-                          arguments: user)),
+                      value: 2,
+                      onTap: () => Get.toNamed(RoutesHelper.addShiftsDoneScreen,
+                          arguments: user
+                      )
+                  ),
                   buildPopUpOption(
                       title: 'Add Feedback',
                       icon: Icons.feedback,
-                      value: 2,
+                      value: 3,
                       onTap: () => Get.toNamed(
                           RoutesHelper.addUserFeedbackScreen,
-                          arguments: user)),
+                          arguments: user
+                      )
+                  ),
                 ],
                 icon: const Icon(Icons.more_vert),
               ),
