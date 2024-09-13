@@ -39,7 +39,7 @@ class _AddUserShiftState extends State<AddUserShift> {
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),
         title: Text(
-          widget.selectedUser.name,
+          widget.selectedUser.name!,
           style:
               const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),

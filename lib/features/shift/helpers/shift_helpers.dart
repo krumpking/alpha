@@ -15,13 +15,13 @@ class ShiftHelpers {
     required String documentUrl,
   }) async {
     // Validate User
-    if (!GetUtils.isEmail(selectedUser.email)) {
+    if (!GetUtils.isEmail(selectedUser.email!)) {
       CustomSnackBar.showErrorSnackbar(
           message: 'Invalid email for assigned user.');
       return;
     }
 
-    if (selectedUser.name.isEmpty) {
+    if (selectedUser.name!.isEmpty) {
       CustomSnackBar.showErrorSnackbar(
           message: 'Assigned user name is required.');
       return;

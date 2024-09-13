@@ -306,7 +306,7 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                   children: preferredWorkDays.map((shift) {
                     return Chip(
                       label: Text(
-                        '${shift.day}: ${shift.startTime} - ${shift.endTime}',
+                        '${shift.date}: ${shift.startTime} - ${shift.endTime}',
                         style:
                             const TextStyle(fontSize: 10, color: Colors.white),
                       ),
@@ -412,34 +412,34 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                   ],
                 ),
                 const SizedBox(height: 10),
-                GeneralButton(
-                  onTap: () {
-                    setState(() {
-                      preferredWorkDays.add(
-                        Shift(
-                          day: shiftDayController.text.trim(),
-                          startTime: shiftStartTimeController.text.trim(),
-                          endTime: shiftEndTimeController.text.trim(),
-                        ),
-                      );
-                    });
-                    shiftDayController.clear();
-                    shiftStartTimeController.clear();
-                    shiftEndTimeController.clear();
-                  },
-                  borderRadius: 10,
-                  btnColor: Colors.white,
-                  boxBorder: Border.all(color: Pallete.primaryColor),
-                  width: 150,
-                  height: 40,
-                  child: Text(
-                    "Add Shift",
-                    style: TextStyle(
-                        color: Pallete.primaryColor,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
+                // GeneralButton(
+                //   onTap: () {
+                //     setState(() {
+                //       preferredWorkDays.add(
+                //         Shift(
+                //           date: shiftDayController.text.trim(),
+                //           startTime: shiftStartTimeController.text.trim(),
+                //           endTime: shiftEndTimeController.text.trim(),
+                //         ),
+                //       );
+                //     });
+                //     shiftDayController.clear();
+                //     shiftStartTimeController.clear();
+                //     shiftEndTimeController.clear();
+                //   },
+                //   borderRadius: 10,
+                //   btnColor: Colors.white,
+                //   boxBorder: Border.all(color: Pallete.primaryColor),
+                //   width: 150,
+                //   height: 40,
+                //   child: Text(
+                //     "Add Shift",
+                //     style: TextStyle(
+                //         color: Pallete.primaryColor,
+                //         fontSize: 12,
+                //         fontWeight: FontWeight.bold),
+                //   ),
+                // ),
               ],
             ),
 

@@ -103,12 +103,12 @@ class _ProfileScreenState extends ConsumerState<UserProfileScreen>
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                userProfile.name,
+                                userProfile.name!,
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold),
                               ),
                               Text(
-                                userProfile.post,
+                                userProfile.post!,
                                 style: const TextStyle(fontSize: 12),
                               ),
                             ],

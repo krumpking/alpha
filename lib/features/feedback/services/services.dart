@@ -21,7 +21,7 @@ class FeedbackServices {
       addedBy: currentUser.email!,
       feedackTitle: feedbackTitle,
       description: description,
-      userEmail: selectedUser.email,
+      userEmail: selectedUser.email!,
     );
     try {
       await FirebaseFirestore.instance

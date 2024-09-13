@@ -25,10 +25,12 @@ class StaffCard extends StatelessWidget {
           children: [
             ListTile(
               contentPadding: EdgeInsets.zero,
-              title: Text(user.name,
-                  style: const TextStyle(fontWeight: FontWeight.bold)),
+              title: Text(
+                  user.name!,
+                  style: const TextStyle(fontWeight: FontWeight.bold)
+              ),
               subtitle: Text(
-                user.post,
+                user.post!,
                 style: const TextStyle(fontSize: 12),
               ),
               trailing: PopupMenuButton<int>(
@@ -82,7 +84,7 @@ class StaffCard extends StatelessWidget {
                         style: TextStyle(fontSize: 12, color: Colors.black)),
                     TextSpan(
                         text:
-                            '${user.preferredWorkDays[0].day} ${user.preferredWorkDays[0].startTime}-${user.preferredWorkDays[0].endTime}',
+                            '${user.preferredWorkDays[0].date} ${user.preferredWorkDays[0].startTime}-${user.preferredWorkDays[0].endTime}',
                         style: TextStyle(
                             fontSize: 12, color: Pallete.primaryColor)),
                   ]),

@@ -123,7 +123,7 @@ class _UserHomeScreenState extends ConsumerState<UserHomeScreen>
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    userProfile.post,
+                                    userProfile.post!,
                                     style: const TextStyle(fontSize: 12),
                                   ),
                                 ],

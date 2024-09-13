@@ -192,20 +192,20 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen>
                 StaffTab(
                     users: users
                         .where((user) =>
-                            user.post.toLowerCase() == 'nurse' &&
-                            user.role.toLowerCase() == 'user')
+                            user.post!.toLowerCase() == 'nurse' &&
+                            user.role!.toLowerCase() == 'user')
                         .toList()),
                 StaffTab(
                     users: users
                         .where((user) =>
-                            user.post.toLowerCase() == 'social worker' &&
-                            user.role.toLowerCase() == 'user')
+                            user.post!.toLowerCase() == 'social worker' &&
+                            user.role!.toLowerCase() == 'user')
                         .toList()),
                 StaffTab(
                     users: users
                         .where((user) =>
-                            user.post.toLowerCase() == 'care/support worker' &&
-                            user.role.toLowerCase() == 'user')
+                            user.post!.toLowerCase() == 'care/support worker' &&
+                            user.role!.toLowerCase() == 'user')
                         .toList()),
               ],
             ),

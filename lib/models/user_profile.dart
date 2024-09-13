@@ -3,20 +3,20 @@ import 'package:alpha/models/shift.dart';
 import 'document.dart';
 
 class UserProfile {
-  String name;
-  String email;
-  String phoneNumber;
-  String address;
+  String? name;
+  String? email;
+  String? phoneNumber;
+  String? address;
   List<Shift> preferredWorkDays;
-  String previousEmployer;
-  String contactInformation;
-  String role;
+  String? previousEmployer;
+  String? contactInformation;
+  String? role;
   List<String> specialisations;
   String? profilePicture;
-  String city;
-  String state;
-  String country;
-  String post;
+  String? city;
+  String? state;
+  String? country;
+  String? post;
   List<Document> documents;
   DateTime? dob;
   String? gender;
@@ -62,27 +62,27 @@ class UserProfile {
   };
 
   factory UserProfile.fromJson(Map<String, dynamic> json) => UserProfile(
-    name: json['name'],
-    email: json['email'],
-    phoneNumber: json['phoneNumber'],
-    address: json['address'],
+    name: json['name'] ?? '',
+    email: json['email'] ?? '',
+    phoneNumber: json['phoneNumber'] ?? '',
+    address: json['address'] ?? '',
     preferredWorkDays: (json['preferredWorkDays'] as List)
         .map((shiftJson) => Shift.fromJson(shiftJson))
         .toList(),
-    previousEmployer: json['previousEmployer'],
-    contactInformation: json['contactInformation'],
-    role: json['role'],
-    post: json['post'],
+    previousEmployer: json['previousEmployer'] ?? '',
+    contactInformation: json['contactInformation'] ?? '',
+    role: json['role'] ?? '',
+    post: json['post'] ?? '',
     specialisations: List<String>.from(json['specialisations']),
-    profilePicture: json['profilePicture'],
+    profilePicture: json['profilePicture'] ?? '',
     documents: (json['documents'] as List)
         .map((documentJson) => Document.fromJson(documentJson))
         .toList(),
     dob: json['dob'] != null ? DateTime.parse(json['dob']) : null,
-    gender: json['gender'],
-    city: json['city'],
-    state: json['state'],
-    country: json['country'],
+    gender: json['gender'] ?? '',
+    city: json['city']?? '',
+    state: json['state'] ?? '',
+    country: json['country'] ?? '',
   );
 
   UserProfile copyWith({

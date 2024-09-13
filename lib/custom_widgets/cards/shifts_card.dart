@@ -47,7 +47,7 @@ class ShiftCard extends StatelessWidget {
                       ),
 
                       TextSpan(
-                          text: '${shift.day} ${shift.startTime}-${shift.endTime}',
+                          text: '${shift.date} ${shift.startTime}-${shift.endTime}',
                           style: TextStyle(
                               fontSize: 12,
                               color: Pallete.primaryColor

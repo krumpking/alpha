@@ -60,7 +60,7 @@ class AdminViewUsers extends ConsumerWidget {
                     ),
 
                     title: Text(
-                        user.name,
+                        user.name!,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 14
@@ -75,7 +75,7 @@ class AdminViewUsers extends ConsumerWidget {
                     ),
 
                     trailing: Text(
-                      user.post,
+                      user.post!,
                       style:  TextStyle(
                           color: Colors.grey.shade600,
                           fontSize: 12

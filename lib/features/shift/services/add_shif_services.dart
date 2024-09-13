@@ -19,7 +19,7 @@ class ShiftServices {
       hoursCompleted: hoursCompleted.toDouble(),
       documentName: documentName,
       isCompleted: isCompleted,
-      assignedUser: selectedUser.email,
+      assignedUser: selectedUser.email!,
       documentUrl: documentUrl,
     );
     try {

@@ -13,36 +13,36 @@ class AddUserHelper {
     String? fileName,
   }) async {
     // Validate Email
-    if (!GetUtils.isEmail(userProfile.email)) {
+    if (!GetUtils.isEmail(userProfile.email!)) {
       CustomSnackBar.showErrorSnackbar(message: 'Please input a valid email.');
       return;
     }
 
     // Validate Phone Number
-    if (userProfile.phoneNumber.isEmpty ||
-        !GetUtils.isPhoneNumber(userProfile.phoneNumber)) {
+    if (userProfile.phoneNumber!.isEmpty ||
+        !GetUtils.isPhoneNumber(userProfile.phoneNumber!)) {
       CustomSnackBar.showErrorSnackbar(
           message: 'Please input a valid phone number.');
       return;
     }
 
     // Validate Name
-    if (userProfile.name.isEmpty) {
+    if (userProfile.name!.isEmpty) {
       CustomSnackBar.showErrorSnackbar(message: 'Name is required.');
       return;
     }
 
-    if (userProfile.city.isEmpty) {
+    if (userProfile.city!.isEmpty) {
       CustomSnackBar.showErrorSnackbar(message: 'City is required.');
       return;
     }
 
-    if (userProfile.state.isEmpty) {
+    if (userProfile.state!.isEmpty) {
       CustomSnackBar.showErrorSnackbar(message: 'State is required.');
       return;
     }
 
-    if (userProfile.country.isEmpty) {
+    if (userProfile.country!.isEmpty) {
       CustomSnackBar.showErrorSnackbar(message: 'Country is required.');
       return;
     }
@@ -54,27 +54,27 @@ class AddUserHelper {
     }
 
     // Validate Address
-    if (userProfile.address.isEmpty) {
+    if (userProfile.address!.isEmpty) {
       CustomSnackBar.showErrorSnackbar(message: 'Address is required.');
       return;
     }
 
     // Validate Previous Employer
-    if (userProfile.previousEmployer.isEmpty) {
+    if (userProfile.previousEmployer!.isEmpty) {
       CustomSnackBar.showErrorSnackbar(
           message: 'Previous Employer is required.');
       return;
     }
 
     // Validate Contact Information
-    if (userProfile.contactInformation.isEmpty) {
+    if (userProfile.contactInformation!.isEmpty) {
       CustomSnackBar.showErrorSnackbar(
           message: 'Contact Information is required.');
       return;
     }
 
     // Validate Role
-    if (userProfile.role.isEmpty) {
+    if (userProfile.role!.isEmpty) {
       CustomSnackBar.showErrorSnackbar(message: 'Role is required.');
       return;
     }
