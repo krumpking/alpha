@@ -64,24 +64,6 @@ class StaffCard extends StatelessWidget {
                       icon: Icons.calendar_month,
                       value: 1,
                       onTap: () => Get.toNamed(RoutesHelper.addShiftsScreen,
-                          arguments: user.email
-                      )
-                  ),
-
-                  buildPopUpOption(
-                      title: 'Add Hours worked',
-                      icon: Icons.calendar_month,
-                      value: 2,
-                      onTap: () => Get.toNamed(RoutesHelper.addShiftsDoneScreen,
-                          arguments: user
-                      )
-                  ),
-                  buildPopUpOption(
-                      title: 'Add Feedback',
-                      icon: Icons.feedback,
-                      value: 3,
-                      onTap: () => Get.toNamed(
-                          RoutesHelper.addUserFeedbackScreen,
                           arguments: user
                       )
                   ),

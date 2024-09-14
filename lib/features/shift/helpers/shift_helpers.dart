@@ -9,38 +9,8 @@ import '../../../models/user_profile.dart';
 
 class ShiftHelpers {
   static void validateAndSubmitShift({
-    required User currentUser,
-    required UserProfile selectedUser,
-    required bool isCompleted,
-    required int hoursCompleted,
-    required String documentName,
-    required String documentUrl,
+    required Shift shift,
   }) async {
-    // Validate User
-    if (!GetUtils.isEmail(selectedUser.email!)) {
-      CustomSnackBar.showErrorSnackbar(
-          message: 'Invalid email for assigned user.');
-      return;
-    }
-
-    if (selectedUser.name!.isEmpty) {
-      CustomSnackBar.showErrorSnackbar(
-          message: 'Assigned user name is required.');
-      return;
-    }
-
-    // Validate Hours Completed
-    if (hoursCompleted <= 0) {
-      CustomSnackBar.showErrorSnackbar(
-          message: 'Please input valid hours completed.');
-      return;
-    }
-
-    // Validate Document Name
-    if (documentName.isEmpty) {
-      CustomSnackBar.showErrorSnackbar(message: 'Document name is required.');
-      return;
-    }
 
     // Show loader while submitting shift
     Get.dialog(
@@ -50,14 +20,9 @@ class ShiftHelpers {
       barrierDismissible: false,
     );
 
-    // Submit the shift
-    await ShiftServices.submitShiftsDone(
-      currentUser: currentUser,
-      selectedUser: selectedUser,
-      isCompleted: isCompleted,
-      hoursCompleted: hoursCompleted,
-      documentName: documentName,
-      documentUrl: documentUrl,
+    await ShiftServices.updateShift(
+      shiftId: shift.shiftId,
+      updatedShift: shift,
     ).then((response) {
       if (!response.success) {
         if (Get.isDialogOpen!) Get.back();
@@ -66,7 +31,7 @@ class ShiftHelpers {
       } else {
         if (Get.isDialogOpen!) Get.back();
         CustomSnackBar.showSuccessSnackbar(
-            message: 'Shift submitted successfully');
+            message: 'Shift updated successfully');
       }
     });
   }

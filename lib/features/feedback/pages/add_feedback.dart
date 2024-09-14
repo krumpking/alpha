@@ -2,6 +2,7 @@ import 'package:alpha/core/utils/logs.dart';
 import 'package:alpha/core/utils/routes.dart';
 import 'package:alpha/features/feedback/helpers/helpers.dart';
 import 'package:alpha/global/global.dart';
+import 'package:alpha/models/shift.dart';
 import 'package:alpha/models/user_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -14,10 +15,10 @@ import 'package:get/get.dart';
 
 class AddFeedbackScreen extends StatefulWidget {
   final UserProfile selectedUser;
-  final String shiftId;
+  final Shift shift;
 
   const AddFeedbackScreen(
-      {super.key, required this.selectedUser, required this.shiftId});
+      {super.key, required this.selectedUser, required this.shift});
 
   @override
   State<AddFeedbackScreen> createState() => _AddFeedbackScreenState();
@@ -106,7 +107,7 @@ class _AddFeedbackScreenState extends State<AddFeedbackScreen> {
                     currentUser: currentUser!,
                     feedbackTitle: feedbackTitleController.text.trim(),
                     selectedUser: widget.selectedUser,
-                    shiftId: widget.shiftId,
+                    shiftId: widget.shift.shiftId,
                   )
                 },
                 borderRadius: 10,

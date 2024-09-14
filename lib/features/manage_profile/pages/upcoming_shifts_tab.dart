@@ -1,18 +1,19 @@
 import 'package:alpha/core/utils/logs.dart';
 import 'package:alpha/core/utils/providers.dart';
+import 'package:alpha/models/user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:alpha/custom_widgets/cards/shifts_card.dart';
 
 class UpcomingShiftsTab extends ConsumerWidget {
-  final String profileEmail;
+  final UserProfile selectedUser;
 
-  const UpcomingShiftsTab({super.key, required this.profileEmail});
+  const UpcomingShiftsTab({super.key, required this.selectedUser});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Listen to the shiftsProvider using the profileEmail
-    final shiftsAsyncValue = ref.watch(ProviderUtils.upcomingShiftsProvider(profileEmail));
+    final shiftsAsyncValue = ref.watch(ProviderUtils.upcomingShiftsProvider(selectedUser.email!));
 
     return Scaffold(
       body: shiftsAsyncValue.when(
@@ -25,7 +26,7 @@ class UpcomingShiftsTab extends ConsumerWidget {
             itemCount: shifts.length,
             itemBuilder: (context, index) {
               final shift = shifts[index];
-              return ShiftCard(shift: shift);
+              return ShiftCard(isUpcomingShift: true, shift: shift, selectedUser: selectedUser,);
             },
           );
         },

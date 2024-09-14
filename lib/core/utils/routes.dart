@@ -18,6 +18,7 @@ import 'package:get/get.dart';
 import '../../features/auth/pages/email_verification_success.dart';
 import '../../features/auth/pages/login_page.dart';
 import '../../features/auth/pages/resend_reset_email_screen.dart';
+import '../../models/shift.dart';
 import '../../models/user_profile.dart';
 
 class RoutesHelper {
@@ -35,7 +36,7 @@ class RoutesHelper {
   static String adminAddUserScreen = '/addUser';
   static String viewUserScreen = '/viewUsers';
   static String userProfileScreen = '/profile';
-  static String addShiftsDoneScreen = '/addShiftsDone';
+  static String updateShiftScreen = '/updateShift';
   static String addShiftsScreen = '/addShift';
   static String addUserFeedbackScreen = '/addFeedback';
 
@@ -68,11 +69,15 @@ class RoutesHelper {
         }),
     GetPage(name: adminAddUserScreen, page: () => const AdminAddUser()),
     GetPage(
-        name: addShiftsDoneScreen,
+        name: updateShiftScreen,
         page: () {
-          final UserProfile selectedUser = Get.arguments as UserProfile;
 
-          return AddShiftsDone(selectedUser: selectedUser);
+          final args = Get.arguments as List;
+          final UserProfile selectedUser = args[0] as UserProfile;
+          final Shift shift = args[1] as Shift;
+
+
+          return EditShift(selectedUser: selectedUser, shift: shift);
         }),
     GetPage(
         name: addShiftsScreen,
@@ -90,11 +95,14 @@ class RoutesHelper {
     GetPage(
         name: addUserFeedbackScreen,
         page: () {
-          final UserProfile selectedUser = Get.arguments as UserProfile;
+          final args = Get.arguments as List;
+          final UserProfile selectedUser = args[0] as UserProfile;
+          final Shift shift = args[1] as Shift;
+
 
           return AddFeedbackScreen(
             selectedUser: selectedUser,
-            shiftId: '',
+            shift: shift,
           );
         }),
   ];

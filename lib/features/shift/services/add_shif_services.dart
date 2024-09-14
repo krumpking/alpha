@@ -87,60 +87,42 @@ class ShiftServices {
   }
 
 
+  static Stream<List<Shift>> streamPreviousShiftsByEmail({required String email}) {
+    final now = DateTime.now();
+    final today = DateFormat('yyyy/MM/dd').format(now);
 
-  static Future<APIResponse<List<Shift>>> getAllPreviousShiftsByEmail({required String email}) async {
-    try {
-      final now = DateTime.now();
-      final today = DateFormat('yyyy/MM/dd').format(now);
-
-      // Query the shifts collection for previous shifts
-      final querySnapshot = await FirebaseFirestore.instance
-          .collection('shifts')
-          .where('staffEmail', isEqualTo: email)
-          .where('day', isLessThan: today) // Past shifts
-          .orderBy('day', descending: true)
-          .orderBy('startTime', descending: true)
-          .get();
-
-      // Convert query results to a list of Shift objects
-      final previousShifts = querySnapshot.docs.map((doc) {
-        return Shift.fromJson(doc.data());
-      }).toList();
-
-      return APIResponse(data:  previousShifts, success: true);
-    } catch (e) {
-      DevLogs.logError('Failed to get previous shifts: $e');
-      return APIResponse(success: false, message: 'Failed to get previous shifts' );
-    }
+    // Return a Firestore snapshot stream for real-time updates
+    return FirebaseFirestore.instance
+        .collection('shifts')
+        .where('staffEmail', isEqualTo: email)
+        .where('day', isLessThan: today) // Past shifts
+        .orderBy('day', descending: true)
+        .orderBy('startTime', descending: true)
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs.map((doc) => Shift.fromJson(doc.data())).toList();
+    });
   }
 
-
-
-  static Future<APIResponse<void>> submitShiftsDone({
-    required User currentUser,
-    required UserProfile selectedUser,
-    required bool isCompleted,
-    required int hoursCompleted,
-    required String documentName,
-    required String documentUrl,
+  static Future<APIResponse<void>> updateShift({
+    required String shiftId,
+    required Shift updatedShift,
   }) async {
-    var hoursWroked = HoursWorked(
-      dateAdded: DateTime.now().toString(),
-      addedBy: currentUser.email!,
-      hoursCompleted: hoursCompleted.toDouble(),
-      documentName: documentName,
-      isCompleted: isCompleted,
-      assignedUser: selectedUser.email!,
-      documentUrl: documentUrl,
-    );
     try {
+      final shiftData = updatedShift.toJson();
+
+      // Update the shift in Firestore using the document ID
       await FirebaseFirestore.instance
           .collection('shifts')
-          .add(hoursWroked.toJson());
+          .doc(shiftId)
+          .update(shiftData);
+
       return APIResponse(success: true);
     } catch (e) {
-      return APIResponse(
-          success: false, message: 'Failed to submit shift: ${e.toString()}');
+      DevLogs.logError('Failed to update shift: $e');
+      return APIResponse(success: false, message: 'Failed to update shift: ${e.toString()}');
     }
   }
+
+
 }

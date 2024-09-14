@@ -1,3 +1,5 @@
+import 'document.dart';
+
 class Shift {
   String shiftId;
   String placeName;
@@ -12,6 +14,8 @@ class Shift {
   String staffEmail;
   bool done;
   String notes;
+  List<Document>? documents;
+
 
   Shift({
     required this.shiftId,
@@ -27,6 +31,7 @@ class Shift {
     required this.staffEmail,
     required this.done,
     required this.notes,
+    this.documents
   });
 
   Map<String, dynamic> toJson() => {
@@ -43,6 +48,7 @@ class Shift {
     'staffEmail': staffEmail,
     'done': done,
     'notes': notes,
+    'documents': documents?.map((doc) => doc.toJson()).toList(),
   };
 
   factory Shift.fromJson(Map<String, dynamic> json) => Shift(
@@ -59,7 +65,43 @@ class Shift {
     staffEmail: json['staffEmail'] ?? '',
     done: json['done'] ?? '',
     notes: json['notes'] ?? '',
+    documents: (json['documents'] as List?)
+        ?.map((doc) => Document.fromJson(doc))
+        .toList(),
   );
 
+  Shift copyWith({
+    String? shiftId,
+    String? placeName,
+    String? startTime,
+    String? endTime,
+    String? duration,
+    String? date,
+    String? dateAdded,
+    String? addedBy,
+    String? contactPersonNumber,
+    String? contactPersonAltNumber,
+    String? staffEmail,
+    bool? done,
+    String? notes,
+    List<Document>? documents,
+  }) {
+    return Shift(
+      shiftId: shiftId ?? this.shiftId,
+      placeName: placeName ?? this.placeName,
+      startTime: startTime ?? this.startTime,
+      endTime: endTime ?? this.endTime,
+      duration: duration ?? this.duration,
+      date: date ?? this.date,
+      dateAdded: dateAdded ?? this.dateAdded,
+      addedBy: addedBy ?? this.addedBy,
+      contactPersonNumber: contactPersonNumber ?? this.contactPersonNumber,
+      contactPersonAltNumber:
+      contactPersonAltNumber ?? this.contactPersonAltNumber,
+      staffEmail: staffEmail ?? this.staffEmail,
+      done: done ?? this.done,
+      notes: notes ?? this.notes,
+      documents: documents ?? this.documents,
+    );
+  }
 }
-
