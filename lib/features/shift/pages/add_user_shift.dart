@@ -113,7 +113,9 @@ class _AddUserShiftState extends State<AddUserShift> {
                 labelText: 'Shift Date',
               ),
             ),
+
             const SizedBox(height: 10),
+
             Row(
               children: [
                 Expanded(
@@ -142,6 +144,13 @@ class _AddUserShiftState extends State<AddUserShift> {
                         color: Colors.grey,
                       ),
                       labelText: 'Start Time',
+                      onChanged: (value){
+                        if(_endTimeController.text.isNotEmpty && _startTimeController.text.isNotEmpty){
+                          setState(() {
+                            _durationController.text = ShiftHelpers.calculateDuration(shiftStartTime: _startTimeController.text, shiftEndTime: _endTimeController.text);
+                          });
+                        }
+                      },
                     ),
                   ),
                 ),
@@ -172,6 +181,13 @@ class _AddUserShiftState extends State<AddUserShift> {
                         color: Colors.grey,
                       ),
                       labelText: 'End Time',
+                      onChanged: (value){
+                        if(_endTimeController.text.isNotEmpty && _startTimeController.text.isNotEmpty){
+                          setState(() {
+                            _durationController.text = ShiftHelpers.calculateDuration(shiftStartTime: _startTimeController.text, shiftEndTime: _endTimeController.text);
+                          });
+                        }
+                      },
                     ),
                   ),
                 ),
@@ -179,6 +195,7 @@ class _AddUserShiftState extends State<AddUserShift> {
             ),
             const SizedBox(height: 12),
             CustomTextField(
+              enabled: false,
               controller: _durationController,
               labelText: 'Duration',
               prefixIcon: const Icon(Icons.timelapse, color: Colors.grey),

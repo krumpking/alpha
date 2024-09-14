@@ -2,6 +2,7 @@ import 'package:alpha/features/shift/services/add_shif_services.dart';
 import 'package:alpha/models/shift.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import '../../../custom_widgets/circular_loader/circular_loader.dart';
 import '../../../custom_widgets/snackbar/custom_snackbar.dart';
 import '../../../models/user_profile.dart';
@@ -135,4 +136,24 @@ class ShiftHelpers {
       }
     });
   }
+
+  static String calculateDuration({required String shiftStartTime, required String shiftEndTime}) {
+    if (shiftStartTime.isNotEmpty && shiftStartTime.isNotEmpty) {
+      final format = DateFormat('HH:mm');
+      final startTime = format.parse(shiftStartTime);
+      final endTime = format.parse(shiftEndTime);
+
+      // Calculate the difference in minutes
+      final difference = endTime.difference(startTime);
+
+      // Set the duration in hours and minutes
+      final hours = difference.inHours;
+      final minutes = difference.inMinutes % 60;
+
+      return '${hours}h ${minutes}m';
+    }
+
+    return '';
+  }
+
 }
