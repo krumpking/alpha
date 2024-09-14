@@ -77,7 +77,7 @@ class ShiftCard extends StatelessWidget {
                     value: 1,
                     onTap: () => Get.toNamed(
                         RoutesHelper.addUserFeedbackScreen,
-                        arguments: selectedUser
+                        arguments: [selectedUser, shift]
                     )
                 ),
               ],

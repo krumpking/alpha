@@ -13,7 +13,6 @@ class FeedbackHelper {
       required String description,
       required String shiftId,
       required String feedbackTitle}) async {
-    DevLogs.logInfo('Clicked');
 
     // Validate User
     if (!GetUtils.isEmail(selectedUser.email!)) {
@@ -46,7 +45,8 @@ class FeedbackHelper {
             selectedUser: selectedUser,
             description: description,
             shiftId: shiftId,
-            feedbackTitle: feedbackTitle)
+            feedbackTitle: feedbackTitle
+    )
         .then((response) {
       if (!response.success) {
         if (Get.isDialogOpen!) Get.back();

@@ -177,11 +177,7 @@ class _UserHomeScreenState extends ConsumerState<UserHomeScreen>
 
                   return GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SeeFeedback(),
-                          ));
+
                     },
                     child: CategoryCard(
                       color: randomColor,

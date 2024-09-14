@@ -199,7 +199,7 @@ class _ProfileScreenState extends ConsumerState<UserProfileScreen>
                       PreviousShiftsTab(selectedUser: userProfile),
 
                       // Notes Tab
-                      const NotesTab(notes: []),
+                      NotesTab(selectedUser: userProfile),
                     ],
                   ),
                 ),

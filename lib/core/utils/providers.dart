@@ -20,10 +20,10 @@ class ProviderUtils {
     return StaffNotifier();
   });
 
-  static final feedbackProvider =
-      StateNotifierProvider<FeedbackNotifier, AsyncValue<List<FeedbackModel>>>(
-          (ref) {
-    return FeedbackNotifier();
+
+  static final feedbackProvider = StateNotifierProvider.family<FeedbackNotifier,
+      AsyncValue<List<FeedbackModel>>, String>((ref, profileEmail) {
+    return FeedbackNotifier(profileEmail: profileEmail);
   });
 
   static final userProvider = StateNotifierProvider<UserNotifier, User?>((ref) {
