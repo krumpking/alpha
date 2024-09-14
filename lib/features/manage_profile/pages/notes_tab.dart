@@ -3,8 +3,6 @@ import 'package:alpha/core/utils/providers.dart';
 import 'package:alpha/models/user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:alpha/custom_widgets/cards/shifts_card.dart';
-
 import '../../../custom_widgets/cards/feedbackcard.dart';
 
 class NotesTab extends ConsumerWidget {

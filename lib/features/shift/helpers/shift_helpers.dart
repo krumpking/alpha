@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:alpha/features/shift/services/add_shif_services.dart';
 import 'package:alpha/models/shift.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -121,4 +123,20 @@ class ShiftHelpers {
     return '';
   }
 
+  static String generateRandomId(String email) {
+    final now = DateTime.now();
+
+    final emailLetters = email.replaceAll(RegExp(r'[^a-zA-Z]'), '');
+
+    final random = Random(now.millisecondsSinceEpoch);
+
+    final pool = '${emailLetters.isEmpty ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' : emailLetters}abcdefghijklmnopqrstuvwxyz';
+
+    // Generate a 15-character long ID using random letters from the pool
+    String generateId() {
+      return List.generate(15, (index) => pool[random.nextInt(pool.length)]).join();
+    }
+
+    return generateId();
+  }
 }

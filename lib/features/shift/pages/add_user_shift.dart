@@ -259,7 +259,7 @@ class _AddUserShiftState extends State<AddUserShift> {
               child: GeneralButton(
                 onTap: () {
                   final shift = Shift(
-                    shiftId: "", // generate shift ID here or in backend
+                    shiftId: ShiftHelpers.generateRandomId(widget.selectedUser.email!),
                     placeName: _placeNameController.text,
                     startTime: _startTimeController.text,
                     endTime: _endTimeController.text,
