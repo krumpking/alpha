@@ -1,7 +1,9 @@
 import 'package:alpha/core/utils/api_response.dart';
+import 'package:alpha/core/utils/logs.dart';
 import 'package:alpha/features/shift/models/hours_worked.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
 import '../../../models/shift.dart';
 import '../../../models/user_profile.dart';
 
@@ -22,7 +24,52 @@ class ShiftServices {
     }
   }
 
-  static Future<APIResponse<void>> submitShift({
+
+  static Future<Shift?> getNextUserShiftByEmail({required String email}) async {
+    try {
+      final now = DateTime.now();
+      final today = DateFormat('yyyy/MM/dd').format(now);
+
+      // Query the shifts collection for shifts with the given email and not completed
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('shifts')
+          .where('staffEmail', isEqualTo: email)
+          .where('done', isEqualTo: false)
+      // Order by staffEmail first (assuming it has an index)
+          .orderBy('staffEmail', descending: false)
+      // Limit the results to documents where day is greater than or equal to today
+          .where('day', isGreaterThanOrEqualTo: today)
+      // Order by remaining fields (assuming indexes exist)
+          .orderBy('startTime', descending: false)
+          .limit(1) // Limit to only retrieve the first document
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        // Get the first shift that is closest to today
+        for (var doc in querySnapshot.docs) {
+          final shiftData = doc.data();
+          final shiftDate = shiftData['day'] as String;
+
+          if (shiftDate.compareTo(today) >= 0) {
+            final nextShift = Shift.fromJson(shiftData);
+            if (shiftDate == today) {
+              nextShift.notes = 'Today\'s shift';
+            }
+            return nextShift;
+          }
+        }
+      }
+      return null;
+    } catch (e) {
+      DevLogs.logError('Failed to get next user shift: $e');
+      return null;
+    }
+  }
+
+
+
+
+  static Future<APIResponse<void>> submitShiftsDone({
     required User currentUser,
     required UserProfile selectedUser,
     required bool isCompleted,
@@ -47,20 +94,6 @@ class ShiftServices {
     } catch (e) {
       return APIResponse(
           success: false, message: 'Failed to submit shift: ${e.toString()}');
-    }
-  }
-
-  static Future<APIResponse<List<Map<String, dynamic>>>> fetchShifts() async {
-    try {
-      QuerySnapshot snapshot =
-          await FirebaseFirestore.instance.collection('shifts').get();
-      List<Map<String, dynamic>> shifts = snapshot.docs
-          .map((doc) => doc.data() as Map<String, dynamic>)
-          .toList();
-      return APIResponse(success: true, data: shifts);
-    } catch (e) {
-      return APIResponse(
-          success: false, message: 'Failed to fetch shifts: ${e.toString()}');
     }
   }
 }

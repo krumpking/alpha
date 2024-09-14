@@ -1,8 +1,10 @@
-import 'package:alpha/core/constants/color_constants.dart';
-import 'package:alpha/core/utils/routes.dart';
-import 'package:alpha/models/user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../core/constants/color_constants.dart';
+import '../../core/utils/routes.dart';
+import '../../features/shift/services/add_shif_services.dart';
+import '../../models/shift.dart';
+import '../../models/user_profile.dart';
 
 class StaffCard extends StatelessWidget {
   final UserProfile user;
@@ -26,8 +28,8 @@ class StaffCard extends StatelessWidget {
             ListTile(
               contentPadding: EdgeInsets.zero,
               title: Text(
-                  user.name!,
-                  style: const TextStyle(fontWeight: FontWeight.bold)
+                user.name!,
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               subtitle: Text(
                 user.post!,
@@ -38,10 +40,10 @@ class StaffCard extends StatelessWidget {
                   // Handle the selected value
                   switch (selectedValue) {
                     case 0:
-                      // Perform some action for Edit
+                    // Perform some action for Edit
                       break;
                     case 1:
-                      // Perform some action for Delete
+                    // Perform some action for Delete
                       break;
                   }
                 },
@@ -62,7 +64,7 @@ class StaffCard extends StatelessWidget {
                       icon: Icons.calendar_month,
                       value: 1,
                       onTap: () => Get.toNamed(RoutesHelper.addShiftsScreen,
-                          arguments: user
+                          arguments: user.email
                       )
                   ),
 
@@ -88,36 +90,58 @@ class StaffCard extends StatelessWidget {
               ),
             ),
             const Divider(color: Colors.grey),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                RichText(
-                  text: TextSpan(children: [
-                    const TextSpan(
-                        text: 'Shift:  ',
-                        style: TextStyle(fontSize: 12, color: Colors.black)),
-                    TextSpan(
-                        text:
-                            '12/34/56',
-                        style: TextStyle(
-                            fontSize: 12, color: Pallete.primaryColor)),
-                  ]),
-                ),
-                const SizedBox(height: 4),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: Colors.green,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Text(
-                    'Alpha',
-                    style: TextStyle(color: Colors.white, fontSize: 12),
-                  ),
-                ),
-              ],
+            FutureBuilder<Shift?>(
+              future: ShiftServices.getNextUserShiftByEmail(
+                  email: user.email!),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  // Handle error here
+                  return Text('Error loading next shift: ${snapshot.error}');
+                } else if (snapshot.hasData) {
+                  final nextShift = snapshot.data;
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      RichText(
+                        text: TextSpan(children: [
+                          const TextSpan(
+                              text: 'Next Shift:  ',
+                              style: TextStyle(
+                                  fontSize: 12, color: Colors.black)),
+                          TextSpan(
+                            text: nextShift!.notes == "Today's shift"
+                                ? "Today, ${nextShift!.startTime}"
+                                : '${nextShift!.date}, ${nextShift!.startTime}',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Pallete.primaryColor,
+                            ),
+                          ),
+                        ]),
+                      ),
+                      const SizedBox(height: 4),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: Colors.green,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          nextShift!.placeName,
+                          style:
+                          const TextStyle(color: Colors.white, fontSize: 12),
+                        ),
+                      ),
+                    ],
+                  );
+                } else {
+                  return const Text('No upcoming shifts');
+                }
+              },
             ),
           ],
         ),
@@ -125,11 +149,12 @@ class StaffCard extends StatelessWidget {
     );
   }
 
-  dynamic buildPopUpOption(
-      {required String title,
-      required IconData icon,
-      required int value,
-      required void Function() onTap}) {
+  dynamic buildPopUpOption({
+    required String title,
+    required IconData icon,
+    required int value,
+    required void Function() onTap,
+  }) {
     return PopupMenuItem<int>(
       onTap: onTap,
       value: value,

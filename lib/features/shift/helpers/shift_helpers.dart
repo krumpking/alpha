@@ -51,7 +51,7 @@ class ShiftHelpers {
     );
 
     // Submit the shift
-    await ShiftServices.submitShift(
+    await ShiftServices.submitShiftsDone(
       currentUser: currentUser,
       selectedUser: selectedUser,
       isCompleted: isCompleted,

@@ -1,6 +1,8 @@
+import 'package:alpha/custom_widgets/text_fields/custome_phone_input.dart';
 import 'package:alpha/features/workers/helper/storage_helper.dart';
 import 'package:alpha/models/shift.dart';
 import 'package:alpha/models/user_profile.dart';
+import 'package:extended_phone_number_input/phone_number_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -26,8 +28,8 @@ class _AddUserShiftState extends State<AddUserShift> {
   final TextEditingController _endTimeController = TextEditingController();
   final TextEditingController _durationController = TextEditingController();
   final TextEditingController _contactPersonController = TextEditingController();
-  final TextEditingController _contactPersonAltController = TextEditingController();
   final TextEditingController _notesController = TextEditingController();
+  PhoneNumberInputController? _contactPersonAltController;
   bool _isCompleted = false;
   User? currentUser;
 
@@ -35,6 +37,9 @@ class _AddUserShiftState extends State<AddUserShift> {
   void initState() {
     super.initState();
     currentUser = FirebaseAuth.instance.currentUser;
+    _contactPersonAltController = PhoneNumberInputController(context);
+    _contactPersonController.text = widget.selectedUser.phoneNumber!;
+
   }
 
   @override
@@ -132,6 +137,12 @@ class _AddUserShiftState extends State<AddUserShift> {
                             String formattedTime =
                             DateFormat('HH:mm').format(dateTime);
                             _startTimeController.text = formattedTime;
+
+                            if(_endTimeController.text.isNotEmpty && _startTimeController.text.isNotEmpty){
+                              setState(() {
+                                _durationController.text = ShiftHelpers.calculateDuration(shiftStartTime: _startTimeController.text, shiftEndTime: _endTimeController.text);
+                              });
+                            }
                           }
                         });
                       });
@@ -144,13 +155,6 @@ class _AddUserShiftState extends State<AddUserShift> {
                         color: Colors.grey,
                       ),
                       labelText: 'Start Time',
-                      onChanged: (value){
-                        if(_endTimeController.text.isNotEmpty && _startTimeController.text.isNotEmpty){
-                          setState(() {
-                            _durationController.text = ShiftHelpers.calculateDuration(shiftStartTime: _startTimeController.text, shiftEndTime: _endTimeController.text);
-                          });
-                        }
-                      },
                     ),
                   ),
                 ),
@@ -169,6 +173,12 @@ class _AddUserShiftState extends State<AddUserShift> {
                             String formattedTime =
                             DateFormat('HH:mm').format(dateTime);
                             _endTimeController.text = formattedTime;
+
+                            if(_endTimeController.text.isNotEmpty && _startTimeController.text.isNotEmpty){
+                              setState(() {
+                                _durationController.text = ShiftHelpers.calculateDuration(shiftStartTime: _startTimeController.text, shiftEndTime: _endTimeController.text);
+                              });
+                            }
                           }
                         });
                       });
@@ -207,10 +217,10 @@ class _AddUserShiftState extends State<AddUserShift> {
               prefixIcon: const Icon(Icons.phone, color: Colors.grey),
             ),
             const SizedBox(height: 12),
-            CustomTextField(
+            CustomPhoneInput(
               controller: _contactPersonAltController,
               labelText: 'Alternative Contact Number',
-              prefixIcon: const Icon(Icons.phone, color: Colors.grey),
+              pickFromContactsIcon: const Icon(Icons.perm_contact_cal),
             ),
             const SizedBox(height: 12),
             CustomTextField(
@@ -258,8 +268,8 @@ class _AddUserShiftState extends State<AddUserShift> {
                     dateAdded: DateTime.now().toString(),
                     addedBy: currentUser!.email!,
                     contactPersonNumber: _contactPersonController.text,
-                    contactPersonAltNumber: _contactPersonAltController.text,
                     staffEmail: widget.selectedUser.email!,
+                    contactPersonAltNumber: _contactPersonAltController!.fullPhoneNumber,
                     done: _isCompleted,
                     notes: _notesController.text,
                   );
