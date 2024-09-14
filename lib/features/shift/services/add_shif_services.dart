@@ -68,6 +68,53 @@ class ShiftServices {
 
 
 
+  static Stream<List<Shift>> streamUpcomingShiftsByEmail({required String email}) {
+    final now = DateTime.now();
+    final today = DateFormat('yyyy/MM/dd').format(now);
+
+    // Return a Firestore snapshot stream for real-time updates
+    return FirebaseFirestore.instance
+        .collection('shifts')
+        .where('staffEmail', isEqualTo: email)
+        .where('done', isEqualTo: false) // Not completed
+        .where('day', isGreaterThanOrEqualTo: today) // Future or today’s shifts
+        .orderBy('day', descending: false)
+        .orderBy('startTime', descending: false)
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs.map((doc) => Shift.fromJson(doc.data())).toList();
+    });
+  }
+
+
+
+  static Future<APIResponse<List<Shift>>> getAllPreviousShiftsByEmail({required String email}) async {
+    try {
+      final now = DateTime.now();
+      final today = DateFormat('yyyy/MM/dd').format(now);
+
+      // Query the shifts collection for previous shifts
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('shifts')
+          .where('staffEmail', isEqualTo: email)
+          .where('day', isLessThan: today) // Past shifts
+          .orderBy('day', descending: true)
+          .orderBy('startTime', descending: true)
+          .get();
+
+      // Convert query results to a list of Shift objects
+      final previousShifts = querySnapshot.docs.map((doc) {
+        return Shift.fromJson(doc.data());
+      }).toList();
+
+      return APIResponse(data:  previousShifts, success: true);
+    } catch (e) {
+      DevLogs.logError('Failed to get previous shifts: $e');
+      return APIResponse(success: false, message: 'Failed to get previous shifts' );
+    }
+  }
+
+
 
   static Future<APIResponse<void>> submitShiftsDone({
     required User currentUser,

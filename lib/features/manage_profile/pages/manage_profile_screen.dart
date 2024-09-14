@@ -2,7 +2,7 @@ import 'package:alpha/core/utils/logs.dart';
 import 'package:alpha/core/utils/providers.dart';
 import 'package:alpha/features/manage_profile/pages/documents_tab.dart';
 import 'package:alpha/features/manage_profile/pages/notes_tab.dart';
-import 'package:alpha/features/manage_profile/pages/shifts_tab.dart';
+import 'package:alpha/features/manage_profile/pages/upcoming_shifts_tab.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -191,7 +191,7 @@ class _ProfileScreenState extends ConsumerState<UserProfileScreen>
                       DocumentsTab(documents: userProfile.documents),
 
                       // Shifts Tab
-                      ShiftsTab(shifts: []),
+                      UpcomingShiftsTab(profileEmail: userProfile.email!),
 
                       // Notes Tab
                       const NotesTab(notes: []),

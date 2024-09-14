@@ -9,7 +9,6 @@ class ShiftCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String shiftHours = ProfileHelpers.shiftHours(shift);
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -24,9 +23,9 @@ class ShiftCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          const ListTile(
+          ListTile(
             contentPadding: EdgeInsets.zero,
-            title: Text('Hospital Name', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+            title: Text( shift.placeName, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
           ),
           const Divider(
             color: Colors.grey,
@@ -65,7 +64,7 @@ class ShiftCard extends StatelessWidget {
                   color: Colors.blue,
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Text(shiftHours, style: const TextStyle(color: Colors.white, fontSize: 12)),
+                child: Text(shift.duration, style: const TextStyle(color: Colors.white, fontSize: 12)),
               ),
             ],
           ),
