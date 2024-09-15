@@ -1,4 +1,4 @@
-import 'package:alpha/custom_widgets/text_fields/custome_phone_input.dart';
+import 'package:alpha/custom_widgets/text_fields/custom_phone_input.dart';
 import 'package:alpha/models/shift.dart';
 import 'package:alpha/models/document.dart';
 import 'package:alpha/core/constants/color_constants.dart';
@@ -25,11 +25,11 @@ class AdminAddUser extends ConsumerStatefulWidget {
 class _AdminAddUserState extends ConsumerState<AdminAddUser> {
   String selectedRole = 'User';
   PhoneNumberInputController? phoneNumberController;
+  PhoneNumberInputController? contactInformationController;
   TextEditingController emailController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   TextEditingController previousEmployerController = TextEditingController();
-  PhoneNumberInputController? contactInformationController;
   TextEditingController documentNameController = TextEditingController();
   TextEditingController dobController = TextEditingController();
   TextEditingController shiftDayController = TextEditingController();

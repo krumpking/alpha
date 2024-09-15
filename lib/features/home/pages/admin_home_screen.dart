@@ -32,9 +32,20 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen>
   final _key = GlobalKey<ScaffoldState>();
   final user = FirebaseAuth.instance.currentUser;
 
+  final searchStaffProvider = ProviderUtils.searchProvider;
+
   @override
   void initState() {
     super.initState();
+
+    // Ensure this is called after the widget is fully built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final staffState = ref.read(ProviderUtils.staffProvider);
+      staffState.whenData((users) {
+        ref.read(searchStaffProvider.notifier).setAllUsers(users);
+      });
+    });
+
     _tabController = TabController(length: 3, vsync: this);
   }
 
@@ -46,6 +57,8 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen>
 
   @override
   Widget build(BuildContext context) {
+    final filteredUsers = ref.watch(searchStaffProvider);
+
     final staffState = ref.watch(
       ProviderUtils.staffProvider,
     );
@@ -54,8 +67,8 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen>
       key: _key,
       drawer: Dimensions.isSmallScreen
           ? AdminDrawer(
-              user: user!,
-            )
+        user: user!,
+      )
           : null,
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -103,9 +116,12 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen>
                   ],
                 ),
                 const SizedBox(height: 16),
-                const CustomTextField(
-                  labelText: 'Find Stuff',
-                  prefixIcon: Icon(Icons.search),
+                CustomTextField(
+                  labelText: 'Find Staff',
+                  prefixIcon: const Icon(Icons.search),
+                  onChanged: (value) {
+                    ref.read(searchStaffProvider.notifier).filterUsers(value!);
+                  },
                 ),
               ],
             ),
@@ -113,7 +129,9 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen>
         ),
       ),
       body: staffState.when(
-        data: (users) => _buildContent(users),
+        data: (users) {
+          return _buildContent(filteredUsers);
+        },
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stackTrace) => Center(child: Text('Error: $error')),
       ),
@@ -145,7 +163,7 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen>
                 final randomColor = colors[Random().nextInt(colors.length)];
 
                 List<String>? imagesLinks =
-                    List<String>.from(stuffCard['images']);
+                List<String>.from(stuffCard['images']);
 
                 return CategoryCard(
                   color: randomColor,
@@ -159,7 +177,7 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen>
           ),
           const SizedBox(height: 16),
           const Text(
-            'Stuff',
+            'Staff',
             textAlign: TextAlign.start,
             style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -192,20 +210,20 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen>
                 StaffTab(
                     users: users
                         .where((user) =>
-                            user.post!.toLowerCase() == 'nurse' &&
-                            user.role!.toLowerCase() == 'user')
+                    user.post!.toLowerCase() == 'nurse' &&
+                        user.role!.toLowerCase() == 'user')
                         .toList()),
                 StaffTab(
                     users: users
                         .where((user) =>
-                            user.post!.toLowerCase() == 'social worker' &&
-                            user.role!.toLowerCase() == 'user')
+                    user.post!.toLowerCase() == 'social worker' &&
+                        user.role!.toLowerCase() == 'user')
                         .toList()),
                 StaffTab(
                     users: users
                         .where((user) =>
-                            user.post!.toLowerCase() == 'care/support worker' &&
-                            user.role!.toLowerCase() == 'user')
+                    user.post!.toLowerCase() == 'care/support worker' &&
+                        user.role!.toLowerCase() == 'user')
                         .toList()),
               ],
             ),

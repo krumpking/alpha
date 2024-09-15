@@ -36,6 +36,41 @@ class StaffServices {
     }
   }
 
+  // Method to search staff by name
+  static Future<APIResponse<List<UserProfile>>> searchStaffByName({
+    required String name,
+  }) async {
+    try {
+      // Query Firestore to find users whose names contain the search string
+      final querySnapshot = await _firestore
+          .collection('users')
+          .where('name', isGreaterThanOrEqualTo: name)
+          .where('name', isLessThanOrEqualTo: '$name\uf8ff')
+          .get();
+
+      // Check if any documents are found
+      if (querySnapshot.docs.isNotEmpty) {
+        // Map the query results to UserProfile objects
+        final userList = querySnapshot.docs
+            .map((doc) => UserProfile.fromJson(doc.data()))
+            .toList();
+
+        return APIResponse(
+          success: true,
+          data: userList,
+          message: 'Users found successfully',
+        );
+      } else {
+        return APIResponse(
+          success: false,
+          message: 'No users found with the given name',
+        );
+      }
+    } catch (e) {
+      return APIResponse(success: false, message: e.toString());
+    }
+  }
+
 
 
   static Future<APIResponse<UserProfile>> fetchUserProfile({required String profileEmail}) async {

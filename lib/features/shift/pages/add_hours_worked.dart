@@ -21,6 +21,7 @@ class EditShift extends StatefulWidget {
 
 class _EditShiftState extends State<EditShift> {
   final TextEditingController _documentNameController = TextEditingController();
+  final TextEditingController _hoursWorkedController = TextEditingController();
   bool _isCompleted = false;
   User? currentUser;
   List<Document> documents = [];
@@ -32,6 +33,10 @@ class _EditShiftState extends State<EditShift> {
     currentUser = FirebaseAuth.instance.currentUser;
     _isCompleted = widget.shift.done;
     documents = widget.shift.documents ?? [];
+
+    setState(() {
+      _hoursWorkedController.text = widget.shift.duration;
+    });
   }
 
   @override
@@ -54,6 +59,13 @@ class _EditShiftState extends State<EditShift> {
             _buildHeader(),
             const SizedBox(height: 24),
             _buildDocumentUpload(),
+            const SizedBox(height: 12),
+            CustomTextField(
+              controller: _hoursWorkedController,
+              labelText: 'Hours Worked',
+              prefixIcon: const Icon(Icons.description, color: Colors.grey),
+            ),
+            const SizedBox(height: 12),
             const SizedBox(height: 12),
             _buildCompletionSwitch(),
             const SizedBox(height: 20),
