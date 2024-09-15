@@ -1,12 +1,11 @@
 import 'package:alpha/core/constants/color_constants.dart';
+import 'package:alpha/models/shift.dart';
 import 'package:flutter/material.dart';
 
 class TaskItemCard extends StatelessWidget {
-  final String name;
-  final String role;
-  final String type;
-  final String time;
-  const TaskItemCard({super.key, required this.name, required this.role, required this.type, required this.time});
+  final Shift shift;
+  final bool isUpcomingShift;
+  const TaskItemCard({super.key, required this.shift, required this.isUpcomingShift,});
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +24,9 @@ class TaskItemCard extends StatelessWidget {
         children: [
           ListTile(
             contentPadding: EdgeInsets.zero,
-            title: Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
+            title: Text(shift.placeName, style: const TextStyle(fontWeight: FontWeight.bold)),
             subtitle: Text(
-              role,
+              shift.notes,
               style: const TextStyle(
                 fontSize: 12
               ),
@@ -41,7 +40,7 @@ class TaskItemCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                  time,
+                  "${shift.date}    ${shift.startTime}-${shift.endTime}",
                   style: TextStyle(
                       fontSize: 12,
                     color: Pallete.primaryColor
@@ -52,10 +51,10 @@ class TaskItemCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
-                  color: type == 'Alpha' ? Colors.green : Colors.blue,
+                  color: shift.done ? Colors.green : isUpcomingShift ? Colors.blue : Colors.red,
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Text(type, style: const TextStyle(color: Colors.white, fontSize: 12)),
+                child: Text(shift.done ? 'Completed' : isUpcomingShift ? 'Available' : 'Incomplete', style: const TextStyle(color: Colors.white, fontSize: 12)),
               ),
             ],
           ),

@@ -8,6 +8,8 @@ import 'package:alpha/custom_widgets/cards/task_item.dart';
 import 'package:alpha/custom_widgets/text_fields/custom_text_field.dart';
 import 'package:alpha/features/feedback/pages/see_feedback.dart';
 import 'package:alpha/features/feedback/models/feedback_model.dart';
+import 'package:alpha/features/home/pages/user_tabs/previous_shifts_tab.dart';
+import 'package:alpha/features/home/pages/user_tabs/upcoming_shifts_tab.dart';
 import 'package:alpha/features/home/services/dummy.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -28,6 +30,8 @@ class UserHomeScreen extends ConsumerStatefulWidget {
 
 class _UserHomeScreenState extends ConsumerState<UserHomeScreen>
     with SingleTickerProviderStateMixin {
+  final _searchController = TextEditingController();
+  String searchTerm = '';
   late TabController _tabController;
   final List<Color> colors = [
     Colors.blue,
@@ -55,8 +59,8 @@ class _UserHomeScreenState extends ConsumerState<UserHomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    final userProfileAsync = ref.watch(ProviderUtils.profileProvider(user!.email!));
-
+    final userProfileAsync =
+        ref.watch(ProviderUtils.profileProvider(user!.email!));
 
     return Scaffold(
       key: _key,
@@ -143,9 +147,16 @@ class _UserHomeScreenState extends ConsumerState<UserHomeScreen>
                     const SizedBox(
                       height: 16,
                     ),
-                    const CustomTextField(
-                        labelText: 'Find some shifts',
-                        prefixIcon: Icon(Icons.search)),
+                    CustomTextField(
+                      labelText: 'Find some shifts',
+                      prefixIcon: const Icon(Icons.search),
+                      controller: _searchController,
+                      onChanged: (value) {
+                        setState(() {
+                          searchTerm = value!;
+                        });
+                      },
+                    ),
                   ],
                 ))),
       ),
@@ -220,9 +231,9 @@ class _UserHomeScreenState extends ConsumerState<UserHomeScreen>
                 child: TabBarView(
                   controller: _tabController,
                   children: [
+                    MyUpcomingShiftsTab(currentUser: user!, searchTerm: searchTerm),
                     _buildTabCategory(),
-                    _buildTabCategory(),
-                    _buildTabCategory(),
+                    MyPreviousShiftsTab(currentUser: user!, searchTerm: searchTerm),
                   ],
                 )),
           ],
@@ -236,32 +247,7 @@ class _UserHomeScreenState extends ConsumerState<UserHomeScreen>
       height: 800,
       child: ListView(
         physics: const BouncingScrollPhysics(),
-        children: const [
-          TaskItemCard(
-            name: 'NHS Shifts',
-            role: 'Hospital',
-            time: '12/08/24 1:00pm - 2:00pm',
-            type: 'Available',
-          ),
-          TaskItemCard(
-            name: 'NHS Shifts',
-            role: 'Hospital',
-            time: '12/08/24 1:00pm - 2:00pm',
-            type: 'Available',
-          ),
-          TaskItemCard(
-            name: 'NHS Shifts',
-            role: 'Hospital',
-            time: '12/08/24 1:00pm - 2:00pm',
-            type: 'Available',
-          ),
-          TaskItemCard(
-            name: 'NHS Shifts',
-            role: 'Hospital',
-            time: '12/08/24 1:00pm - 2:00pm',
-            type: 'Available',
-          ),
-        ],
+        children: const []
       ),
     );
   }

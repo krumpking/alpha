@@ -7,11 +7,11 @@ import 'package:get/get.dart';
 
 import '../../core/utils/routes.dart';
 
-class AdminShiftCard extends StatelessWidget {
+class ShiftCard extends StatelessWidget {
   final Shift shift;
   final bool isUpcomingShift;
   final UserProfile selectedUser;
-  const AdminShiftCard({super.key, required this.shift, required this.isUpcomingShift, required this.selectedUser});
+  const ShiftCard({super.key, required this.shift, required this.isUpcomingShift, required this.selectedUser});
 
   @override
   Widget build(BuildContext context) {
