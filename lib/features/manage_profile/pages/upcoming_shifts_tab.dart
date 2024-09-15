@@ -26,7 +26,7 @@ class UpcomingShiftsTab extends ConsumerWidget {
             itemCount: shifts.length,
             itemBuilder: (context, index) {
               final shift = shifts[index];
-              return ShiftCard(isUpcomingShift: true, shift: shift, selectedUser: selectedUser,);
+              return AdminShiftCard(isUpcomingShift: true, shift: shift, selectedUser: selectedUser,);
             },
           );
         },

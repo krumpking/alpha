@@ -55,8 +55,8 @@ class _UserHomeScreenState extends ConsumerState<UserHomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    final userProfileAsync =
-        ref.watch(ProviderUtils.profileProvider(user!.email!));
+    final userProfileAsync = ref.watch(ProviderUtils.profileProvider(user!.email!));
+
 
     return Scaffold(
       key: _key,

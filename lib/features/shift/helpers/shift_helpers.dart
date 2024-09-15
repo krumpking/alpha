@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:alpha/core/utils/validator.dart';
 import 'package:alpha/features/shift/services/add_shif_services.dart';
 import 'package:alpha/models/shift.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,6 +14,12 @@ class ShiftHelpers {
   static void validateAndSubmitShift({
     required Shift shift,
   }) async {
+
+    // Validate Email
+    if (!Validator.isValidTimeFormat(shift.duration)) {
+      CustomSnackBar.showErrorSnackbar(message: 'Please input a valid time.');
+      return;
+    }
 
     // Show loader while submitting shift
     Get.dialog(

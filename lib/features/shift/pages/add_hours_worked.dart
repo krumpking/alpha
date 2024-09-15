@@ -62,10 +62,9 @@ class _EditShiftState extends State<EditShift> {
             const SizedBox(height: 12),
             CustomTextField(
               controller: _hoursWorkedController,
-              labelText: 'Hours Worked',
+              labelText: 'Hours Worked (e.g., 12h 30m)',
               prefixIcon: const Icon(Icons.description, color: Colors.grey),
             ),
-            const SizedBox(height: 12),
             const SizedBox(height: 12),
             _buildCompletionSwitch(),
             const SizedBox(height: 20),
@@ -178,6 +177,7 @@ class _EditShiftState extends State<EditShift> {
           final updatedShift = widget.shift.copyWith(
             documents: documents,
             done: _isCompleted,
+            duration: _hoursWorkedController.text
           );
           ShiftHelpers.validateAndSubmitShift(shift: updatedShift);
         },
