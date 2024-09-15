@@ -18,6 +18,7 @@ import 'package:get/get.dart';
 import '../../features/auth/pages/email_verification_success.dart';
 import '../../features/auth/pages/login_page.dart';
 import '../../features/auth/pages/resend_reset_email_screen.dart';
+import '../../features/statistics/pages/admin_shift_stats.dart';
 import '../../models/shift.dart';
 import '../../models/user_profile.dart';
 
@@ -32,7 +33,8 @@ class RoutesHelper {
   static String resendVerificationEmailScreen = '/resendVerificationEmail';
   static String adminHomeScreen = '/adminHome';
   static String userHomeScreen = '/userHome';
-  static String adminStatsScreen = '/adminStats';
+  static String adminStaffStatsScreen = '/adminStaffStats';
+  static String adminShiftStatsScreen = '/adminShiftStats';
   static String adminAddUserScreen = '/addUser';
   static String viewUserScreen = '/viewUsers';
   static String userProfileScreen = '/profile';
@@ -86,7 +88,8 @@ class RoutesHelper {
           return AddUserShift(selectedUser: selectedUser);
         }),
     GetPage(name: viewUserScreen, page: () => const AdminViewUsers()),
-    GetPage(name: adminStatsScreen, page: () => const AdminStuffStats()),
+    GetPage(name: adminStaffStatsScreen, page: () => const AdminStaffStats()),
+    GetPage(name: adminShiftStatsScreen, page: () => const AdminShiftStats()),
     GetPage(name: userHomeScreen, page: () => const UserHomeScreen()),
     GetPage(
         name: successfulVerificationScreen,

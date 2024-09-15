@@ -27,7 +27,7 @@ class MyPreviousShiftsTab extends ConsumerWidget {
           // Filter shifts by search term (by date or title)
           final filteredShifts = shifts.where((shift) {
             final titleMatch = shift.placeName.toLowerCase().contains(searchTerm.toLowerCase());
-            final dateMatch = shift.date.contains(searchTerm); // Assuming date is in String format
+            final dateMatch = shift.date.contains(searchTerm);
             return titleMatch || dateMatch;
           }).toList();
 

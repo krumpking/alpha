@@ -1,5 +1,6 @@
 import 'package:alpha/core/utils/api_response.dart';
 import 'package:alpha/core/utils/logs.dart';
+import 'package:alpha/features/shift/helpers/shift_helpers.dart';
 import 'package:alpha/features/shift/models/hours_worked.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,6 +9,8 @@ import '../../../models/shift.dart';
 import '../../../models/user_profile.dart';
 
 class ShiftServices {
+
+
 
   static Future<APIResponse<void>> submitUserShift({
     required Shift shift
@@ -121,6 +124,64 @@ class ShiftServices {
     } catch (e) {
       DevLogs.logError('Failed to update shift: $e');
       return APIResponse(success: false, message: 'Failed to update shift: ${e.toString()}');
+    }
+  }
+
+  static Future<Map<String, int>> getHoursWorked({
+    required String email,
+    required String timePeriod, // 'day', 'week', 'month', 'year'
+  }) async {
+    final now = DateTime.now();
+    DateTime startDate;
+
+    switch (timePeriod) {
+      case 'day':
+        startDate = DateTime(now.year, now.month, now.day);
+        break;
+      case 'week':
+        startDate = now.subtract(Duration(days: now.weekday - 1)); // Monday of the week
+        break;
+      case 'month':
+        startDate = DateTime(now.year, now.month);
+        break;
+      case 'year':
+        startDate = DateTime(now.year);
+        break;
+      default:
+        throw Exception('Invalid time period specified');
+    }
+
+    final startDateStr = DateFormat('yyyy/MM/dd').format(startDate);
+
+    try {
+      Query query = FirebaseFirestore.instance
+          .collection('shifts')
+          .where('done', isEqualTo: true)
+          .where('staffEmail', isEqualTo: email)
+          .where('day', isGreaterThanOrEqualTo: startDateStr);
+
+      final querySnapshot = await query.get();
+
+      int totalMinutes = 0;
+
+      for (var doc in querySnapshot.docs) {
+        final data = doc.data();
+        if(data != null){
+          final duration = '12h 45m';
+
+
+          totalMinutes += ShiftHelpers.convertDurationToMinutes(duration);
+        }
+      }
+
+      return {
+        'totalMinutes': totalMinutes,
+        'hours': totalMinutes ~/ 60,
+        'minutes': totalMinutes % 60,
+      };
+    } catch (e) {
+      DevLogs.logError('Failed to calculate hours worked: $e');
+      return {};
     }
   }
 

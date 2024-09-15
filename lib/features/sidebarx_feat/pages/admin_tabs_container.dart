@@ -24,7 +24,7 @@ class AdminTabScreensContainer extends StatelessWidget {
           case 1:
             return const AdminAddUser();
           case 2:
-            return const AdminStuffStats();
+            return const AdminStaffStats();
           default:
             return Text(
               'Not Found',

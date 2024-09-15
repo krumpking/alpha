@@ -9,12 +9,13 @@ import 'package:skeletonizer/skeletonizer.dart';
 import '../../../core/constants/local_image_constants.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AdminStaffStats extends ConsumerWidget {
-  const AdminStaffStats({super.key});
+class AdminShiftStats extends ConsumerWidget {
+  const AdminShiftStats({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final staffCounts = ref.watch(ProviderUtils.staffCountProvider);
+    final shiftStats = ref.watch(ProviderUtils.shiftStatsProvider({'email': 'staff_email@example.com', 'timePeriod': 'month'}));
+
 
     return Scaffold(
       backgroundColor: Pallete.primaryColor,
@@ -83,56 +84,13 @@ class AdminStaffStats extends ConsumerWidget {
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(26),
               topRight: Radius.circular(26),
-            )
-        ),
-        child: staffCounts.when(
-          data: (counts) => Column(
+            )),
+        child: shiftStats.when(
+          data: (stats) => Column(
             children: [
-              Expanded(
-                flex: 1,
-                child: Row(
-                  children: [
-                    Expanded(
-                        flex: 1,
-                        child: statWidget(
-                            number: counts['Care and Support Workers'].toString(),
-                            title: "Total Care and Support Workers"
-                        )
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                        child: statWidget(
-                            number: counts['Social Workers'].toString(),
-                            title: "Social Workers"
-                        )
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16),
-              Expanded(
-                flex: 1,
-                child: Row(
-                  children: [
-                    Expanded(
-                        child: statWidget(
-                            number: counts['Nurses'].toString(),
-                            title: "Nurses"
-                        )
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                        child: GestureDetector(
-                          onTap: () => Get.toNamed(RoutesHelper.viewUserScreen),
-                          child: statWidget(
-                              number: "Staff",
-                              title: "Add/Remove"
-                          ),
-                        )
-                    ),
-                  ],
-                ),
-              ),
+              statWidget(
+                  number: '${stats['hours']}h ${stats['minutes']}m',
+                  title: 'Hours Worked This Month'),
             ],
           ),
           loading: () => const Center(child: CircularProgressIndicator()),
@@ -147,9 +105,7 @@ class AdminStaffStats extends ConsumerWidget {
       alignment: Alignment.center,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 24),
       decoration: BoxDecoration(
-          color: Colors.grey.shade200,
-          borderRadius: BorderRadius.circular(16)
-      ),
+          color: Colors.grey.shade200, borderRadius: BorderRadius.circular(16)),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

@@ -5,6 +5,7 @@ import 'package:alpha/models/shift.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../features/home/state/search_notifier.dart';
+import '../../features/shift/services/add_shif_services.dart';
 import '../../features/shift/state/previous_shifts_provider.dart';
 import '../../features/statistics/state/count_provider.dart';
 import '../../features/workers/state/stuff_provider.dart';
@@ -53,6 +54,17 @@ class ProviderUtils {
 
   static final searchProvider = StateNotifierProvider<SearchStaffNotifier, List<UserProfile>>((ref) {
     return SearchStaffNotifier();
+  });
+
+  static final shiftStatsProvider = FutureProvider.family<Map<String, int>, Map<String, String>>((ref, params) async {
+    final email = params['email'] ?? '';
+    final timePeriod = params['timePeriod'] ?? 'day';
+
+    if (email.isEmpty) {
+      return {};
+    }
+
+    return await ShiftServices.getHoursWorked(email: email, timePeriod: timePeriod);
   });
 
 }

@@ -2,11 +2,9 @@ import 'package:alpha/core/constants/local_image_constants.dart';
 import 'package:alpha/core/utils/routes.dart';
 import 'package:alpha/core/utils/shared_pref.dart';
 import 'package:alpha/features/auth/services/auth_service.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 import '../../core/constants/color_constants.dart';
 
 class AdminDrawer extends StatefulWidget {
@@ -127,7 +125,21 @@ class _AdminDrawerState extends State<AdminDrawer> {
               ),
               trailing: const Icon(Icons.navigate_next),
               onTap: () {
-                Get.toNamed(RoutesHelper.adminStatsScreen);
+                Get.toNamed(RoutesHelper.adminStaffStatsScreen);
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.bar_chart,
+                color: Pallete.primaryColor,
+              ),
+              title: const Text(
+                'Shift Statistics',
+                style: TextStyle(fontSize: 16),
+              ),
+              trailing: const Icon(Icons.navigate_next),
+              onTap: () {
+                Get.toNamed(RoutesHelper.adminShiftStatsScreen);
               },
             ),
             ListTile(
