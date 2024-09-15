@@ -56,15 +56,15 @@ class ProviderUtils {
     return SearchStaffNotifier();
   });
 
-  static final shiftStatsProvider = FutureProvider.family<Map<String, int>, Map<String, String>>((ref, params) async {
-    final email = params['email'] ?? '';
-    final timePeriod = params['timePeriod'] ?? 'day';
-
-    if (email.isEmpty) {
-      return {};
+  static final hoursWorkedProvider = FutureProvider.family<Map<String, Duration>, String>((ref, period) async {
+    final response = await ShiftServices.getHoursWorked(period: period);
+    if (response.success) {
+      return response.data!;
+    } else {
+      throw Exception(response.message);
     }
-
-    return await ShiftServices.getHoursWorked(email: email, timePeriod: timePeriod);
   });
+
+
 
 }

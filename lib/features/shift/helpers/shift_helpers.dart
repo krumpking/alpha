@@ -147,26 +147,13 @@ class ShiftHelpers {
     return generateId();
   }
 
-  static int convertDurationToMinutes(String duration) {
-    final regex = RegExp(r'(\d+h)?\s*(\d+m)?');
-    final match = regex.firstMatch(duration);
 
-    int hours = 0;
-    int minutes = 0;
-
-    if (match != null) {
-      final hoursMatch = match.group(1);
-      final minutesMatch = match.group(2);
-
-      if (hoursMatch != null) {
-        hours = int.parse(hoursMatch.replaceAll('h', '').trim());
-      }
-      if (minutesMatch != null) {
-        minutes = int.parse(minutesMatch.replaceAll('m', '').trim());
-      }
-    }
-
-    return (hours * 60) + minutes;
+  static Duration parseShiftDuration(String duration) {
+    final parts = duration.split(' ');
+    int hours = int.parse(parts[0].replaceAll('h', ''));
+    int minutes = int.parse(parts[1].replaceAll('m', ''));
+    return Duration(hours: hours, minutes: minutes);
   }
+
 
 }

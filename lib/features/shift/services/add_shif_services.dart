@@ -127,63 +127,55 @@ class ShiftServices {
     }
   }
 
-  static Future<Map<String, int>> getHoursWorked({
-    required String email,
-    required String timePeriod, // 'day', 'week', 'month', 'year'
+  // Fetch and calculate total hours worked for all staff or individual staff by day/week/month/year
+  static Future<APIResponse<Map<String, Duration>>> getHoursWorked({
+    String? staffEmail,
+    required String period,  // "day", "week", "month", or "year"
   }) async {
-    final now = DateTime.now();
-    DateTime startDate;
-
-    switch (timePeriod) {
-      case 'day':
-        startDate = DateTime(now.year, now.month, now.day);
-        break;
-      case 'week':
-        startDate = now.subtract(Duration(days: now.weekday - 1)); // Monday of the week
-        break;
-      case 'month':
-        startDate = DateTime(now.year, now.month);
-        break;
-      case 'year':
-        startDate = DateTime(now.year);
-        break;
-      default:
-        throw Exception('Invalid time period specified');
-    }
-
-    final startDateStr = DateFormat('yyyy/MM/dd').format(startDate);
-
     try {
-      Query query = FirebaseFirestore.instance
-          .collection('shifts')
-          .where('done', isEqualTo: true)
-          .where('staffEmail', isEqualTo: email)
-          .where('day', isGreaterThanOrEqualTo: startDateStr);
+      final now = DateTime.now();
+      DateTime startDate;
+
+      switch (period) {
+        case 'day':
+          startDate = DateTime(now.year, now.month, now.day);
+          break;
+        case 'week':
+          startDate = now.subtract(Duration(days: now.weekday - 1));
+          break;
+        case 'month':
+          startDate = DateTime(now.year, now.month);
+          break;
+        case 'year':
+          startDate = DateTime(now.year);
+          break;
+        default:
+          throw Exception("Invalid period");
+      }
+
+      // Query shifts for the given staff or all staff if no email is provided
+      final query = FirebaseFirestore.instance.collection('shifts')
+          .where('day', isGreaterThanOrEqualTo: DateFormat('yyyy/MM/dd').format(startDate));
+
+      if (staffEmail != null) {
+        query.where('staffEmail', isEqualTo: staffEmail);
+      }
 
       final querySnapshot = await query.get();
 
-      int totalMinutes = 0;
+      // Sum the durations of all shifts
+      Duration totalDuration = Duration.zero;
 
       for (var doc in querySnapshot.docs) {
-        final data = doc.data();
-        if(data != null){
-          final duration = '12h 45m';
-
-
-          totalMinutes += ShiftHelpers.convertDurationToMinutes(duration);
-        }
+        final shiftData = doc.data();
+        final duration = ShiftHelpers.parseShiftDuration(shiftData['duration']);
+        totalDuration += duration;
       }
 
-      return {
-        'totalMinutes': totalMinutes,
-        'hours': totalMinutes ~/ 60,
-        'minutes': totalMinutes % 60,
-      };
+      return APIResponse(success: true, data: {'total': totalDuration});
     } catch (e) {
-      DevLogs.logError('Failed to calculate hours worked: $e');
-      return {};
+      return APIResponse(success: false, message: 'Failed to get hours worked: ${e.toString()}');
     }
   }
-
 
 }
