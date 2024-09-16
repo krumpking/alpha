@@ -2,11 +2,9 @@ import 'package:alpha/core/constants/local_image_constants.dart';
 import 'package:alpha/core/utils/routes.dart';
 import 'package:alpha/core/utils/shared_pref.dart';
 import 'package:alpha/features/auth/services/auth_service.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 import '../../core/constants/color_constants.dart';
 
 class UserDrawer extends StatefulWidget {
@@ -129,15 +127,17 @@ class _UserDrawerState extends State<UserDrawer> {
             ),
             ListTile(
               leading: Icon(
-                Icons.settings,
+                Icons.auto_graph,
                 color: Pallete.primaryColor,
               ),
               title: const Text(
-                'Settings',
+                'Shift Statistics',
                 style: TextStyle(fontSize: 16),
               ),
               trailing: const Icon(Icons.navigate_next),
-              onTap: () {},
+              onTap: () {
+                Get.toNamed(RoutesHelper.userShiftStatsScreen, arguments: widget.user.email);
+              },
             ),
             ListTile(
               onTap: () async {

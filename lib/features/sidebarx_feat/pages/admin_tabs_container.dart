@@ -1,4 +1,5 @@
 import 'package:alpha/features/home/pages/admin_home_screen.dart';
+import 'package:alpha/features/statistics/pages/admin_shift_stats.dart';
 import 'package:alpha/features/workers/pages/add_user.dart';
 import 'package:flutter/material.dart';
 import 'package:sidebarx/sidebarx.dart';
@@ -25,6 +26,8 @@ class AdminTabScreensContainer extends StatelessWidget {
             return const AdminAddUser();
           case 2:
             return const AdminStaffStats();
+          case 3:
+            return const AdminShiftStats();
           default:
             return Text(
               'Not Found',

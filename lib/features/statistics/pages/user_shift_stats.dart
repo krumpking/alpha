@@ -9,17 +9,17 @@ import 'package:tuple/tuple.dart';
 import '../../../core/constants/local_image_constants.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AdminShiftStats extends ConsumerWidget {
-  const AdminShiftStats({super.key});
+class UserShiftStats extends ConsumerWidget {
+  final String profileEmail;
+  const UserShiftStats({super.key, required this.profileEmail, });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    //Since the Tuple takes 2 values the period and the email address, we will pass null for the email address so that we get the statistics for all users
-    final dailyHoursWorked = ref.watch(ProviderUtils.hoursWorkedProvider(const Tuple2('day', null)));
-    final weeklyHoursWorked = ref.watch(ProviderUtils.hoursWorkedProvider(const Tuple2('week', null)));
-    final monthlyHoursWorked = ref.watch(ProviderUtils.hoursWorkedProvider(const Tuple2('month', null)));
-    final yearlyHoursWorked = ref.watch(ProviderUtils.hoursWorkedProvider(const Tuple2('year', null)));
 
+    final dailyHoursWorked = ref.watch(ProviderUtils.hoursWorkedProvider(Tuple2('day', profileEmail)));
+    final weeklyHoursWorked = ref.watch(ProviderUtils.hoursWorkedProvider(Tuple2('week', profileEmail)));
+    final monthlyHoursWorked = ref.watch(ProviderUtils.hoursWorkedProvider(Tuple2('month', profileEmail)));
+    final yearlyHoursWorked = ref.watch(ProviderUtils.hoursWorkedProvider(Tuple2('year', profileEmail)));
 
 
     return Scaffold(

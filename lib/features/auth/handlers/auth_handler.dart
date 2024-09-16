@@ -61,6 +61,8 @@ class AuthHandler extends ConsumerWidget {
                   // Handle email verification
                   WidgetsBinding.instance.addPostFrameCallback((_) async {
                     ref.read(ProviderUtils.userProvider.notifier).updateUser(user);
+                    ref.read(ProviderUtils.userProvider.notifier).updateUser(user);
+                    ref.read(ProviderUtils.userRoleProvider.notifier).state = userRole;
 
                     if (user.providerData.any((info) => info.providerId == 'phone')) {
                       // Phone authenticated user, handle accordingly
@@ -75,7 +77,7 @@ class AuthHandler extends ConsumerWidget {
                     }
                   });
 
-                  return MainScreen(selectedRole: userRole!);
+                  return MainScreen(selectedRole: userRole!, user: user,);
 
                 },
               );

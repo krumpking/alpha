@@ -126,7 +126,7 @@ class ShiftServices {
   // Fetch and calculate total hours worked for all staff or individual staff by day/week/month/year
   static Future<APIResponse<Map<String, Duration>>> getHoursWorked({
     String? staffEmail,
-    required String period, // "day", "week", "month", or "year"
+    required String period,
   }) async {
     try {
       final now = DateTime.now();

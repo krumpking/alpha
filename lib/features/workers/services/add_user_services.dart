@@ -70,8 +70,7 @@ class StaffServices {
     }
   }
 
-  static Future<APIResponse<UserProfile>> fetchUserProfile(
-      {required String profileEmail}) async {
+  static Future<APIResponse<UserProfile>> fetchUserProfile({required String profileEmail}) async {
     final usersRef = FirebaseFirestore.instance.collection('users');
 
     // Query the collection to find a user document with the specified email

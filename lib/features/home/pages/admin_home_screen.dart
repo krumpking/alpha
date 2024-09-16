@@ -62,9 +62,7 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen>
     return Scaffold(
       key: _key,
       drawer: Dimensions.isSmallScreen
-          ? AdminDrawer(
-        user: user!,
-      )
+          ? AdminDrawer(user: user!)
           : null,
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -126,8 +124,6 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen>
       ),
       body: staffState.when(
         data: (users) {
-          // Move setAllUsers here to ensure it runs every time data is available
-          ref.read(searchStaffProvider.notifier).setAllUsers(users);
           return _buildContent(filteredUsers);
         },
         loading: () => const Center(child: CircularProgressIndicator()),
@@ -135,6 +131,7 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen>
       ),
     );
   }
+
 
 
   Widget _buildContent(List<UserProfile> users) {

@@ -8,6 +8,7 @@ import 'package:alpha/features/home/pages/user_home_screen.dart';
 import 'package:alpha/features/manage_profile/pages/manage_profile_screen.dart';
 import 'package:alpha/features/shift/pages/add_user_shift.dart';
 import 'package:alpha/features/statistics/pages/admin_stuff_stats.dart';
+import 'package:alpha/features/statistics/pages/user_shift_stats.dart';
 import 'package:alpha/features/welcome/pages/onboard.dart';
 import 'package:alpha/features/welcome/pages/splash.dart';
 import 'package:alpha/features/workers/pages/add_user.dart';
@@ -35,6 +36,7 @@ class RoutesHelper {
   static String userHomeScreen = '/userHome';
   static String adminStaffStatsScreen = '/adminStaffStats';
   static String adminShiftStatsScreen = '/adminShiftStats';
+  static String userShiftStatsScreen = '/userShiftStats';
   static String adminAddUserScreen = '/addUser';
   static String viewUserScreen = '/viewUsers';
   static String userProfileScreen = '/profile';
@@ -68,6 +70,13 @@ class RoutesHelper {
           final String email = Get.arguments as String;
 
           return UserProfileScreen(profileEmail: email);
+        }),
+    GetPage(
+        name: userShiftStatsScreen,
+        page: () {
+          final String email = Get.arguments as String;
+
+          return UserShiftStats(profileEmail: email);
         }),
     GetPage(name: adminAddUserScreen, page: () => const AdminAddUser()),
     GetPage(
