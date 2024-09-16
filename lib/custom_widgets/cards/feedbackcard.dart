@@ -30,7 +30,7 @@ class FeedbackCard extends StatelessWidget {
             title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text( feedback.feedackTitle, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                Text( feedback.feedbackTitle, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
               ],
             ),
           ),

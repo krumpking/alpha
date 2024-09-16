@@ -11,7 +11,7 @@ class FeedbackHelper {
       {required User currentUser,
       required UserProfile selectedUser,
       required String description,
-      required String shiftId,
+      required String feedbackSource,
       required String feedbackTitle}) async {
     // Validate User
     if (!GetUtils.isEmail(selectedUser.email!)) {
@@ -43,7 +43,7 @@ class FeedbackHelper {
             currentUser: currentUser,
             selectedUser: selectedUser,
             description: description,
-            shiftId: shiftId,
+            feedbackSource: feedbackSource,
             feedbackTitle: feedbackTitle)
         .then((response) {
       if (!response.success) {

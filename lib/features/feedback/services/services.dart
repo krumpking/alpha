@@ -13,13 +13,14 @@ class FeedbackServices {
     required User currentUser,
     required UserProfile selectedUser,
     required String description,
-    required String shiftId,
+    required String feedbackSource,
     required String feedbackTitle,
   }) async {
     var feedback = FeedbackModel(
       date: DateTime.now().toString(),
       addedBy: currentUser.email!,
-      feedackTitle: feedbackTitle,
+      feedbackTitle: feedbackTitle,
+      feedbackSource: feedbackSource,
       description: description,
       userEmail: selectedUser.email!,
     );

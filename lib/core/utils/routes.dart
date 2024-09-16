@@ -107,7 +107,8 @@ class RoutesHelper {
         page: () {
           final args = Get.arguments as List;
           final UserProfile selectedUser = args[0] as UserProfile;
-          final Shift shift = args[1] as Shift;
+          final Shift? shift = args[1] as Shift?;
+
 
           return AddFeedbackScreen(
             selectedUser: selectedUser,

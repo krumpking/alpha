@@ -15,10 +15,10 @@ import 'package:get/get.dart';
 
 class AddFeedbackScreen extends StatefulWidget {
   final UserProfile selectedUser;
-  final Shift shift;
+  final Shift? shift;
 
   const AddFeedbackScreen(
-      {super.key, required this.selectedUser, required this.shift});
+      {super.key, required this.selectedUser, this.shift});
 
   @override
   State<AddFeedbackScreen> createState() => _AddFeedbackScreenState();
@@ -29,7 +29,6 @@ class _AddFeedbackScreenState extends State<AddFeedbackScreen> {
   final TextEditingController feedbackTitleController = TextEditingController();
   final currentUser = FirebaseAuth.instance.currentUser;
   FeedbackTag? feedbackTag;
-  bool _isAlpha = false;
 
   @override
   void initState() {
@@ -107,7 +106,7 @@ class _AddFeedbackScreenState extends State<AddFeedbackScreen> {
                     currentUser: currentUser!,
                     feedbackTitle: feedbackTitleController.text.trim(),
                     selectedUser: widget.selectedUser,
-                    shiftId: widget.shift.shiftId,
+                    feedbackSource: widget.shift == null ? widget.shift!.shiftId : 'general ',
                   )
                 },
                 borderRadius: 10,
