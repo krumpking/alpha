@@ -38,7 +38,6 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen>
   void initState() {
     super.initState();
 
-    // Ensure this is called after the widget is fully built
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final staffState = ref.read(ProviderUtils.staffProvider);
       staffState.whenData((users) {
@@ -57,18 +56,15 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen>
 
   @override
   Widget build(BuildContext context) {
+    final staffState = ref.watch(ProviderUtils.staffProvider);
     final filteredUsers = ref.watch(searchStaffProvider);
-
-    final staffState = ref.watch(
-      ProviderUtils.staffProvider,
-    );
 
     return Scaffold(
       key: _key,
       drawer: Dimensions.isSmallScreen
           ? AdminDrawer(
-              user: user!,
-            )
+        user: user!,
+      )
           : null,
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -130,6 +126,8 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen>
       ),
       body: staffState.when(
         data: (users) {
+          // Move setAllUsers here to ensure it runs every time data is available
+          ref.read(searchStaffProvider.notifier).setAllUsers(users);
           return _buildContent(filteredUsers);
         },
         loading: () => const Center(child: CircularProgressIndicator()),
@@ -137,6 +135,7 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen>
       ),
     );
   }
+
 
   Widget _buildContent(List<UserProfile> users) {
     return SingleChildScrollView(
