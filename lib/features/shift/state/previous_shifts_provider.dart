@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:alpha/features/shift/services/add_shif_services.dart';
+import 'package:alpha/features/hours_worked/services/add_shif_services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/utils/api_response.dart';
-import '../../../models/shift.dart';
+import '../models/shift.dart';
 
 class PreviousShiftsNotifier extends StateNotifier<AsyncValue<List<Shift>>> {
   final String profileEmail;
@@ -20,14 +20,14 @@ class PreviousShiftsNotifier extends StateNotifier<AsyncValue<List<Shift>>> {
 
     _shiftSubscription =
         ShiftServices.streamPreviousShiftsByEmail(email: profileEmail).listen(
-              (shifts) {
-            state = AsyncValue.data(shifts);
-          },
-          onError: (error) {
-            state = AsyncValue.error(
-                'Failed to fetch user shifts: $error', StackTrace.current);
-          },
-        );
+      (shifts) {
+        state = AsyncValue.data(shifts);
+      },
+      onError: (error) {
+        state = AsyncValue.error(
+            'Failed to fetch user shifts: $error', StackTrace.current);
+      },
+    );
   }
 
   // Cleanup: Cancel the stream subscription when no longer needed

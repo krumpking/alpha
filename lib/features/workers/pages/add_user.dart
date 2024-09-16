@@ -1,6 +1,6 @@
 import 'package:alpha/custom_widgets/text_fields/custom_phone_input.dart';
-import 'package:alpha/models/shift.dart';
-import 'package:alpha/models/document.dart';
+import 'package:alpha/features/shift/models/shift.dart';
+import 'package:alpha/features/hours_worked/models/document.dart';
 import 'package:alpha/core/constants/color_constants.dart';
 import 'package:alpha/custom_widgets/custom_button/general_button.dart';
 import 'package:alpha/custom_widgets/text_fields/custom_text_field.dart';
@@ -11,7 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../../../custom_widgets/country_city_state/country_city_state.dart';
 import '../../../custom_widgets/custom_dropdown.dart';
-import '../../../models/user_profile.dart';
+import '../../manage_profile/models/user_profile.dart';
 import '../helper/add_user_helper.dart';
 import '../services/media_services.dart';
 
@@ -35,7 +35,8 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
   TextEditingController shiftDayController = TextEditingController();
   TextEditingController shiftStartTimeController = TextEditingController();
   TextEditingController shiftEndTimeController = TextEditingController();
-  TextEditingController specializationTextEditingController = TextEditingController();
+  TextEditingController specializationTextEditingController =
+      TextEditingController();
   String selectedGender = 'Male';
   String? selectedCity;
   String? selectedState;
@@ -406,11 +407,14 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                         post: selectedPost,
                         name: nameController.text.trim(),
                         email: emailController.text.trim(),
-                        phoneNumber: phoneNumberController!.fullPhoneNumber.trim(),
+                        phoneNumber:
+                            phoneNumberController!.fullPhoneNumber.trim(),
                         address: addressController.text.trim(),
-                        previousEmployer:previousEmployerController.text.trim(),
+                        previousEmployer:
+                            previousEmployerController.text.trim(),
                         documents: documents,
-                        contactInformation: contactInformationController!.fullPhoneNumber,
+                        contactInformation:
+                            contactInformationController!.fullPhoneNumber,
                         role: selectedRole,
                         gender: selectedGender,
                         dob: dob,
@@ -420,7 +424,6 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                         specialisations: specialisations,
                       ),
                     );
-
                   } else {
                     AddUserHelper.validateAndSubmitForm(
                       userProfile: UserProfile(

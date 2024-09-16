@@ -1,6 +1,6 @@
 import 'package:alpha/core/utils/logs.dart';
 import 'package:alpha/core/utils/providers.dart';
-import 'package:alpha/models/user_profile.dart';
+import 'package:alpha/features/manage_profile/models/user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../custom_widgets/cards/feedbackcard.dart';
@@ -13,7 +13,8 @@ class NotesTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Listen to the shiftsProvider using the profileEmail
-    final notessAsyncValue = ref.watch(ProviderUtils.feedbackProvider(selectedUser.email!));
+    final notessAsyncValue =
+        ref.watch(ProviderUtils.feedbackProvider(selectedUser.email!));
 
     return Scaffold(
       body: notessAsyncValue.when(
@@ -26,9 +27,7 @@ class NotesTab extends ConsumerWidget {
               itemCount: feedbacks.length,
               itemBuilder: (context, index) {
                 final feedback = feedbacks[index];
-                return FeedbackCard(
-                  feedback: feedback
-                );
+                return FeedbackCard(feedback: feedback);
               },
             );
           },
@@ -38,8 +37,7 @@ class NotesTab extends ConsumerWidget {
             return Center(
               child: Text('Error: $error'),
             );
-          }
-      ),
+          }),
     );
   }
 }

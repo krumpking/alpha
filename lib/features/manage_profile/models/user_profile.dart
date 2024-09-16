@@ -1,6 +1,6 @@
-import 'package:alpha/models/shift.dart';
+import 'package:alpha/features/shift/models/shift.dart';
 
-import 'document.dart';
+import '../../hours_worked/models/document.dart';
 
 class UserProfile {
   String? name;
@@ -40,44 +40,44 @@ class UserProfile {
   });
 
   Map<String, dynamic> toJson() => {
-    'name': name,
-    'email': email,
-    'phoneNumber': phoneNumber,
-    'address': address,
-    'previousEmployer': previousEmployer,
-    'contactInformation': contactInformation,
-    'role': role,
-    'post': post,
-    'specialisations': specialisations,
-    'profilePicture': profilePicture,
-    'documents': documents.map((document) => document.toJson()).toList(),
-    'dob': dob?.toIso8601String(),
-    'gender': gender,
-    'city': city,
-    'state': state,
-    'country': country
-  };
+        'name': name,
+        'email': email,
+        'phoneNumber': phoneNumber,
+        'address': address,
+        'previousEmployer': previousEmployer,
+        'contactInformation': contactInformation,
+        'role': role,
+        'post': post,
+        'specialisations': specialisations,
+        'profilePicture': profilePicture,
+        'documents': documents.map((document) => document.toJson()).toList(),
+        'dob': dob?.toIso8601String(),
+        'gender': gender,
+        'city': city,
+        'state': state,
+        'country': country
+      };
 
   factory UserProfile.fromJson(Map<String, dynamic> json) => UserProfile(
-    name: json['name'] ?? '',
-    email: json['email'] ?? '',
-    phoneNumber: json['phoneNumber'] ?? '',
-    address: json['address'] ?? '',
-    previousEmployer: json['previousEmployer'] ?? '',
-    contactInformation: json['contactInformation'] ?? '',
-    role: json['role'] ?? '',
-    post: json['post'] ?? '',
-    specialisations: List<String>.from(json['specialisations']),
-    profilePicture: json['profilePicture'] ?? '',
-    documents: (json['documents'] as List)
-        .map((documentJson) => Document.fromJson(documentJson))
-        .toList(),
-    dob: json['dob'] != null ? DateTime.parse(json['dob']) : null,
-    gender: json['gender'] ?? '',
-    city: json['city']?? '',
-    state: json['state'] ?? '',
-    country: json['country'] ?? '',
-  );
+        name: json['name'] ?? '',
+        email: json['email'] ?? '',
+        phoneNumber: json['phoneNumber'] ?? '',
+        address: json['address'] ?? '',
+        previousEmployer: json['previousEmployer'] ?? '',
+        contactInformation: json['contactInformation'] ?? '',
+        role: json['role'] ?? '',
+        post: json['post'] ?? '',
+        specialisations: List<String>.from(json['specialisations']),
+        profilePicture: json['profilePicture'] ?? '',
+        documents: (json['documents'] as List)
+            .map((documentJson) => Document.fromJson(documentJson))
+            .toList(),
+        dob: json['dob'] != null ? DateTime.parse(json['dob']) : null,
+        gender: json['gender'] ?? '',
+        city: json['city'] ?? '',
+        state: json['state'] ?? '',
+        country: json['country'] ?? '',
+      );
 
   UserProfile copyWith({
     String? name,

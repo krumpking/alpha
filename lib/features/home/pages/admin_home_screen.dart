@@ -4,7 +4,7 @@ import 'package:alpha/core/constants/dimensions.dart';
 import 'package:alpha/custom_widgets/cards/category_card.dart';
 import 'package:alpha/custom_widgets/text_fields/custom_text_field.dart';
 import 'package:alpha/features/home/services/dummy.dart';
-import 'package:alpha/models/user_profile.dart';
+import 'package:alpha/features/manage_profile/models/user_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -67,8 +67,8 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen>
       key: _key,
       drawer: Dimensions.isSmallScreen
           ? AdminDrawer(
-        user: user!,
-      )
+              user: user!,
+            )
           : null,
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -163,7 +163,7 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen>
                 final randomColor = colors[Random().nextInt(colors.length)];
 
                 List<String>? imagesLinks =
-                List<String>.from(stuffCard['images']);
+                    List<String>.from(stuffCard['images']);
 
                 return CategoryCard(
                   color: randomColor,
@@ -210,20 +210,20 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen>
                 StaffTab(
                     users: users
                         .where((user) =>
-                    user.post!.toLowerCase() == 'nurse' &&
-                        user.role!.toLowerCase() == 'user')
+                            user.post!.toLowerCase() == 'nurse' &&
+                            user.role!.toLowerCase() == 'user')
                         .toList()),
                 StaffTab(
                     users: users
                         .where((user) =>
-                    user.post!.toLowerCase() == 'social worker' &&
-                        user.role!.toLowerCase() == 'user')
+                            user.post!.toLowerCase() == 'social worker' &&
+                            user.role!.toLowerCase() == 'user')
                         .toList()),
                 StaffTab(
                     users: users
                         .where((user) =>
-                    user.post!.toLowerCase() == 'care/support worker' &&
-                        user.role!.toLowerCase() == 'user')
+                            user.post!.toLowerCase() == 'care/support worker' &&
+                            user.role!.toLowerCase() == 'user')
                         .toList()),
               ],
             ),

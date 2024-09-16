@@ -3,7 +3,7 @@ import 'package:alpha/features/workers/services/add_user_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../custom_widgets/circular_loader/circular_loader.dart';
-import '../../../models/user_profile.dart';
+import '../../manage_profile/models/user_profile.dart';
 import '../services/storage_services.dart';
 
 class AddUserHelper {
@@ -106,7 +106,8 @@ class AddUserHelper {
       if (!uploadResponse.success) {
         if (!Get.isSnackbarOpen) Get.back();
         CustomSnackBar.showErrorSnackbar(
-            message: uploadResponse.message ?? 'Failed to upload image, Please try again');
+            message: uploadResponse.message ??
+                'Failed to upload image, Please try again');
         return;
       }
 
@@ -128,7 +129,6 @@ class AddUserHelper {
       }
     });
   }
-
 
   static Future<DateTime?> pickDate(
       {required BuildContext context,

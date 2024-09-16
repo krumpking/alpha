@@ -1,20 +1,16 @@
 import 'package:alpha/core/utils/api_response.dart';
 import 'package:alpha/core/utils/logs.dart';
 import 'package:alpha/features/shift/helpers/shift_helpers.dart';
-import 'package:alpha/features/shift/models/hours_worked.dart';
+import 'package:alpha/features/hours_worked/models/hours_worked.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
-import '../../../models/shift.dart';
-import '../../../models/user_profile.dart';
+import '../../shift/models/shift.dart';
+import '../../manage_profile/models/user_profile.dart';
 
 class ShiftServices {
-
-
-
-  static Future<APIResponse<void>> submitUserShift({
-    required Shift shift
-  }) async {
+  static Future<APIResponse<void>> submitUserShift(
+      {required Shift shift}) async {
     final shiftData = shift.toJson();
 
     try {
@@ -23,10 +19,10 @@ class ShiftServices {
       return APIResponse(success: true);
     } catch (e) {
       return APIResponse(
-          success: false, message: 'Failed to submit user shift: ${e.toString()}');
+          success: false,
+          message: 'Failed to submit user shift: ${e.toString()}');
     }
   }
-
 
   static Future<Shift?> getNextUserShiftByEmail({required String email}) async {
     try {
@@ -38,11 +34,11 @@ class ShiftServices {
           .collection('shifts')
           .where('staffEmail', isEqualTo: email)
           .where('done', isEqualTo: false)
-      // Order by staffEmail first (assuming it has an index)
+          // Order by staffEmail first (assuming it has an index)
           .orderBy('staffEmail', descending: false)
-      // Limit the results to documents where day is greater than or equal to today
+          // Limit the results to documents where day is greater than or equal to today
           .where('day', isGreaterThanOrEqualTo: today)
-      // Order by remaining fields (assuming indexes exist)
+          // Order by remaining fields (assuming indexes exist)
           .orderBy('startTime', descending: false)
           .limit(1) // Limit to only retrieve the first document
           .get();
@@ -69,9 +65,8 @@ class ShiftServices {
     }
   }
 
-
-
-  static Stream<List<Shift>> streamUpcomingShiftsByEmail({required String email}) {
+  static Stream<List<Shift>> streamUpcomingShiftsByEmail(
+      {required String email}) {
     final now = DateTime.now();
     final today = DateFormat('yyyy/MM/dd').format(now);
 
@@ -89,8 +84,8 @@ class ShiftServices {
     });
   }
 
-
-  static Stream<List<Shift>> streamPreviousShiftsByEmail({required String email}) {
+  static Stream<List<Shift>> streamPreviousShiftsByEmail(
+      {required String email}) {
     final now = DateTime.now();
     final today = DateFormat('yyyy/MM/dd').format(now);
 
@@ -123,14 +118,15 @@ class ShiftServices {
       return APIResponse(success: true);
     } catch (e) {
       DevLogs.logError('Failed to update shift: $e');
-      return APIResponse(success: false, message: 'Failed to update shift: ${e.toString()}');
+      return APIResponse(
+          success: false, message: 'Failed to update shift: ${e.toString()}');
     }
   }
 
   // Fetch and calculate total hours worked for all staff or individual staff by day/week/month/year
   static Future<APIResponse<Map<String, Duration>>> getHoursWorked({
     String? staffEmail,
-    required String period,  // "day", "week", "month", or "year"
+    required String period, // "day", "week", "month", or "year"
   }) async {
     try {
       final now = DateTime.now();
@@ -154,8 +150,8 @@ class ShiftServices {
       }
 
       // Query shifts for the given staff or all staff if no email is provided
-      final query = FirebaseFirestore.instance.collection('shifts')
-          .where('day', isGreaterThanOrEqualTo: DateFormat('yyyy/MM/dd').format(startDate));
+      final query = FirebaseFirestore.instance.collection('shifts').where('day',
+          isGreaterThanOrEqualTo: DateFormat('yyyy/MM/dd').format(startDate));
 
       if (staffEmail != null) {
         query.where('staffEmail', isEqualTo: staffEmail);
@@ -174,8 +170,9 @@ class ShiftServices {
 
       return APIResponse(success: true, data: {'total': totalDuration});
     } catch (e) {
-      return APIResponse(success: false, message: 'Failed to get hours worked: ${e.toString()}');
+      return APIResponse(
+          success: false,
+          message: 'Failed to get hours worked: ${e.toString()}');
     }
   }
-
 }

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../core/constants/color_constants.dart';
 import '../../core/utils/routes.dart';
-import '../../features/shift/services/add_shif_services.dart';
-import '../../models/shift.dart';
-import '../../models/user_profile.dart';
+import '../../features/hours_worked/services/add_shif_services.dart';
+import '../../features/shift/models/shift.dart';
+import '../../features/manage_profile/models/user_profile.dart';
 
 class StaffCard extends StatelessWidget {
   final UserProfile user;
@@ -40,10 +40,10 @@ class StaffCard extends StatelessWidget {
                   // Handle the selected value
                   switch (selectedValue) {
                     case 0:
-                    // Perform some action for Edit
+                      // Perform some action for Edit
                       break;
                     case 1:
-                    // Perform some action for Delete
+                      // Perform some action for Delete
                       break;
                   }
                 },
@@ -57,24 +57,19 @@ class StaffCard extends StatelessWidget {
                           arguments: user.email);
                     },
                   ),
-
-
                   buildPopUpOption(
                       title: 'Add Shift',
                       icon: Icons.calendar_month,
                       value: 1,
                       onTap: () => Get.toNamed(RoutesHelper.addShiftsScreen,
-                          arguments: user
-                      )
-                  ),
+                          arguments: user)),
                 ],
                 icon: const Icon(Icons.more_vert),
               ),
             ),
             const Divider(color: Colors.grey),
             FutureBuilder<Shift?>(
-              future: ShiftServices.getNextUserShiftByEmail(
-                  email: user.email!),
+              future: ShiftServices.getNextUserShiftByEmail(email: user.email!),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const CircularProgressIndicator();
@@ -91,8 +86,8 @@ class StaffCard extends StatelessWidget {
                         text: TextSpan(children: [
                           const TextSpan(
                               text: 'Next Shift:  ',
-                              style: TextStyle(
-                                  fontSize: 12, color: Colors.black)),
+                              style:
+                                  TextStyle(fontSize: 12, color: Colors.black)),
                           TextSpan(
                             text: nextShift!.notes == "Today's shift"
                                 ? "Today, ${nextShift!.startTime}"
@@ -114,8 +109,8 @@ class StaffCard extends StatelessWidget {
                         ),
                         child: Text(
                           nextShift!.placeName,
-                          style:
-                          const TextStyle(color: Colors.white, fontSize: 12),
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 12),
                         ),
                       ),
                     ],

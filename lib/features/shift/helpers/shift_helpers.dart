@@ -1,20 +1,19 @@
 import 'dart:math';
 
 import 'package:alpha/core/utils/validator.dart';
-import 'package:alpha/features/shift/services/add_shif_services.dart';
-import 'package:alpha/models/shift.dart';
+import 'package:alpha/features/hours_worked/services/add_shif_services.dart';
+import 'package:alpha/features/shift/models/shift.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../../../custom_widgets/circular_loader/circular_loader.dart';
 import '../../../custom_widgets/snackbar/custom_snackbar.dart';
-import '../../../models/user_profile.dart';
+import '../../manage_profile/models/user_profile.dart';
 
 class ShiftHelpers {
   static void validateAndSubmitShift({
     required Shift shift,
   }) async {
-
     // Validate Email
     if (!Validator.isValidTimeFormat(shift.duration)) {
       CustomSnackBar.showErrorSnackbar(message: 'Please input a valid time.');
@@ -45,10 +44,7 @@ class ShiftHelpers {
     });
   }
 
-
-  static void addUserShift({
-    required Shift shift
-  }) async {
+  static void addUserShift({required Shift shift}) async {
     // Validate Place Name
     if (shift.placeName.isEmpty) {
       CustomSnackBar.showErrorSnackbar(message: 'Place name is required.');
@@ -74,14 +70,16 @@ class ShiftHelpers {
     }
 
     // Validate Contact Person
-    if (shift.contactPersonNumber.isEmpty || !GetUtils.isPhoneNumber(shift.contactPersonNumber)) {
+    if (shift.contactPersonNumber.isEmpty ||
+        !GetUtils.isPhoneNumber(shift.contactPersonNumber)) {
       CustomSnackBar.showErrorSnackbar(
           message: 'Valid contact person number is required.');
       return;
     }
 
     // Validate Alternative Contact (Optional but still checked if provided)
-    if (shift.contactPersonAltNumber.isNotEmpty && !GetUtils.isPhoneNumber(shift.contactPersonAltNumber)) {
+    if (shift.contactPersonAltNumber.isNotEmpty &&
+        !GetUtils.isPhoneNumber(shift.contactPersonAltNumber)) {
       CustomSnackBar.showErrorSnackbar(
           message: 'Valid alternative contact number is required.');
       return;
@@ -96,22 +94,20 @@ class ShiftHelpers {
     );
 
     // Submit the shift
-    await ShiftServices.submitUserShift(
-      shift: shift
-    ).then((response) {
+    await ShiftServices.submitUserShift(shift: shift).then((response) {
       if (!response.success) {
         if (Get.isDialogOpen!) Get.back();
         CustomSnackBar.showErrorSnackbar(
             message: response.message ?? 'Failed to submit shift');
       } else {
         if (Get.isDialogOpen!) Get.back();
-        CustomSnackBar.showSuccessSnackbar(
-            message: 'Shift added successfully');
+        CustomSnackBar.showSuccessSnackbar(message: 'Shift added successfully');
       }
     });
   }
 
-  static String calculateDuration({required String shiftStartTime, required String shiftEndTime}) {
+  static String calculateDuration(
+      {required String shiftStartTime, required String shiftEndTime}) {
     if (shiftStartTime.isNotEmpty && shiftStartTime.isNotEmpty) {
       final format = DateFormat('HH:mm');
       final startTime = format.parse(shiftStartTime);
@@ -137,16 +133,17 @@ class ShiftHelpers {
 
     final random = Random(now.millisecondsSinceEpoch);
 
-    final pool = '${emailLetters.isEmpty ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' : emailLetters}abcdefghijklmnopqrstuvwxyz';
+    final pool =
+        '${emailLetters.isEmpty ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' : emailLetters}abcdefghijklmnopqrstuvwxyz';
 
     // Generate a 15-character long ID using random letters from the pool
     String generateId() {
-      return List.generate(15, (index) => pool[random.nextInt(pool.length)]).join();
+      return List.generate(15, (index) => pool[random.nextInt(pool.length)])
+          .join();
     }
 
     return generateId();
   }
-
 
   static Duration parseShiftDuration(String duration) {
     final parts = duration.split(' ');
@@ -154,6 +151,4 @@ class ShiftHelpers {
     int minutes = int.parse(parts[1].replaceAll('m', ''));
     return Duration(hours: hours, minutes: minutes);
   }
-
-
 }

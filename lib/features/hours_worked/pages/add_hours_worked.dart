@@ -1,14 +1,14 @@
 import 'package:alpha/features/workers/helper/storage_helper.dart';
-import 'package:alpha/models/document.dart';
-import 'package:alpha/models/user_profile.dart';
+import 'package:alpha/features/hours_worked/models/document.dart';
+import 'package:alpha/features/manage_profile/models/user_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../../core/constants/color_constants.dart';
 import '../../../custom_widgets/custom_button/general_button.dart';
 import '../../../custom_widgets/custom_switch/custom_switch.dart';
 import '../../../custom_widgets/text_fields/custom_text_field.dart';
-import '../../../models/shift.dart';
-import '../helpers/shift_helpers.dart';
+import '../../shift/models/shift.dart';
+import '../../shift/helpers/shift_helpers.dart';
 
 class EditShift extends StatefulWidget {
   final UserProfile selectedUser;
@@ -49,7 +49,7 @@ class _EditShiftState extends State<EditShift> {
         title: Text(
           widget.selectedUser.name!,
           style:
-          const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+              const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
       ),
       body: Padding(
@@ -175,10 +175,9 @@ class _EditShiftState extends State<EditShift> {
       child: GeneralButton(
         onTap: () {
           final updatedShift = widget.shift.copyWith(
-            documents: documents,
-            done: _isCompleted,
-            duration: _hoursWorkedController.text
-          );
+              documents: documents,
+              done: _isCompleted,
+              duration: _hoursWorkedController.text);
           ShiftHelpers.validateAndSubmitShift(shift: updatedShift);
         },
         borderRadius: 10,

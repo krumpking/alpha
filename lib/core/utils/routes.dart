@@ -1,5 +1,5 @@
 import 'package:alpha/features/feedback/pages/add_feedback.dart';
-import 'package:alpha/features/shift/pages/add_hours_worked.dart';
+import 'package:alpha/features/hours_worked/pages/add_hours_worked.dart';
 import 'package:alpha/features/auth/handlers/auth_handler.dart';
 import 'package:alpha/features/auth/pages/email_verification.dart';
 import 'package:alpha/features/auth/pages/forgot_password.dart';
@@ -19,8 +19,8 @@ import '../../features/auth/pages/email_verification_success.dart';
 import '../../features/auth/pages/login_page.dart';
 import '../../features/auth/pages/resend_reset_email_screen.dart';
 import '../../features/statistics/pages/admin_shift_stats.dart';
-import '../../models/shift.dart';
-import '../../models/user_profile.dart';
+import '../../features/shift/models/shift.dart';
+import '../../features/manage_profile/models/user_profile.dart';
 
 class RoutesHelper {
   static String welcomeScreen = '/welcome';
@@ -73,11 +73,9 @@ class RoutesHelper {
     GetPage(
         name: updateShiftScreen,
         page: () {
-
           final args = Get.arguments as List;
           final UserProfile selectedUser = args[0] as UserProfile;
           final Shift shift = args[1] as Shift;
-
 
           return EditShift(selectedUser: selectedUser, shift: shift);
         }),
@@ -101,7 +99,6 @@ class RoutesHelper {
           final args = Get.arguments as List;
           final UserProfile selectedUser = args[0] as UserProfile;
           final Shift shift = args[1] as Shift;
-
 
           return AddFeedbackScreen(
             selectedUser: selectedUser,

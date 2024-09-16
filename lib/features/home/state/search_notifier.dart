@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:alpha/models/user_profile.dart';
-
+import 'package:alpha/features/manage_profile/models/user_profile.dart';
 
 class SearchStaffNotifier extends StateNotifier<List<UserProfile>> {
   List<UserProfile> _allUsers = [];
@@ -18,8 +17,9 @@ class SearchStaffNotifier extends StateNotifier<List<UserProfile>> {
       state = _allUsers;
     } else {
       state = _allUsers
-          .where((user) => user.name != null &&
-          user.name!.toLowerCase().contains(searchTerm.toLowerCase()))
+          .where((user) =>
+              user.name != null &&
+              user.name!.toLowerCase().contains(searchTerm.toLowerCase()))
           .toList();
     }
   }

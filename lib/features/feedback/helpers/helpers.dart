@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import '../../../custom_widgets/circular_loader/circular_loader.dart';
 import '../../../custom_widgets/snackbar/custom_snackbar.dart';
-import '../../../models/user_profile.dart';
+import '../../manage_profile/models/user_profile.dart';
 
 class FeedbackHelper {
   static void validateAndSubmitFeedback(
@@ -13,7 +13,6 @@ class FeedbackHelper {
       required String description,
       required String shiftId,
       required String feedbackTitle}) async {
-
     // Validate User
     if (!GetUtils.isEmail(selectedUser.email!)) {
       CustomSnackBar.showErrorSnackbar(
@@ -45,8 +44,7 @@ class FeedbackHelper {
             selectedUser: selectedUser,
             description: description,
             shiftId: shiftId,
-            feedbackTitle: feedbackTitle
-    )
+            feedbackTitle: feedbackTitle)
         .then((response) {
       if (!response.success) {
         if (Get.isDialogOpen!) Get.back();

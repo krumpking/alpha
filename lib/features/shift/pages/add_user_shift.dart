@@ -1,6 +1,6 @@
 import 'package:alpha/custom_widgets/text_fields/custom_phone_input.dart';
-import 'package:alpha/models/shift.dart';
-import 'package:alpha/models/user_profile.dart';
+import 'package:alpha/features/shift/models/shift.dart';
+import 'package:alpha/features/manage_profile/models/user_profile.dart';
 import 'package:extended_phone_number_input/phone_number_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +26,8 @@ class _AddUserShiftState extends State<AddUserShift> {
   final TextEditingController _shiftDateController = TextEditingController();
   final TextEditingController _endTimeController = TextEditingController();
   final TextEditingController _durationController = TextEditingController();
-  final TextEditingController _contactPersonController = TextEditingController();
+  final TextEditingController _contactPersonController =
+      TextEditingController();
   final TextEditingController _notesController = TextEditingController();
   PhoneNumberInputController? _contactPersonAltController;
   bool _isCompleted = false;
@@ -38,7 +39,6 @@ class _AddUserShiftState extends State<AddUserShift> {
     currentUser = FirebaseAuth.instance.currentUser;
     _contactPersonAltController = PhoneNumberInputController(context);
     _contactPersonController.text = widget.selectedUser.phoneNumber!;
-
   }
 
   @override
@@ -51,7 +51,7 @@ class _AddUserShiftState extends State<AddUserShift> {
         title: Text(
           widget.selectedUser.name!,
           style:
-          const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+              const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
       ),
       body: Padding(
@@ -75,7 +75,6 @@ class _AddUserShiftState extends State<AddUserShift> {
                 color: Pallete.primaryColor,
               ),
             ),
-
             Text(
               'Add Shift',
               textAlign: TextAlign.center,
@@ -96,12 +95,12 @@ class _AddUserShiftState extends State<AddUserShift> {
             GestureDetector(
               onTap: () async {
                 await AddUserHelper.pickDate(
-                    context: context, initialDate: DateTime.now())
+                        context: context, initialDate: DateTime.now())
                     .then((date) {
                   setState(() {
                     if (date != null) {
                       String formattedDate =
-                      DateFormat('yyyy/MM/dd').format(date);
+                          DateFormat('yyyy/MM/dd').format(date);
                       _shiftDateController.text = formattedDate;
                     }
                   });
@@ -117,9 +116,7 @@ class _AddUserShiftState extends State<AddUserShift> {
                 labelText: 'Shift Date',
               ),
             ),
-
             const SizedBox(height: 10),
-
             Row(
               children: [
                 Expanded(
@@ -134,12 +131,17 @@ class _AddUserShiftState extends State<AddUserShift> {
                                 now.day, timeOfDay.hour, timeOfDay.minute);
 
                             String formattedTime =
-                            DateFormat('HH:mm').format(dateTime);
+                                DateFormat('HH:mm').format(dateTime);
                             _startTimeController.text = formattedTime;
 
-                            if(_endTimeController.text.isNotEmpty && _startTimeController.text.isNotEmpty){
+                            if (_endTimeController.text.isNotEmpty &&
+                                _startTimeController.text.isNotEmpty) {
                               setState(() {
-                                _durationController.text = ShiftHelpers.calculateDuration(shiftStartTime: _startTimeController.text, shiftEndTime: _endTimeController.text);
+                                _durationController.text =
+                                    ShiftHelpers.calculateDuration(
+                                        shiftStartTime:
+                                            _startTimeController.text,
+                                        shiftEndTime: _endTimeController.text);
                               });
                             }
                           }
@@ -170,12 +172,17 @@ class _AddUserShiftState extends State<AddUserShift> {
                                 now.day, timeOfDay.hour, timeOfDay.minute);
 
                             String formattedTime =
-                            DateFormat('HH:mm').format(dateTime);
+                                DateFormat('HH:mm').format(dateTime);
                             _endTimeController.text = formattedTime;
 
-                            if(_endTimeController.text.isNotEmpty && _startTimeController.text.isNotEmpty){
+                            if (_endTimeController.text.isNotEmpty &&
+                                _startTimeController.text.isNotEmpty) {
                               setState(() {
-                                _durationController.text = ShiftHelpers.calculateDuration(shiftStartTime: _startTimeController.text, shiftEndTime: _endTimeController.text);
+                                _durationController.text =
+                                    ShiftHelpers.calculateDuration(
+                                        shiftStartTime:
+                                            _startTimeController.text,
+                                        shiftEndTime: _endTimeController.text);
                               });
                             }
                           }
@@ -190,10 +197,14 @@ class _AddUserShiftState extends State<AddUserShift> {
                         color: Colors.grey,
                       ),
                       labelText: 'End Time',
-                      onChanged: (value){
-                        if(_endTimeController.text.isNotEmpty && _startTimeController.text.isNotEmpty){
+                      onChanged: (value) {
+                        if (_endTimeController.text.isNotEmpty &&
+                            _startTimeController.text.isNotEmpty) {
                           setState(() {
-                            _durationController.text = ShiftHelpers.calculateDuration(shiftStartTime: _startTimeController.text, shiftEndTime: _endTimeController.text);
+                            _durationController.text =
+                                ShiftHelpers.calculateDuration(
+                                    shiftStartTime: _startTimeController.text,
+                                    shiftEndTime: _endTimeController.text);
                           });
                         }
                       },
@@ -258,7 +269,8 @@ class _AddUserShiftState extends State<AddUserShift> {
               child: GeneralButton(
                 onTap: () {
                   final shift = Shift(
-                    shiftId: ShiftHelpers.generateRandomId(widget.selectedUser.email!),
+                    shiftId: ShiftHelpers.generateRandomId(
+                        widget.selectedUser.email!),
                     placeName: _placeNameController.text,
                     startTime: _startTimeController.text,
                     endTime: _endTimeController.text,
@@ -268,14 +280,13 @@ class _AddUserShiftState extends State<AddUserShift> {
                     addedBy: currentUser!.email!,
                     contactPersonNumber: _contactPersonController.text,
                     staffEmail: widget.selectedUser.email!,
-                    contactPersonAltNumber: _contactPersonAltController!.fullPhoneNumber,
+                    contactPersonAltNumber:
+                        _contactPersonAltController!.fullPhoneNumber,
                     done: _isCompleted,
                     notes: _notesController.text,
                   );
 
-                  ShiftHelpers.addUserShift(
-                    shift : shift
-                  );
+                  ShiftHelpers.addUserShift(shift: shift);
                 },
                 borderRadius: 10,
                 btnColor: Pallete.primaryColor,

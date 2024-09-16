@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../../core/utils/api_response.dart';
 import '../../../global/global.dart';
-import '../../../models/user_profile.dart';
+import '../../manage_profile/models/user_profile.dart';
 
 class FeedbackServices {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -35,15 +35,17 @@ class FeedbackServices {
     }
   }
 
-
-  static Stream<List<FeedbackModel>> streamFeedbackByEmail({required String email}) {
+  static Stream<List<FeedbackModel>> streamFeedbackByEmail(
+      {required String email}) {
     // Return a Firestore snapshot stream for real-time updates
     return FirebaseFirestore.instance
         .collection('feedback')
         .where('userEmail', isEqualTo: email)
         .snapshots()
         .map((snapshot) {
-      return snapshot.docs.map((doc) => FeedbackModel.fromJson(doc.data())).toList();
+      return snapshot.docs
+          .map((doc) => FeedbackModel.fromJson(doc.data()))
+          .toList();
     });
   }
 }
