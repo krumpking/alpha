@@ -4,14 +4,15 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import '../../../core/constants/animation_asset_constants.dart';
 import '../../../core/constants/color_constants.dart';
-import '../../../core/utils/routes.dart';
+import '../../../core/routes/routes.dart';
 import '../../../custom_widgets/circular_loader/circular_loader.dart';
 import '../../../custom_widgets/text_fields/custom_text_field.dart';
 import '../services/auth_service.dart';
 
 class ForgotPasswordScreen extends StatelessWidget {
-
-  ForgotPasswordScreen({super.key,});
+  ForgotPasswordScreen({
+    super.key,
+  });
 
   final TextEditingController emailController = TextEditingController();
 
@@ -34,14 +35,9 @@ class ForgotPasswordScreen extends StatelessWidget {
                 AnimationAsset.resetPasswordAnimation,
               ),
             ),
-
             Container(
               padding: const EdgeInsets.all(20),
-              margin: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 20
-              ),
-
+              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
               decoration: BoxDecoration(
                 color: Colors.grey.shade100,
                 borderRadius: BorderRadius.circular(20),
@@ -63,12 +59,8 @@ class ForgotPasswordScreen extends StatelessWidget {
                   const Text(
                     'Reset Password',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold
-                    ),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-
                   const Text(
                     'Enter your email and we will send you a password reset link',
                     textAlign: TextAlign.center,
@@ -76,12 +68,9 @@ class ForgotPasswordScreen extends StatelessWidget {
                       fontSize: 12,
                     ),
                   ),
-
                   const SizedBox(
                     height: 20,
                   ),
-
-
                   CustomTextField(
                     controller: emailController,
                     obscureText: false,
@@ -91,42 +80,32 @@ class ForgotPasswordScreen extends StatelessWidget {
                       color: Colors.grey,
                     ),
                   ),
-
                   const SizedBox(
                     height: 20,
                   ),
-
                   GeneralButton(
                     btnColor: Pallete.primaryColor,
                     width: screenWidth,
                     borderRadius: 10,
                     child: const Text(
-                        'Reset Password',
+                      'Reset Password',
                       style: TextStyle(
                         color: Colors.white,
                       ),
                     ),
-
-                    onTap: () async{
+                    onTap: () async {
                       Get.dialog(
-                          const CustomLoader(
-                              message: 'Resetting Password'
-                          )
-                      );
+                          const CustomLoader(message: 'Resetting Password'));
 
-
-                      await AuthServices.sendPasswordResetEmail(email: emailController.text.trim()).then((response) {
+                      await AuthServices.sendPasswordResetEmail(
+                              email: emailController.text.trim())
+                          .then((response) {
                         Get.offAllNamed(
-                          RoutesHelper.resendVerificationEmailScreen,
-                          arguments: [
-                            emailController.text.trim()
-                          ]
-                        );
+                            RoutesHelper.resendVerificationEmailScreen,
+                            arguments: [emailController.text.trim()]);
                       });
-
                     },
                   ),
-
                 ],
               ),
             ),

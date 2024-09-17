@@ -1,12 +1,10 @@
 import 'package:alpha/core/constants/local_image_constants.dart';
-import 'package:alpha/core/utils/routes.dart';
+import 'package:alpha/core/routes/routes.dart';
 import 'package:alpha/core/utils/shared_pref.dart';
 import 'package:alpha/features/auth/services/auth_service.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 import '../../core/constants/color_constants.dart';
 
 class UserDrawer extends StatefulWidget {
@@ -56,24 +54,7 @@ class _UserDrawerState extends State<UserDrawer> {
                           child: SizedBox(
                         height: MediaQuery.of(context).size.height * 0.45,
                         child: Image.asset(LocalImageConstants.logo),
-                      )
-                          //  CachedNetworkImage(
-                          //   imageUrl: widget.user.photoURL ??
-                          //       "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                          //   width: MediaQuery.of(context).size.height * 0.18,
-                          //   height: MediaQuery.of(context).size.height * 0.18,
-                          //   fit: BoxFit.cover,
-                          //   placeholder: (context, url) => Skeletonizer(
-                          //     enabled: true,
-                          //     child: SizedBox(
-                          //       height: MediaQuery.of(context).size.height * 0.45,
-                          //       child: Image.asset(LocalImageConstants.logo),
-                          //     ),
-                          //   ),
-                          //   errorWidget: (context, url, error) =>
-                          //       const Icon(Icons.error),
-                          // ),
-                          ),
+                      )),
                     ),
                     Container(
                       margin: const EdgeInsets.only(top: 15),
@@ -124,20 +105,24 @@ class _UserDrawerState extends State<UserDrawer> {
               ),
               trailing: const Icon(Icons.navigate_next),
               onTap: () {
-                Get.toNamed(RoutesHelper.userProfileScreen, arguments: widget.user.email);
+                Get.toNamed(RoutesHelper.userProfileScreen,
+                    arguments: widget.user.email);
               },
             ),
             ListTile(
               leading: Icon(
-                Icons.settings,
+                Icons.auto_graph,
                 color: Pallete.primaryColor,
               ),
               title: const Text(
-                'Settings',
+                'Shift Statistics',
                 style: TextStyle(fontSize: 16),
               ),
               trailing: const Icon(Icons.navigate_next),
-              onTap: () {},
+              onTap: () {
+                Get.toNamed(RoutesHelper.userShiftStatsScreen,
+                    arguments: widget.user.email);
+              },
             ),
             ListTile(
               onTap: () async {

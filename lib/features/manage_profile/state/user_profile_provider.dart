@@ -1,5 +1,5 @@
 import 'package:alpha/features/workers/services/add_user_services.dart';
-import 'package:alpha/models/user_profile.dart';
+import 'package:alpha/features/manage_profile/models/user_profile.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/utils/api_response.dart';
 
