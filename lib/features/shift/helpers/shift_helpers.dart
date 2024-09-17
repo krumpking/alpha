@@ -151,4 +151,34 @@ class ShiftHelpers {
     int minutes = int.parse(parts[1].replaceAll('m', ''));
     return Duration(hours: hours, minutes: minutes);
   }
+
+
+  static void updateShift({
+    required Shift shift,
+  }) async {
+
+    // Show loader while submitting shift
+    Get.dialog(
+      const CustomLoader(
+        message: 'Updating shift',
+      ),
+      barrierDismissible: false,
+    );
+
+    await ShiftServices.updateShift(
+      shiftId: shift.shiftId,
+      updatedShift: shift,
+    ).then((response) {
+      if (!response.success) {
+        if (Get.isDialogOpen!) Get.back();
+        CustomSnackBar.showErrorSnackbar(
+            message: response.message ?? 'Failed to update shift');
+      } else {
+        if (Get.isDialogOpen!) Get.back();
+        CustomSnackBar.showSuccessSnackbar(
+            message: 'Shift updated successfully');
+      }
+    });
+  }
+
 }

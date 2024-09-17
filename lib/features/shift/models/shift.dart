@@ -12,6 +12,8 @@ class Shift {
   String contactPersonNumber;
   String contactPersonAltNumber;
   String staffEmail;
+  int hoursWorked;
+  bool visible;
   bool done;
   String notes;
   List<Document>? documents;
@@ -22,7 +24,9 @@ class Shift {
       required this.startTime,
       required this.endTime,
       required this.duration,
+      required this.hoursWorked,
       required this.date,
+      required this.visible,
       required this.dateAdded,
       required this.addedBy,
       required this.contactPersonNumber,
@@ -46,16 +50,20 @@ class Shift {
         'staffEmail': staffEmail,
         'done': done,
         'notes': notes,
+        'visible': visible,
         'documents': documents?.map((doc) => doc.toJson()).toList(),
+        'hoursWorked': hoursWorked
       };
 
   factory Shift.fromJson(Map<String, dynamic> json) => Shift(
         shiftId: json['shiftId'] ?? '',
         placeName: json['placeName'] ?? '',
         startTime: json['startTime'] ?? '',
+        hoursWorked: json['hoursWorked'] ?? 0,
         endTime: json['endTime'] ?? '',
         duration: json['duration'] ?? '',
         date: json['day'] ?? '',
+        visible: json['visible'] ?? true,
         dateAdded: json['dateAdded'] ?? '',
         addedBy: json['addedBy'] ?? '',
         contactPersonNumber: json['contactPersonNumber'] ?? '',
@@ -81,8 +89,10 @@ class Shift {
     String? contactPersonAltNumber,
     String? staffEmail,
     bool? done,
+    bool? visible,
     String? notes,
     List<Document>? documents,
+    int? hoursWorked,
   }) {
     return Shift(
       shiftId: shiftId ?? this.shiftId,
@@ -100,6 +110,8 @@ class Shift {
       done: done ?? this.done,
       notes: notes ?? this.notes,
       documents: documents ?? this.documents,
+      visible: visible ?? this.visible,
+      hoursWorked: hoursWorked ?? this.hoursWorked
     );
   }
 }

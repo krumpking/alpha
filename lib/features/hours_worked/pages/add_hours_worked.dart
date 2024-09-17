@@ -10,16 +10,16 @@ import '../../../custom_widgets/text_fields/custom_text_field.dart';
 import '../../shift/models/shift.dart';
 import '../../shift/helpers/shift_helpers.dart';
 
-class EditShift extends StatefulWidget {
+class AddHoursWorkedScreen extends StatefulWidget {
   final UserProfile selectedUser;
   final Shift shift;
-  const EditShift({super.key, required this.selectedUser, required this.shift});
+  const AddHoursWorkedScreen({super.key, required this.selectedUser, required this.shift});
 
   @override
-  State<EditShift> createState() => _EditShiftState();
+  State<AddHoursWorkedScreen> createState() => _AddHoursWorkedScreenState();
 }
 
-class _EditShiftState extends State<EditShift> {
+class _AddHoursWorkedScreenState extends State<AddHoursWorkedScreen> {
   final TextEditingController _documentNameController = TextEditingController();
   final TextEditingController _hoursWorkedController = TextEditingController();
   bool _isCompleted = false;
@@ -93,7 +93,7 @@ class _EditShiftState extends State<EditShift> {
           ),
         ),
         Text(
-          'Edit Shift',
+          'Add Hours Worked',
           textAlign: TextAlign.center,
           style: TextStyle(
               color: Pallete.primaryColor,
@@ -177,14 +177,15 @@ class _EditShiftState extends State<EditShift> {
           final updatedShift = widget.shift.copyWith(
               documents: documents,
               done: _isCompleted,
-              duration: _hoursWorkedController.text);
+              hoursWorked: _hoursWorkedController.text.isNotEmpty ? int.parse(_hoursWorkedController.text) : 0
+          );
           ShiftHelpers.validateAndSubmitShift(shift: updatedShift);
         },
         borderRadius: 10,
         btnColor: Pallete.primaryColor,
         width: 300,
         child: const Text(
-          "Update shift",
+          "Add Hours Worked",
           style: TextStyle(
               color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
         ),

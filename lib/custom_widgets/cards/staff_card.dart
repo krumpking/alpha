@@ -67,12 +67,13 @@ class StaffCard extends StatelessWidget {
                   ),
                   buildPopUpOption(
                       title: 'Add Feedback',
-                      icon: Icons.calendar_month,
+                      icon: Icons.feedback,
                       value: 1,
                       onTap: () => Get.toNamed(RoutesHelper.addUserFeedbackScreen,
                           arguments: [user, null]
                       )
                   ),
+
                 ],
                 icon: const Icon(Icons.more_vert),
               ),

@@ -7,6 +7,7 @@ import 'package:alpha/features/home/pages/admin_home_screen.dart';
 import 'package:alpha/features/home/pages/user_home_screen.dart';
 import 'package:alpha/features/manage_profile/pages/manage_profile_screen.dart';
 import 'package:alpha/features/shift/pages/add_user_shift.dart';
+import 'package:alpha/features/shift/pages/edit_shift.dart';
 import 'package:alpha/features/statistics/pages/admin_stuff_stats.dart';
 import 'package:alpha/features/statistics/pages/user_shift_stats.dart';
 import 'package:alpha/features/welcome/pages/onboard.dart';
@@ -40,7 +41,8 @@ class RoutesHelper {
   static String adminAddUserScreen = '/addUser';
   static String viewUserScreen = '/viewUsers';
   static String userProfileScreen = '/profile';
-  static String updateShiftScreen = '/updateShift';
+  static String addHoursWorkedScreen = '/addHoursWorkedScreen';
+  static String editShiftScreen = '/editShift';
   static String addShiftsScreen = '/addShift';
   static String addUserFeedbackScreen = '/addFeedback';
 
@@ -80,13 +82,22 @@ class RoutesHelper {
         }),
     GetPage(name: adminAddUserScreen, page: () => const AdminAddUser()),
     GetPage(
-        name: updateShiftScreen,
+        name: addHoursWorkedScreen,
         page: () {
           final args = Get.arguments as List;
           final UserProfile selectedUser = args[0] as UserProfile;
           final Shift shift = args[1] as Shift;
 
-          return EditShift(selectedUser: selectedUser, shift: shift);
+          return AddHoursWorkedScreen(selectedUser: selectedUser, shift: shift);
+        }),
+    GetPage(
+        name: editShiftScreen,
+        page: () {
+          final args = Get.arguments as List;
+          final UserProfile selectedUser = args[0] as UserProfile;
+          final Shift shift = args[1] as Shift;
+
+          return EditUserShift(selectedUser: selectedUser, shift: shift);
         }),
     GetPage(
         name: addShiftsScreen,

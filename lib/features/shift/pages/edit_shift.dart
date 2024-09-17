@@ -12,22 +12,23 @@ import '../../../custom_widgets/text_fields/custom_text_field.dart';
 import '../../workers/helper/add_user_helper.dart';
 import '../helpers/shift_helpers.dart';
 
-class AddUserShift extends StatefulWidget {
+class EditUserShift extends StatefulWidget {
   final UserProfile selectedUser;
-  const AddUserShift({super.key, required this.selectedUser});
+  final Shift shift;
+  const EditUserShift({super.key, required this.selectedUser, required this.shift});
 
   @override
-  State<AddUserShift> createState() => _AddUserShiftState();
+  State<EditUserShift> createState() => _EditUserShiftState();
 }
 
-class _AddUserShiftState extends State<AddUserShift> {
+class _EditUserShiftState extends State<EditUserShift> {
   final TextEditingController _placeNameController = TextEditingController();
   final TextEditingController _startTimeController = TextEditingController();
   final TextEditingController _shiftDateController = TextEditingController();
   final TextEditingController _endTimeController = TextEditingController();
   final TextEditingController _durationController = TextEditingController();
   final TextEditingController _contactPersonController =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController _notesController = TextEditingController();
   PhoneNumberInputController? _contactPersonAltController;
   bool _isCompleted = false;
@@ -37,8 +38,18 @@ class _AddUserShiftState extends State<AddUserShift> {
   void initState() {
     super.initState();
     currentUser = FirebaseAuth.instance.currentUser;
-    _contactPersonAltController = PhoneNumberInputController(context);
-    _contactPersonController.text = widget.selectedUser.phoneNumber!;
+    setState(() {
+      _contactPersonAltController = PhoneNumberInputController(context);
+      _contactPersonController.text = widget.selectedUser.phoneNumber!;
+      _placeNameController.text = widget.shift.placeName;
+      _shiftDateController.text = widget.shift.date;
+      _startTimeController.text = widget.shift.startTime;
+      _endTimeController.text = widget.shift.endTime;
+      _durationController.text = widget.shift.duration;
+      _contactPersonController.text = widget.shift.contactPersonNumber;
+      _notesController.text = widget.shift.notes;
+      _isCompleted = widget.shift.done;
+    });
   }
 
   @override
@@ -51,7 +62,7 @@ class _AddUserShiftState extends State<AddUserShift> {
         title: Text(
           widget.selectedUser.name!,
           style:
-              const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+          const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
       ),
       body: Padding(
@@ -70,13 +81,13 @@ class _AddUserShiftState extends State<AddUserShift> {
                 ),
               ),
               child: Icon(
-                Icons.calendar_month,
+                Icons.edit_calendar_sharp,
                 size: 100,
                 color: Pallete.primaryColor,
               ),
             ),
             Text(
-              'Add Shift',
+              'Edit Shift',
               textAlign: TextAlign.center,
               style: TextStyle(
                   color: Pallete.primaryColor,
@@ -95,12 +106,12 @@ class _AddUserShiftState extends State<AddUserShift> {
             GestureDetector(
               onTap: () async {
                 await AddUserHelper.pickDate(
-                        context: context, initialDate: DateTime.now())
+                    context: context, initialDate: DateTime.now())
                     .then((date) {
                   setState(() {
                     if (date != null) {
                       String formattedDate =
-                          DateFormat('yyyy/MM/dd').format(date);
+                      DateFormat('yyyy/MM/dd').format(date);
                       _shiftDateController.text = formattedDate;
                     }
                   });
@@ -131,7 +142,7 @@ class _AddUserShiftState extends State<AddUserShift> {
                                 now.day, timeOfDay.hour, timeOfDay.minute);
 
                             String formattedTime =
-                                DateFormat('HH:mm').format(dateTime);
+                            DateFormat('HH:mm').format(dateTime);
                             _startTimeController.text = formattedTime;
 
                             if (_endTimeController.text.isNotEmpty &&
@@ -140,7 +151,7 @@ class _AddUserShiftState extends State<AddUserShift> {
                                 _durationController.text =
                                     ShiftHelpers.calculateDuration(
                                         shiftStartTime:
-                                            _startTimeController.text,
+                                        _startTimeController.text,
                                         shiftEndTime: _endTimeController.text);
                               });
                             }
@@ -172,7 +183,7 @@ class _AddUserShiftState extends State<AddUserShift> {
                                 now.day, timeOfDay.hour, timeOfDay.minute);
 
                             String formattedTime =
-                                DateFormat('HH:mm').format(dateTime);
+                            DateFormat('HH:mm').format(dateTime);
                             _endTimeController.text = formattedTime;
 
                             if (_endTimeController.text.isNotEmpty &&
@@ -181,7 +192,7 @@ class _AddUserShiftState extends State<AddUserShift> {
                                 _durationController.text =
                                     ShiftHelpers.calculateDuration(
                                         shiftStartTime:
-                                            _startTimeController.text,
+                                        _startTimeController.text,
                                         shiftEndTime: _endTimeController.text);
                               });
                             }
@@ -268,32 +279,26 @@ class _AddUserShiftState extends State<AddUserShift> {
             Center(
               child: GeneralButton(
                 onTap: () {
-                  final shift = Shift(
-                    shiftId: ShiftHelpers.generateRandomId(
-                        widget.selectedUser.email!),
-                    placeName: _placeNameController.text,
-                    startTime: _startTimeController.text,
-                    endTime: _endTimeController.text,
-                    duration: _durationController.text,
-                    date: _shiftDateController.text,
-                    dateAdded: DateTime.now().toString(),
-                    addedBy: currentUser!.email!,
-                    contactPersonNumber: _contactPersonController.text,
-                    staffEmail: widget.selectedUser.email!,
-                    contactPersonAltNumber: _contactPersonAltController!.fullPhoneNumber,
-                    done: _isCompleted,
-                    notes: _notesController.text,
-                    visible: true,
-                    hoursWorked: 0
+
+                  final updatedShift = widget.shift.copyWith(
+                      placeName: _placeNameController.text,
+                      startTime: _startTimeController.text,
+                      endTime: _endTimeController.text,
+                      duration: _durationController.text,
+                      date: _shiftDateController.text,
+                      contactPersonNumber: _contactPersonController.text,
+                      contactPersonAltNumber: _contactPersonAltController?.phoneNumber,
+                      notes: _notesController.text,
+                      done: _isCompleted,
                   );
 
-                  ShiftHelpers.addUserShift(shift: shift);
+                  ShiftHelpers.updateShift(shift: updatedShift);
                 },
                 borderRadius: 10,
                 btnColor: Pallete.primaryColor,
                 width: 300,
                 child: const Text(
-                  "Add Shift",
+                  "Edit Shift",
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 14,

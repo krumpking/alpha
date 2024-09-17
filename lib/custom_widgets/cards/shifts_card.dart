@@ -1,5 +1,6 @@
 import 'package:alpha/core/constants/color_constants.dart';
 import 'package:alpha/features/manage_profile/helpers/profile_helpers.dart';
+import 'package:alpha/features/shift/helpers/shift_helpers.dart';
 import 'package:alpha/features/shift/models/shift.dart';
 import 'package:alpha/features/manage_profile/models/user_profile.dart';
 import 'package:flutter/material.dart';
@@ -86,27 +87,27 @@ class ShiftCard extends StatelessWidget {
                   ),
               ],
             ),
-            trailing: !isUpcomingShift
-                ? PopupMenuButton<int>(
+            trailing: PopupMenuButton<int>(
                     onSelected: (int selectedValue) {
                       // Handle the selected value
                       switch (selectedValue) {
                         case 0:
-                          // Perform some action for Edit
                           break;
                         case 1:
-                          // Perform some action for Delete
+                          break;
+                        case 2:
+                          break;
+                        case 3:
                           break;
                       }
                     },
                     itemBuilder: (BuildContext context) => [
-                      if (!shift.done)
                         buildPopUpOption(
                             title: 'Edit',
-                            icon: Icons.calendar_month,
+                            icon: Icons.edit,
                             value: 0,
                             onTap: () => Get.toNamed(
-                                RoutesHelper.updateShiftScreen,
+                                RoutesHelper.editShiftScreen,
                                 arguments: [selectedUser, shift])),
                       buildPopUpOption(
                           title: 'Add Feedback',
@@ -115,10 +116,28 @@ class ShiftCard extends StatelessWidget {
                           onTap: () => Get.toNamed(
                               RoutesHelper.addUserFeedbackScreen,
                               arguments: [selectedUser, shift])),
+                      if (shift.done) buildPopUpOption(
+                          title: 'Add Hours Worked',
+                          icon: Icons.watch_later_outlined,
+                          value: 2,
+                          onTap: () => Get.toNamed(
+                              RoutesHelper.addHoursWorkedScreen,
+                              arguments: [selectedUser, shift])),
+                      if (shift.done) buildPopUpOption(
+                          title: 'Remove',
+                          icon: Icons.visibility_off,
+                          value: 3,
+                          onTap: (){
+                            final updatedShift = shift.copyWith(
+                              visible: true
+                            );
+
+                            ShiftHelpers.updateShift(shift: updatedShift);
+                          }
+                      )
                     ],
                     icon: const Icon(Icons.more_vert),
                   )
-                : SizedBox(),
           ),
           const Divider(
             color: Colors.grey,
