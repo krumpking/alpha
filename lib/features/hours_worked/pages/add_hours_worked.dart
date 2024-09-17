@@ -1,3 +1,4 @@
+import 'package:alpha/core/utils/string_methods.dart';
 import 'package:alpha/features/workers/helper/storage_helper.dart';
 import 'package:alpha/features/hours_worked/models/document.dart';
 import 'package:alpha/features/manage_profile/models/user_profile.dart';
@@ -12,8 +13,7 @@ import '../../shift/helpers/shift_helpers.dart';
 
 class AddHoursWorkedScreen extends StatefulWidget {
   final UserProfile selectedUser;
-  final Shift shift;
-  const AddHoursWorkedScreen({super.key, required this.selectedUser, required this.shift});
+  const AddHoursWorkedScreen({super.key, required this.selectedUser});
 
   @override
   State<AddHoursWorkedScreen> createState() => _AddHoursWorkedScreenState();
@@ -31,12 +31,8 @@ class _AddHoursWorkedScreenState extends State<AddHoursWorkedScreen> {
   void initState() {
     super.initState();
     currentUser = FirebaseAuth.instance.currentUser;
-    _isCompleted = widget.shift.done;
-    documents = widget.shift.documents ?? [];
-
-    setState(() {
-      _hoursWorkedController.text = widget.shift.hoursWorked.toString();
-    });
+    _isCompleted = false;
+    documents = [];
   }
 
   @override
@@ -65,12 +61,8 @@ class _AddHoursWorkedScreenState extends State<AddHoursWorkedScreen> {
               labelText: 'Hours Worked',
               prefixIcon: const Icon(Icons.description, color: Colors.grey),
               keyBoardType: const TextInputType.numberWithOptions(
-                decimal: false,
-                signed: false
-              ),
+                  decimal: false, signed: false),
             ),
-            const SizedBox(height: 12),
-            _buildCompletionSwitch(),
             const SizedBox(height: 20),
             _buildUpdateButton(),
           ],
@@ -148,42 +140,36 @@ class _AddHoursWorkedScreenState extends State<AddHoursWorkedScreen> {
     );
   }
 
-  Widget _buildCompletionSwitch() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      decoration: BoxDecoration(
-          border: Border.all(color: Pallete.greyAccent),
-          borderRadius: BorderRadius.circular(10)),
-      child: ListTile(
-        contentPadding: EdgeInsets.zero,
-        title: const Text(
-          'Is Completed?',
-          style: TextStyle(fontSize: 12),
-        ),
-        trailing: CustomSwitch(
-          height: 25,
-          activeColor: Pallete.primaryColor,
-          value: _isCompleted,
-          onChanged: (bool value) {
-            setState(() {
-              _isCompleted = value;
-            });
-          },
-        ),
-      ),
-    );
-  }
-
   Widget _buildUpdateButton() {
     return Center(
       child: GeneralButton(
-        onTap: () {
-          final updatedShift = widget.shift.copyWith(
-              documents: documents,
-              done: _isCompleted,
-              hoursWorked: _hoursWorkedController.text.isNotEmpty ? int.parse(_hoursWorkedController.text) : 0
-          );
-          ShiftHelpers.validateAndSubmitShift(shift: updatedShift);
+        onTap: () async {
+          var id = StringMethods.generateRandomString();
+          var hours = _hoursWorkedController.text.isNotEmpty
+              ? int.parse(_hoursWorkedController.text)
+              : 0;
+          var addedBy = currentUser != null
+              ? currentUser!.uid
+              : "Admin user account not found";
+
+          Shift hoursWorked = Shift(
+              shiftId: id,
+              placeName: "Monthly Record",
+              startTime: "Monthly record",
+              endTime: "Monthly record",
+              duration: hours.toString(),
+              hoursWorked: hours,
+              date: DateTime.now().toString(),
+              visible: true,
+              dateAdded: DateTime.now().toString(),
+              addedBy: addedBy,
+              contactPersonNumber: "contactPersonNumber",
+              contactPersonAltNumber: "contactPersonAltNumber",
+              staffEmail: "staffEmail",
+              done: true,
+              notes: "notes");
+
+          ShiftHelpers.validateAndSubmitShift(shift: hoursWorked);
         },
         borderRadius: 10,
         btnColor: Pallete.primaryColor,

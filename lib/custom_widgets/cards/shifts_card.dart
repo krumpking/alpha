@@ -30,115 +30,104 @@ class ShiftCard extends StatelessWidget {
       child: Column(
         children: [
           ListTile(
-            contentPadding: EdgeInsets.zero,
-            title: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TapToExpand(
-                  backgroundcolor: Pallete.whiteColor,
-                  content: Column(
-                    children: [
-                      const SizedBox(height: 2),
-                      ListTile(
-                        title: Text(
-                          'Shift duration: ${shift.duration}',
-                        ),
-                      ),
-                      SizedBox(height: 4),
-                      ListTile(
-                        title: Text(
-                          'Shift Notes: ${shift.notes}',
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      ListTile(
+              contentPadding: EdgeInsets.zero,
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TapToExpand(
+                    backgroundcolor: Pallete.whiteColor,
+                    content: Column(
+                      children: [
+                        const SizedBox(height: 2),
+                        ListTile(
                           title: Text(
-                        'Shift Contact Person: ${shift.contactPersonNumber} or ${shift.contactPersonAltNumber}',
-                      )),
-                      const SizedBox(height: 4),
-                      ListTile(
-                        title: Text(
-                          'Staff Email: ${shift.staffEmail}',
+                            'Shift duration: ${shift.duration}',
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  title: Text(shift.placeName,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 14)),
-                  closedHeight: 70,
-                  borderRadius: BorderRadius.circular(16),
-                  openedHeight: 200,
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                if (!isUpcomingShift)
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: shift.done ? Colors.blue : Pallete.redColor,
-                      borderRadius: BorderRadius.circular(12),
+                        SizedBox(height: 4),
+                        ListTile(
+                          title: Text(
+                            'Shift Notes: ${shift.notes}',
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        ListTile(
+                            title: Text(
+                          'Shift Contact Person: ${shift.contactPersonNumber} or ${shift.contactPersonAltNumber}',
+                        )),
+                        const SizedBox(height: 4),
+                        ListTile(
+                          title: Text(
+                            'Staff Email: ${shift.staffEmail}',
+                          ),
+                        ),
+                      ],
                     ),
-                    child: Text(shift.done ? 'Completed' : 'Incomplete',
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 12)),
+                    title: Text(shift.placeName,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 14)),
+                    closedHeight: 70,
+                    borderRadius: BorderRadius.circular(16),
+                    openedHeight: 200,
                   ),
-              ],
-            ),
-            trailing: PopupMenuButton<int>(
-                    onSelected: (int selectedValue) {
-                      // Handle the selected value
-                      switch (selectedValue) {
-                        case 0:
-                          break;
-                        case 1:
-                          break;
-                        case 2:
-                          break;
-                        case 3:
-                          break;
-                      }
-                    },
-                    itemBuilder: (BuildContext context) => [
-                        buildPopUpOption(
-                            title: 'Edit',
-                            icon: Icons.edit,
-                            value: 0,
-                            onTap: () => Get.toNamed(
-                                RoutesHelper.editShiftScreen,
-                                arguments: [selectedUser, shift])),
-                      buildPopUpOption(
-                          title: 'Add Feedback',
-                          icon: Icons.feedback,
-                          value: 1,
-                          onTap: () => Get.toNamed(
-                              RoutesHelper.addUserFeedbackScreen,
-                              arguments: [selectedUser, shift])),
-                      if (shift.done) buildPopUpOption(
-                          title: 'Add Hours Worked',
-                          icon: Icons.watch_later_outlined,
-                          value: 2,
-                          onTap: () => Get.toNamed(
-                              RoutesHelper.addHoursWorkedScreen,
-                              arguments: [selectedUser, shift])),
-                      if (shift.done) buildPopUpOption(
-                          title: 'Remove',
-                          icon: Icons.visibility_off,
-                          value: 3,
-                          onTap: (){
-                            final updatedShift = shift.copyWith(
-                              visible: true
-                            );
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  if (!isUpcomingShift)
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: shift.done ? Colors.blue : Pallete.redColor,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(shift.done ? 'Completed' : 'Incomplete',
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 12)),
+                    ),
+                ],
+              ),
+              trailing: PopupMenuButton<int>(
+                onSelected: (int selectedValue) {
+                  // Handle the selected value
+                  switch (selectedValue) {
+                    case 0:
+                      break;
+                    case 1:
+                      break;
+                    case 2:
+                      break;
+                    case 3:
+                      break;
+                  }
+                },
+                itemBuilder: (BuildContext context) => [
+                  buildPopUpOption(
+                      title: 'Edit',
+                      icon: Icons.edit,
+                      value: 0,
+                      onTap: () => Get.toNamed(RoutesHelper.editShiftScreen,
+                          arguments: [selectedUser, shift])),
+                  buildPopUpOption(
+                      title: 'Add Feedback',
+                      icon: Icons.feedback,
+                      value: 1,
+                      onTap: () => Get.toNamed(
+                          RoutesHelper.addUserFeedbackScreen,
+                          arguments: [selectedUser, shift])),
+                  if (shift.done)
+                    buildPopUpOption(
+                        title: 'Remove',
+                        icon: Icons.visibility_off,
+                        value: 3,
+                        onTap: () {
+                          final updatedShift = shift.copyWith(visible: true);
 
-                            ShiftHelpers.updateShift(shift: updatedShift);
-                          }
-                      )
-                    ],
-                    icon: const Icon(Icons.more_vert),
-                  )
-          ),
+                          ShiftHelpers.updateShift(shift: updatedShift);
+                        })
+                ],
+                icon: const Icon(Icons.more_vert),
+              )),
           const Divider(
             color: Colors.grey,
           ),
