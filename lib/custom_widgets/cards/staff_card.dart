@@ -1,8 +1,10 @@
-import 'package:alpha/core/constants/color_constants.dart';
-import 'package:alpha/core/utils/routes.dart';
-import 'package:alpha/models/user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../core/constants/color_constants.dart';
+import '../../core/routes/routes.dart';
+import '../../features/hours_worked/services/add_shif_services.dart';
+import '../../features/shift/models/shift.dart';
+import '../../features/manage_profile/models/user_profile.dart';
 
 class StaffCard extends StatelessWidget {
   final UserProfile user;
@@ -25,10 +27,12 @@ class StaffCard extends StatelessWidget {
           children: [
             ListTile(
               contentPadding: EdgeInsets.zero,
-              title: Text(user.name,
-                  style: const TextStyle(fontWeight: FontWeight.bold)),
+              title: Text(
+                user.name!,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
               subtitle: Text(
-                user.post,
+                user.post!,
                 style: const TextStyle(fontSize: 12),
               ),
               trailing: PopupMenuButton<int>(
@@ -54,53 +58,81 @@ class StaffCard extends StatelessWidget {
                     },
                   ),
                   buildPopUpOption(
-                      title: 'Add Hours worked',
+                      title: 'Add Shift',
                       icon: Icons.calendar_month,
                       value: 1,
-                      onTap: () => Get.toNamed(RoutesHelper.addUserShiftScreen,
+                      onTap: () => Get.toNamed(RoutesHelper.addShiftsScreen,
                           arguments: user)),
+                  buildPopUpOption(
+                      title: 'Add Hours Worked',
+                      icon: Icons.watch_later_outlined,
+                      value: 2,
+                      onTap: () => Get.toNamed(
+                          RoutesHelper.addHoursWorkedScreen,
+                          arguments: [user])),
                   buildPopUpOption(
                       title: 'Add Feedback',
                       icon: Icons.feedback,
-                      value: 2,
+                      value: 1,
                       onTap: () => Get.toNamed(
                           RoutesHelper.addUserFeedbackScreen,
-                          arguments: user)),
+                          arguments: [user, null])),
                 ],
                 icon: const Icon(Icons.more_vert),
               ),
             ),
             const Divider(color: Colors.grey),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                RichText(
-                  text: TextSpan(children: [
-                    const TextSpan(
-                        text: 'Shift:  ',
-                        style: TextStyle(fontSize: 12, color: Colors.black)),
-                    TextSpan(
-                        text:
-                            '${user.preferredWorkDays[0].day} ${user.preferredWorkDays[0].startTime}-${user.preferredWorkDays[0].endTime}',
-                        style: TextStyle(
-                            fontSize: 12, color: Pallete.primaryColor)),
-                  ]),
-                ),
-                const SizedBox(height: 4),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: Colors.green,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Text(
-                    'Alpha',
-                    style: TextStyle(color: Colors.white, fontSize: 12),
-                  ),
-                ),
-              ],
+            FutureBuilder<Shift?>(
+              future: ShiftServices.getNextUserShiftByEmail(email: user.email!),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  // Handle error here
+                  return Text('Error loading next shift: ${snapshot.error}');
+                } else if (snapshot.hasData) {
+                  final nextShift = snapshot.data;
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      RichText(
+                        text: TextSpan(children: [
+                          const TextSpan(
+                              text: 'Next Shift:  ',
+                              style:
+                                  TextStyle(fontSize: 12, color: Colors.black)),
+                          TextSpan(
+                            text: nextShift!.notes == "Today's shift"
+                                ? "Today, ${nextShift.startTime}"
+                                : '${nextShift.date}, ${nextShift.startTime}',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Pallete.primaryColor,
+                            ),
+                          ),
+                        ]),
+                      ),
+                      const SizedBox(height: 4),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: Colors.green,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          nextShift.placeName,
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 12),
+                        ),
+                      ),
+                    ],
+                  );
+                } else {
+                  return const Text('No upcoming shifts');
+                }
+              },
             ),
           ],
         ),
@@ -108,11 +140,12 @@ class StaffCard extends StatelessWidget {
     );
   }
 
-  dynamic buildPopUpOption(
-      {required String title,
-      required IconData icon,
-      required int value,
-      required void Function() onTap}) {
+  dynamic buildPopUpOption({
+    required String title,
+    required IconData icon,
+    required int value,
+    required void Function() onTap,
+  }) {
     return PopupMenuItem<int>(
       onTap: onTap,
       value: value,

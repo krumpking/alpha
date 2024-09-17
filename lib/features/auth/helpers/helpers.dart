@@ -3,7 +3,7 @@ import 'package:alpha/core/utils/logs.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../core/utils/routes.dart';
+import '../../../core/routes/routes.dart';
 import '../../../core/utils/shared_pref.dart';
 import '../../../custom_widgets/circular_loader/circular_loader.dart';
 import '../../../custom_widgets/snackbar/custom_snackbar.dart';
@@ -11,45 +11,39 @@ import '../../../global/global.dart';
 import '../services/auth_service.dart';
 
 class AuthHelpers {
-
   static Future<void> handleEmailVerification({required User user}) async {
     if (!user.emailVerified) {
-      Get.offAllNamed(
-        RoutesHelper.emailVerificationScreen,
-        arguments: user
-      );
+      Get.offAllNamed(RoutesHelper.emailVerificationScreen, arguments: user);
     } else {
       Get.offAllNamed(RoutesHelper.initialScreen);
     }
   }
 
-  static Future<void> checkEmailVerification({required User currentUser}) async {
-    await currentUser.reload().then((value){
+  static Future<void> checkEmailVerification(
+      {required User currentUser}) async {
+    await currentUser.reload().then((value) {
       final user = FirebaseAuth.instance.currentUser;
 
       if (user?.emailVerified ?? false) {
         Get.offAllNamed(RoutesHelper.initialScreen);
       }
     });
-
   }
 
   static setTimerForAutoRedirect() {
     const Duration timerPeriod = Duration(seconds: 5);
     Timer.periodic(
       timerPeriod,
-          (timer) async {
-        await FirebaseAuth.instance.currentUser?.reload().then((value){
+      (timer) async {
+        await FirebaseAuth.instance.currentUser?.reload().then((value) {
           final user = FirebaseAuth.instance.currentUser;
 
           if (user?.emailVerified ?? false) {
-
             timer.cancel();
 
             Get.offAllNamed(RoutesHelper.successfulVerificationScreen);
           }
         });
-
       },
     );
   }
@@ -99,30 +93,35 @@ class AuthHelpers {
       emailAddress: email.trim(),
       password: password.trim(),
     ).then((response) {
-      if (!response.success && response.message != 'No user found for that email.') {
+      if (!response.success &&
+          response.message != 'No user found for that email.') {
         if (!Get.isSnackbarOpen) Get.back();
-        CustomSnackBar.showErrorSnackbar(message: response.message ?? 'Something went wrong');
-      } else if (!response.success && response.message == 'No user found for that email.') {
+        CustomSnackBar.showErrorSnackbar(
+            message: response.message ?? 'Something went wrong');
+      } else if (!response.success &&
+          response.message == 'No user found for that email.') {
         if (!Get.isSnackbarOpen) Get.back();
-        CustomSnackBar.showErrorSnackbar(message: response.message ?? 'Something went wrong',);
+        CustomSnackBar.showErrorSnackbar(
+          message: response.message ?? 'Something went wrong',
+        );
       } else {
         if (Get.isDialogOpen!) Get.back();
 
         // Show success snackbar
 
-        CustomSnackBar.showSuccessSnackbar(message: 'Login Successful',);
+        CustomSnackBar.showSuccessSnackbar(
+          message: 'Login Successful',
+        );
         Get.offAllNamed(RoutesHelper.initialScreen);
       }
     });
   }
 
-
   static Future<UserRole?> getUserRole(User user) async {
     UserRole? userRole = await CacheUtils.getUserRoleFromCache();
 
     if (userRole == null) {
-      await AuthServices.fetchUserRole(user.email!).then((response) async{
-
+      await AuthServices.fetchUserRole(user.email!).then((response) async {
         DevLogs.logInfo("USER ROLE = ${response.data}");
 
         if (response.data != null) {
@@ -136,5 +135,3 @@ class AuthHelpers {
     return userRole;
   }
 }
-
-

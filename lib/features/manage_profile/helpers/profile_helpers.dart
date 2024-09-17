@@ -1,13 +1,13 @@
-import 'package:alpha/models/document.dart';
-import 'package:alpha/models/shift.dart';
+import 'package:alpha/features/hours_worked/models/document.dart';
+import 'package:alpha/features/shift/models/shift.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ProfileHelpers{
-  static String documentStatus(Document document){
-
-    final DateTime expiryDate = DateFormat('yyyy/MM/dd').parse(document.expiryDate!);
+class ProfileHelpers {
+  static String documentStatus(Document document) {
+    final DateTime expiryDate =
+        DateFormat('yyyy/MM/dd').parse(document.expiryDate!);
     final DateTime currentDate = DateTime.now();
 
     final int daysUntilExpiry = expiryDate.difference(currentDate).inDays;
@@ -26,12 +26,11 @@ class ProfileHelpers{
     } else {
       // The document is valid (more than 15 days until expiry)
       statusText = 'Valid';
-     return statusText;
+      return statusText;
     }
   }
 
-
-  static String shiftHours(Shift shift){
+  static String shiftHours(Shift shift) {
     // Parse the start and end times to DateTime objects
     final DateTime startTime = DateFormat('HH:mm').parse(shift.startTime);
     final DateTime endTime = DateFormat('HH:mm').parse(shift.endTime);
@@ -44,7 +43,7 @@ class ProfileHelpers{
     final int minutes = shiftDuration.inMinutes.remainder(60);
 
     // Format the shift duration as a string
-    return'${hours}h ${minutes}m';
+    return '${hours}h ${minutes}m';
   }
 
   static Future<void> viewDocument(String url) async {

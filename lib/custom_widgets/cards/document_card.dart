@@ -1,6 +1,6 @@
 import 'package:alpha/core/constants/color_constants.dart';
 import 'package:alpha/features/manage_profile/helpers/profile_helpers.dart';
-import 'package:alpha/models/document.dart';
+import 'package:alpha/features/hours_worked/models/document.dart';
 import 'package:flutter/material.dart';
 
 class DocumentCard extends StatelessWidget {
@@ -50,8 +50,7 @@ class DocumentCard extends StatelessWidget {
                   title: 'Delete',
                   icon: Icons.delete,
                   value: 1,
-                  onTap: () {
-                  },
+                  onTap: () {},
                 ),
               ],
               icon: const Icon(Icons.more_vert),
@@ -71,7 +70,8 @@ class DocumentCard extends StatelessWidget {
                     ),
                     TextSpan(
                       text: '${document.expiryDate}',
-                      style: TextStyle(fontSize: 12, color: Pallete.primaryColor),
+                      style:
+                          TextStyle(fontSize: 12, color: Pallete.primaryColor),
                     ),
                   ],
                 ),
@@ -83,8 +83,8 @@ class DocumentCard extends StatelessWidget {
                   color: documentStatus.toLowerCase() == 'expired'
                       ? Colors.redAccent
                       : documentStatus.toLowerCase() == 'valid'
-                      ? Colors.blue
-                      : Colors.orange,
+                          ? Colors.blue
+                          : Colors.orange,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(

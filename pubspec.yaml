@@ -63,6 +63,8 @@ dependencies:
   url_launcher: ^6.3.0
   syncfusion_flutter_pdfviewer: ^26.2.13
   json_annotation: ^4.9.0
+  tap_to_expand: ^0.7.2
+  tuple: ^2.0.2
 
 dev_dependencies:
   flutter_test:

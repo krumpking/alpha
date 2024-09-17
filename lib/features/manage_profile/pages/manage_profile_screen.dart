@@ -2,7 +2,8 @@ import 'package:alpha/core/utils/logs.dart';
 import 'package:alpha/core/utils/providers.dart';
 import 'package:alpha/features/manage_profile/pages/documents_tab.dart';
 import 'package:alpha/features/manage_profile/pages/notes_tab.dart';
-import 'package:alpha/features/manage_profile/pages/shifts_tab.dart';
+import 'package:alpha/features/manage_profile/pages/previous_shifts_tab.dart';
+import 'package:alpha/features/manage_profile/pages/upcoming_shifts_tab.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +33,7 @@ class _ProfileScreenState extends ConsumerState<UserProfileScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
   }
 
   @override
@@ -103,12 +104,12 @@ class _ProfileScreenState extends ConsumerState<UserProfileScreen>
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                userProfile.name,
+                                userProfile.name!,
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold),
                               ),
                               Text(
-                                userProfile.post,
+                                userProfile.post!,
                                 style: const TextStyle(fontSize: 12),
                               ),
                             ],
@@ -179,6 +180,7 @@ class _ProfileScreenState extends ConsumerState<UserProfileScreen>
                   tabs: const [
                     Tab(text: 'Documents'),
                     Tab(text: 'Assigned Shifts'),
+                    Tab(text: 'Previous Shifts'),
                     Tab(text: 'Notes'),
                   ],
                 ),
@@ -190,11 +192,14 @@ class _ProfileScreenState extends ConsumerState<UserProfileScreen>
                       // Documents Tab
                       DocumentsTab(documents: userProfile.documents),
 
-                      // Shifts Tab
-                      ShiftsTab(shifts: userProfile.preferredWorkDays),
+                      // Upcoming Shifts Tab
+                      UpcomingShiftsTab(selectedUser: userProfile),
+
+                      // Previous Shifts Tab
+                      PreviousShiftsTab(selectedUser: userProfile),
 
                       // Notes Tab
-                      const NotesTab(notes: []),
+                      NotesTab(selectedUser: userProfile),
                     ],
                   ),
                 ),

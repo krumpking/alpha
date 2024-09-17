@@ -1,6 +1,7 @@
 import 'package:alpha/core/constants/dimensions.dart';
 import 'package:alpha/features/sidebarx_feat/pages/user_tabs_container.dart';
 import 'package:alpha/global/global.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sidebarx/sidebarx.dart';
@@ -9,7 +10,8 @@ import 'admin_tabs_container.dart';
 
 class MainScreen extends StatelessWidget {
   final UserRole selectedRole;
-  MainScreen({super.key, required this.selectedRole});
+  final User user;
+  MainScreen({super.key, required this.selectedRole, required this.user});
   final _controller = SidebarXController(selectedIndex: 0, extended: true);
   final _key = GlobalKey<ScaffoldState>();
 
@@ -30,6 +32,7 @@ class MainScreen extends StatelessWidget {
                       )
                     : UserTabScreensContainer(
                         controller: _controller,
+                        user: user,
                       ),
                 ),
               ),

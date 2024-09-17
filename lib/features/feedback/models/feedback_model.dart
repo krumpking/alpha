@@ -6,15 +6,17 @@ part 'feedback_model.g.dart';
 class FeedbackModel {
   final String date;
   final String addedBy;
-  final String feedackTitle;
+  final String feedbackTitle;
+  final String feedbackSource;
   final String description;
   final String userEmail;
 
   FeedbackModel({
     required this.date,
     required this.addedBy,
-    required this.feedackTitle,
+    required this.feedbackTitle,
     required this.description,
+    required this.feedbackSource,
     required this.userEmail,
   });
 

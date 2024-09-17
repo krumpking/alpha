@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../animations/fade_in_slide.dart';
 import '../../../core/constants/color_constants.dart';
-import '../../../core/utils/routes.dart';
+import '../../../core/routes/routes.dart';
 import '../../../custom_widgets/text_fields/custom_text_field.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -15,7 +15,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final screenWidth = Get.width;
@@ -49,7 +48,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 40),
                 Container(
                   padding: const EdgeInsets.all(20),
-                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
                   decoration: BoxDecoration(
                     color: Colors.grey.shade100,
                     borderRadius: BorderRadius.circular(20),
@@ -73,8 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: Text(
                           'Login',
                           style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
+                              fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                       ),
                       const SizedBox(
@@ -118,42 +117,35 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: const Text(
                               'Sign in',
                               style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 12
-                              ),
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12),
                             ),
-                            onTap: ()=> AuthHelpers.validateAndSubmitForm(
-                              email: emailController.text.trim(),
-                              password: passwordController.text.trim()
-                            )
-                        ),
+                            onTap: () => AuthHelpers.validateAndSubmitForm(
+                                email: emailController.text.trim(),
+                                password: passwordController.text.trim())),
                       ),
-
-
                       const SizedBox(
                         height: 16,
                       ),
                       FadeInSlide(
                         duration: 2.2,
                         child: GestureDetector(
-                          onTap: () => Get.toNamed(RoutesHelper.forgotPasswordScreen),
+                          onTap: () =>
+                              Get.toNamed(RoutesHelper.forgotPasswordScreen),
                           child: RichText(
                             textAlign: TextAlign.center,
                             text: TextSpan(
                                 style: const TextStyle(
-                                    fontSize: 12,
+                                  fontSize: 12,
                                 ),
                                 children: [
                                   TextSpan(
                                       text: "Forgot Password?",
                                       style: TextStyle(
                                           color: Pallete.primaryColor,
-                                          fontWeight: FontWeight.w400
-                                      )
-                                  )
-                                ]
-                            ),
+                                          fontWeight: FontWeight.w400))
+                                ]),
                           ),
                         ),
                       ),

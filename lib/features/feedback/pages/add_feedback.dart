@@ -1,8 +1,9 @@
 import 'package:alpha/core/utils/logs.dart';
-import 'package:alpha/core/utils/routes.dart';
+import 'package:alpha/core/routes/routes.dart';
 import 'package:alpha/features/feedback/helpers/helpers.dart';
 import 'package:alpha/global/global.dart';
-import 'package:alpha/models/user_profile.dart';
+import 'package:alpha/features/shift/models/shift.dart';
+import 'package:alpha/features/manage_profile/models/user_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
@@ -14,10 +15,9 @@ import 'package:get/get.dart';
 
 class AddFeedbackScreen extends StatefulWidget {
   final UserProfile selectedUser;
-  final String shiftId;
+  final Shift? shift;
 
-  const AddFeedbackScreen(
-      {super.key, required this.selectedUser, required this.shiftId});
+  const AddFeedbackScreen({super.key, required this.selectedUser, this.shift});
 
   @override
   State<AddFeedbackScreen> createState() => _AddFeedbackScreenState();
@@ -28,7 +28,6 @@ class _AddFeedbackScreenState extends State<AddFeedbackScreen> {
   final TextEditingController feedbackTitleController = TextEditingController();
   final currentUser = FirebaseAuth.instance.currentUser;
   FeedbackTag? feedbackTag;
-  bool _isAlpha = false;
 
   @override
   void initState() {
@@ -44,7 +43,7 @@ class _AddFeedbackScreenState extends State<AddFeedbackScreen> {
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),
         title: Text(
-          widget.selectedUser.name,
+          widget.selectedUser.name!,
           style:
               const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
@@ -106,7 +105,9 @@ class _AddFeedbackScreenState extends State<AddFeedbackScreen> {
                     currentUser: currentUser!,
                     feedbackTitle: feedbackTitleController.text.trim(),
                     selectedUser: widget.selectedUser,
-                    shiftId: widget.shiftId,
+                    feedbackSource: widget.shift == null
+                        ? widget.shift!.shiftId
+                        : 'general ',
                   )
                 },
                 borderRadius: 10,

@@ -1,5 +1,5 @@
 import 'package:alpha/core/constants/color_constants.dart';
-import 'package:alpha/core/utils/routes.dart';
+import 'package:alpha/core/routes/routes.dart';
 import 'package:alpha/core/utils/shared_pref.dart';
 import 'package:alpha/features/auth/handlers/auth_handler.dart';
 import 'package:alpha/features/not_found/not_found_screen.dart';
@@ -18,9 +18,7 @@ Future<void> main() async {
 
 Future<void> _setup() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 }
 
 class Alpha extends StatelessWidget {
@@ -61,10 +59,10 @@ class Alpha extends StatelessWidget {
         dialogTheme: DialogTheme(
           backgroundColor: Colors.white, // Dialog background color
           titleTextStyle: TextStyle(
-              color: Pallete.primaryColor, fontSize: 20), // Dialog title text style
+              color: Pallete.primaryColor,
+              fontSize: 20), // Dialog title text style
           contentTextStyle: const TextStyle(
-              color: Colors.black, fontSize: 16
-          ), // Dialog content text style
+              color: Colors.black, fontSize: 16), // Dialog content text style
         ),
       ),
       supportedLocales: const [
@@ -74,10 +72,7 @@ class Alpha extends StatelessWidget {
       ],
       initialRoute: RoutesHelper.splashScreen,
       getPages: RoutesHelper.routes,
-      unknownRoute: GetPage(
-          name: "/",
-          page: ()=> const NotFoundScreen()
-      ),
+      unknownRoute: GetPage(name: "/", page: () => const NotFoundScreen()),
       home: const AuthHandler(),
     );
   }

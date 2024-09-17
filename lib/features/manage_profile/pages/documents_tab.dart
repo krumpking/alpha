@@ -1,4 +1,4 @@
-import 'package:alpha/models/document.dart';
+import 'package:alpha/features/hours_worked/models/document.dart';
 import 'package:flutter/material.dart';
 import '../../../custom_widgets/cards/document_card.dart';
 
