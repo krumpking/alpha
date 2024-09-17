@@ -109,7 +109,6 @@ class RoutesHelper {
           final UserProfile selectedUser = args[0] as UserProfile;
           final Shift? shift = args[1] as Shift?;
 
-
           return AddFeedbackScreen(
             selectedUser: selectedUser,
             shift: shift,
