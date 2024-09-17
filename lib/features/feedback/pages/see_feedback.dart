@@ -74,9 +74,9 @@ class SeeFeedback extends ConsumerWidget {
                 ElevatedButton(
                   onPressed: () {
                     // Add logic to retry fetching users
-                    ref
-                        .read(ProviderUtils.feedbackProvider.notifier)
-                        .fetchFeedback();
+                    // ref
+                    //     .read(ProviderUtils.feedbackProvider.notifier)
+                    //     .fetchFeedback();
                   },
                   child: const Text('Retry'),
                 ),
