@@ -109,13 +109,29 @@ class ShiftServices {
     try {
       final shiftData = updatedShift.toJson();
 
-      // Update the shift in Firestore using the document ID
-      await FirebaseFirestore.instance
+      // Query the collection to find the document with the given shiftId
+      final querySnapshot = await FirebaseFirestore.instance
           .collection('shifts')
-          .doc(shiftId)
-          .update(shiftData);
+          .where('shiftId', isEqualTo: shiftId)
+          .limit(1)
+          .get();
 
-      return APIResponse(success: true);
+      // Check if the document exists
+      if (querySnapshot.docs.isNotEmpty) {
+        // Get the document id (docId) of the first result
+        final docId = querySnapshot.docs.first.id;
+
+        // Update the document using the docId
+        await FirebaseFirestore.instance
+            .collection('shifts')
+            .doc(docId)
+            .update(shiftData);
+
+        return APIResponse(success: true);
+      } else {
+        // No document with the given shiftId was found
+        return APIResponse(success: false, message: 'Shift not found');
+      }
     } catch (e) {
       DevLogs.logError('Failed to update shift: $e');
       return APIResponse(
@@ -123,7 +139,7 @@ class ShiftServices {
     }
   }
 
-  // Fetch and calculate total hours worked for all staff or individual staff by day/week/month/year
+
   static Future<APIResponse<Map<String, Duration>>> getHoursWorked({
     String? staffEmail,
     required String period,
@@ -150,8 +166,10 @@ class ShiftServices {
       }
 
       // Query shifts for the given staff or all staff if no email is provided
-      final query = FirebaseFirestore.instance.collection('shifts').where('day',
-          isGreaterThanOrEqualTo: DateFormat('yyyy/MM/dd').format(startDate));
+      final query = FirebaseFirestore.instance.collection('shifts').where(
+        'day',
+        isGreaterThanOrEqualTo: DateFormat('yyyy/MM/dd').format(startDate),
+      );
 
       if (staffEmail != null) {
         query.where('staffEmail', isEqualTo: staffEmail);
@@ -159,20 +177,23 @@ class ShiftServices {
 
       final querySnapshot = await query.get();
 
-      // Sum the durations of all shifts
+      // Sum the hours worked for all shifts
       Duration totalDuration = Duration.zero;
 
       for (var doc in querySnapshot.docs) {
         final shiftData = doc.data();
-        final duration = ShiftHelpers.parseShiftDuration(shiftData['duration']);
-        totalDuration += duration;
+        final int hoursWorked = shiftData['hoursWorked'] ?? 0;
+        totalDuration += Duration(hours: hoursWorked);
       }
 
       return APIResponse(success: true, data: {'total': totalDuration});
     } catch (e) {
       return APIResponse(
-          success: false,
-          message: 'Failed to get hours worked: ${e.toString()}');
+        success: false,
+        message: 'Failed to get hours worked: ${e.toString()}',
+      );
     }
   }
+
+
 }

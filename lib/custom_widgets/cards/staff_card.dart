@@ -101,8 +101,8 @@ class StaffCard extends StatelessWidget {
                                   TextStyle(fontSize: 12, color: Colors.black)),
                           TextSpan(
                             text: nextShift!.notes == "Today's shift"
-                                ? "Today, ${nextShift!.startTime}"
-                                : '${nextShift!.date}, ${nextShift!.startTime}',
+                                ? "Today, ${nextShift.startTime}"
+                                : '${nextShift.date}, ${nextShift.startTime}',
                             style: TextStyle(
                               fontSize: 12,
                               color: Pallete.primaryColor,
@@ -119,7 +119,7 @@ class StaffCard extends StatelessWidget {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
-                          nextShift!.placeName,
+                          nextShift.placeName,
                           style: const TextStyle(
                               color: Colors.white, fontSize: 12),
                         ),
