@@ -4,12 +4,12 @@ import 'package:alpha/core/constants/dimensions.dart';
 import 'package:alpha/custom_widgets/cards/category_card.dart';
 import 'package:alpha/custom_widgets/text_fields/custom_text_field.dart';
 import 'package:alpha/features/home/services/dummy.dart';
-import 'package:alpha/features/manage_profile/models/user_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/utils/providers.dart';
 import '../../../custom_widgets/sidebar/admin_drawer.dart';
+import '../../manage_profile/models/user_profile.dart';
 import 'admin_tabs/staff_tab.dart';
 
 class AdminHomeScreen extends ConsumerStatefulWidget {
@@ -31,20 +31,12 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen>
   ];
   final _key = GlobalKey<ScaffoldState>();
   final user = FirebaseAuth.instance.currentUser;
-
-  final searchStaffProvider = ProviderUtils.searchProvider;
+  String searchTerm = '';
+  final TextEditingController _searchTextEditingController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final staffState = ref.read(ProviderUtils.staffProvider);
-      staffState.whenData((users) {
-        ref.read(searchStaffProvider.notifier).setAllUsers(users);
-      });
-    });
-
     _tabController = TabController(length: 3, vsync: this);
   }
 
@@ -56,13 +48,16 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    final staffState = ref.watch(ProviderUtils.staffProvider);
-    final filteredUsers = ref.watch(searchStaffProvider);
+    final staffState = ref.watch(
+      ProviderUtils.staffProvider,
+    );
 
     return Scaffold(
       key: _key,
       drawer: Dimensions.isSmallScreen
-          ? AdminDrawer(user: user!)
+          ? AdminDrawer(
+        user: user!,
+      )
           : null,
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -113,8 +108,11 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen>
                 CustomTextField(
                   labelText: 'Find Staff',
                   prefixIcon: const Icon(Icons.search),
+                  controller: _searchTextEditingController,
                   onChanged: (value) {
-                    ref.read(searchStaffProvider.notifier).filterUsers(value!);
+                    setState(() {
+                      searchTerm = value!;
+                    });
                   },
                 ),
               ],
@@ -123,16 +121,12 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen>
         ),
       ),
       body: staffState.when(
-        data: (users) {
-          return _buildContent(filteredUsers);
-        },
+        data: (users) => _buildContent(users),
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stackTrace) => Center(child: Text('Error: $error')),
       ),
     );
   }
-
-
 
   Widget _buildContent(List<UserProfile> users) {
     return SingleChildScrollView(
@@ -159,7 +153,7 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen>
                 final randomColor = colors[Random().nextInt(colors.length)];
 
                 List<String>? imagesLinks =
-                    List<String>.from(stuffCard['images']);
+                List<String>.from(stuffCard['images']);
 
                 return CategoryCard(
                   color: randomColor,
@@ -204,23 +198,29 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen>
               controller: _tabController,
               children: [
                 StaffTab(
-                    users: users
-                        .where((user) =>
-                            user.post!.toLowerCase() == 'nurse' &&
-                            user.role!.toLowerCase() == 'user')
-                        .toList()),
+                  searchTerm: searchTerm,  // Pass the search term to each tab
+                  users: users
+                      .where((user) =>
+                  user.post!.toLowerCase() == 'nurse' &&
+                      user.role!.toLowerCase() == 'user')
+                      .toList(),
+                ),
                 StaffTab(
-                    users: users
-                        .where((user) =>
-                            user.post!.toLowerCase() == 'social worker' &&
-                            user.role!.toLowerCase() == 'user')
-                        .toList()),
+                  searchTerm: searchTerm,  // Pass the search term to each tab
+                  users: users
+                      .where((user) =>
+                  user.post!.toLowerCase() == 'social worker' &&
+                      user.role!.toLowerCase() == 'user')
+                      .toList(),
+                ),
                 StaffTab(
-                    users: users
-                        .where((user) =>
-                            user.post!.toLowerCase() == 'care/support worker' &&
-                            user.role!.toLowerCase() == 'user')
-                        .toList()),
+                  searchTerm: searchTerm,  // Pass the search term to each tab
+                  users: users
+                      .where((user) =>
+                  user.post!.toLowerCase() == 'care/support worker' &&
+                      user.role!.toLowerCase() == 'user')
+                      .toList(),
+                ),
               ],
             ),
           ),

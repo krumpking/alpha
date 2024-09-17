@@ -35,7 +35,7 @@ class _AddHoursWorkedScreenState extends State<AddHoursWorkedScreen> {
     documents = widget.shift.documents ?? [];
 
     setState(() {
-      _hoursWorkedController.text = widget.shift.duration;
+      _hoursWorkedController.text = widget.shift.hoursWorked.toString();
     });
   }
 
@@ -62,8 +62,12 @@ class _AddHoursWorkedScreenState extends State<AddHoursWorkedScreen> {
             const SizedBox(height: 12),
             CustomTextField(
               controller: _hoursWorkedController,
-              labelText: 'Hours Worked (e.g., 12h 30m)',
+              labelText: 'Hours Worked',
               prefixIcon: const Icon(Icons.description, color: Colors.grey),
+              keyBoardType: const TextInputType.numberWithOptions(
+                decimal: false,
+                signed: false
+              ),
             ),
             const SizedBox(height: 12),
             _buildCompletionSwitch(),
