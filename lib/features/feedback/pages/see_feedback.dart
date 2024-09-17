@@ -7,7 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class SeeFeedback extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final feedState = ref.watch(ProviderUtils.feedbackProvider);
+    final feedState =
+        ref.watch(ProviderUtils.feedbackProvider as ProviderListenable);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Pallete.primaryColor,
