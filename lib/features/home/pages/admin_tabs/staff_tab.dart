@@ -36,7 +36,7 @@ class _StaffTabState extends State<StaffTab> {
       itemCount: filteredUsers.length,
       physics: const BouncingScrollPhysics(),
       itemBuilder: (BuildContext context, int index) {
-        final user = filteredUsers[index];  // Use filtered list
+        final user = filteredUsers[index];
         return StaffCard(user: user);
       },
     );
