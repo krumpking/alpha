@@ -6,11 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:sidebarx/sidebarx.dart';
 
 class UserTabScreensContainer extends StatelessWidget {
-  const UserTabScreensContainer({
-    super.key,
-    required this.controller,
-    required this.user
-  });
+  const UserTabScreensContainer(
+      {super.key, required this.controller, required this.user});
   final User user;
   final SidebarXController controller;
 
@@ -26,11 +23,7 @@ class UserTabScreensContainer extends StatelessWidget {
           case 1:
             return UserProfileScreen(profileEmail: user.email!);
           case 2:
-            return const Center(child: Text('Home Screen 3'),);
-          case 3:
             return UserShiftStats(profileEmail: user.email!);
-          case 4:
-            return const Center(child: Text('Home Screen 5'),);
           default:
             return Text(
               'Not Found',

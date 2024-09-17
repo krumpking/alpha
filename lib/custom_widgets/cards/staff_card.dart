@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../core/constants/color_constants.dart';
-import '../../core/utils/routes.dart';
+import '../../core/routes/routes.dart';
 import '../../features/hours_worked/services/add_shif_services.dart';
 import '../../features/shift/models/shift.dart';
 import '../../features/manage_profile/models/user_profile.dart';

@@ -6,6 +6,7 @@ import 'package:sidebarx/sidebarx.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/utils/shared_pref.dart';
 import '../../features/auth/services/auth_service.dart';
+
 class Sidebar extends ConsumerWidget {
   const Sidebar({
     super.key,
@@ -38,8 +39,12 @@ class Sidebar extends ConsumerWidget {
           ],
         ),
         hoverColor: Colors.blueGrey.withOpacity(0.4),
-        textStyle: TextStyle(color: Pallete.primaryColor, fontSize: 16, fontWeight: FontWeight.w500),
-        selectedTextStyle: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+        textStyle: TextStyle(
+            color: Pallete.primaryColor,
+            fontSize: 16,
+            fontWeight: FontWeight.w500),
+        selectedTextStyle: const TextStyle(
+            color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
         itemTextPadding: const EdgeInsets.only(left: 20),
         selectedItemTextPadding: const EdgeInsets.only(left: 20),
         itemDecoration: BoxDecoration(
@@ -100,14 +105,17 @@ class Sidebar extends ConsumerWidget {
           icon: userRole == UserRole.admin ? Icons.edit_note : Icons.person,
           label: userRole == UserRole.admin ? 'Add User' : 'User Profile',
         ),
-        const SidebarXItem(
+        SidebarXItem(
           icon: Icons.auto_graph_outlined,
-          label: 'Staff Statistics',
+          label: userRole == UserRole.admin
+              ? 'Staff Statistics'
+              : 'Work Statistics',
         ),
-        const SidebarXItem(
-          icon: Icons.analytics,
-          label: 'Shift Statistics',
-        ),
+        if (userRole == UserRole.admin)
+          const SidebarXItem(
+            icon: Icons.analytics,
+            label: 'Shift Statistics',
+          ),
         SidebarXItem(
           icon: Icons.logout,
           label: 'Sign Out',

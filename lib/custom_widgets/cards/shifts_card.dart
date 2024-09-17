@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tap_to_expand/tap_to_expand.dart';
 
-import '../../core/utils/routes.dart';
+import '../../core/routes/routes.dart';
 
 class ShiftCard extends StatelessWidget {
   final Shift shift;

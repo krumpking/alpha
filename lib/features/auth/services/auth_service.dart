@@ -1,4 +1,4 @@
-import 'package:alpha/core/utils/routes.dart';
+import 'package:alpha/core/routes/routes.dart';
 import 'package:alpha/features/workers/services/add_user_services.dart';
 import 'package:alpha/features/manage_profile/models/user_profile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

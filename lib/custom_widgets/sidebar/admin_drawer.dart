@@ -1,5 +1,5 @@
 import 'package:alpha/core/constants/local_image_constants.dart';
-import 'package:alpha/core/utils/routes.dart';
+import 'package:alpha/core/routes/routes.dart';
 import 'package:alpha/core/utils/shared_pref.dart';
 import 'package:alpha/features/auth/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
