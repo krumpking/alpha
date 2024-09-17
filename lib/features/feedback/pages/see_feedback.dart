@@ -7,7 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class SeeFeedback extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final feedState = ref.watch(ProviderUtils.feedbackProvider);
+    final feedState =
+        ref.watch(ProviderUtils.feedbackProvider as ProviderListenable);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Pallete.primaryColor,
@@ -74,9 +75,9 @@ class SeeFeedback extends ConsumerWidget {
                 ElevatedButton(
                   onPressed: () {
                     // Add logic to retry fetching users
-                    ref
-                        .read(ProviderUtils.feedbackProvider.notifier)
-                        .fetchFeedback();
+                    // ref
+                    //     .read(ProviderUtils.feedbackProvider.notifier)
+                    //     .fetchFeedback();
                   },
                   child: const Text('Retry'),
                 ),

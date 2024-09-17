@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import '../../../core/constants/color_constants.dart';
-import '../../../core/utils/routes.dart';
+import '../../../core/routes/routes.dart';
 import '../../../custom_widgets/custom_button/general_button.dart';
 import '../helpers/helpers.dart';
 import '../services/auth_service.dart';
@@ -16,7 +16,8 @@ class EmailVerificationScreen extends StatefulWidget {
   const EmailVerificationScreen({super.key, required this.user});
 
   @override
-  State<EmailVerificationScreen> createState() => _EmailVerificationScreenState();
+  State<EmailVerificationScreen> createState() =>
+      _EmailVerificationScreenState();
 }
 
 class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
@@ -41,25 +42,23 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-
               Row(
                 children: [
                   GestureDetector(
-                    onTap: ()async{
-                      await AuthServices.signOut().then((response){
-                        if(response.success){
+                    onTap: () async {
+                      await AuthServices.signOut().then((response) {
+                        if (response.success) {
                           Get.offAllNamed(RoutesHelper.loginScreen);
-                        }else{
-                          DevLogs.logError(response.message ?? 'Something went wrong');
+                        } else {
+                          DevLogs.logError(
+                              response.message ?? 'Something went wrong');
                         }
                       });
                     },
                     child: Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Pallete.primaryColor
-                      ),
+                          shape: BoxShape.circle, color: Pallete.primaryColor),
                       child: const Icon(
                         Icons.close,
                         color: Colors.white,
@@ -80,37 +79,24 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
               const SizedBox(
                 height: 25,
               ),
-
               SingleChildScrollView(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-
-                    Lottie.asset(
-                        AnimationAsset.otpAnimation,
-                        width: 200
-                    ),
-
+                    Lottie.asset(AnimationAsset.otpAnimation, width: 200),
                     const SizedBox(
                       height: 8,
                     ),
-
                     const Text(
                       'Verify you email address',
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold
-                      ),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
-
                     Text(
                       '\n${widget.user.email}\n',
                       style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold
-                      ),
+                          fontSize: 12, fontWeight: FontWeight.bold),
                     ),
-
                     const Text(
                       'Congratulations your account awaits. Verify your email to start and get going.',
                       textAlign: TextAlign.center,
@@ -118,11 +104,9 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                         fontSize: 12,
                       ),
                     ),
-
                     const SizedBox(
                       height: 30,
                     ),
-
                     GeneralButton(
                         btnColor: Pallete.primaryColor,
                         width: screenWidth,
@@ -133,17 +117,15 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                             color: Colors.white,
                           ),
                         ),
-
-                        onTap: () => AuthHelpers.checkEmailVerification(currentUser: _currentUser)
-                    ),
-
+                        onTap: () => AuthHelpers.checkEmailVerification(
+                            currentUser: _currentUser)),
                     const SizedBox(
                       height: 30,
                     ),
-
                     GestureDetector(
                       onTap: () async {
-                        await FirebaseAuth.instance.currentUser!.sendEmailVerification();
+                        await FirebaseAuth.instance.currentUser!
+                            .sendEmailVerification();
 
                         Get.snackbar(
                           'Email Verification',
@@ -154,30 +136,21 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                           duration: const Duration(seconds: 3),
                         );
                       },
-
                       child: RichText(
                         text: TextSpan(
                             style: const TextStyle(
-                              fontSize: 12,
-                              color: Colors.black
-                            ),
+                                fontSize: 12, color: Colors.black),
                             children: [
                               const TextSpan(
-                                  text: "Didn't receive the email? "
-                              ),
-
+                                  text: "Didn't receive the email? "),
                               TextSpan(
                                   text: " Resend",
                                   style: TextStyle(
                                       color: Pallete.primaryColor,
-                                      fontWeight: FontWeight.bold
-                                  )
-                              )
-                            ]
-                        ),
+                                      fontWeight: FontWeight.bold))
+                            ]),
                       ),
                     ),
-
                   ],
                 ),
               ),
@@ -185,6 +158,6 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
           ),
         ),
       ),
-  );
+    );
   }
 }

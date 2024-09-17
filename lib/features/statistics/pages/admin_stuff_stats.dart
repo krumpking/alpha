@@ -1,6 +1,6 @@
 import 'package:alpha/core/constants/color_constants.dart';
 import 'package:alpha/core/utils/providers.dart';
-import 'package:alpha/core/utils/routes.dart';
+import 'package:alpha/core/routes/routes.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +9,8 @@ import 'package:skeletonizer/skeletonizer.dart';
 import '../../../core/constants/local_image_constants.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AdminStuffStats extends ConsumerWidget {
-  const AdminStuffStats({super.key});
+class AdminStaffStats extends ConsumerWidget {
+  const AdminStaffStats({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -24,16 +24,15 @@ class AdminStuffStats extends ConsumerWidget {
         bottom: PreferredSize(
             preferredSize: const Size.fromHeight(220),
             child: Container(
-              decoration: BoxDecoration(
-                  color: Pallete.primaryColor
-              ),
+              decoration: BoxDecoration(color: Pallete.primaryColor),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   ClipOval(
                     child: CachedNetworkImage(
-                      imageUrl: FirebaseAuth.instance.currentUser!.photoURL ?? "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                      imageUrl: FirebaseAuth.instance.currentUser!.photoURL ??
+                          "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
                       width: MediaQuery.of(context).size.height * 0.18,
                       httpHeaders: const {
                         "Content-Type": "image/jpeg",
@@ -43,38 +42,32 @@ class AdminStuffStats extends ConsumerWidget {
                       placeholder: (context, url) => Skeletonizer(
                         enabled: true,
                         child: SizedBox(
-                          height: MediaQuery.of(context).size.height*0.45,
+                          height: MediaQuery.of(context).size.height * 0.45,
                           child: Image.asset(LocalImageConstants.logo),
                         ),
                       ),
                       errorWidget: (context, url, error) =>
-                      const Icon(Icons.error),
+                          const Icon(Icons.error),
                     ),
                   ),
-
                   Text(
-                    FirebaseAuth.instance.currentUser!.displayName ?? 'Alpha Imperial',
+                    FirebaseAuth.instance.currentUser!.displayName ??
+                        'Alpha Imperial',
                     style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
-                        fontSize: 20
-                    ),
+                        fontSize: 20),
                   ),
-
                   const Text(
                     'Our Monthly Stats',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14
-                    ),
+                    style: TextStyle(color: Colors.white, fontSize: 14),
                   ),
                   const SizedBox(
                     height: 20,
                   ),
                 ],
               ),
-            )
-        ),
+            )),
       ),
       body: Container(
         padding: const EdgeInsets.all(20),
@@ -83,8 +76,7 @@ class AdminStuffStats extends ConsumerWidget {
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(26),
               topRight: Radius.circular(26),
-            )
-        ),
+            )),
         child: staffCounts.when(
           data: (counts) => Column(
             children: [
@@ -95,17 +87,14 @@ class AdminStuffStats extends ConsumerWidget {
                     Expanded(
                         flex: 1,
                         child: statWidget(
-                            number: counts['Care and Support Workers'].toString(),
-                            title: "Total Care and Support Workers"
-                        )
-                    ),
+                            number:
+                                counts['Care and Support Workers'].toString(),
+                            title: "Total Care and Support Workers")),
                     const SizedBox(width: 16),
                     Expanded(
                         child: statWidget(
                             number: counts['Social Workers'].toString(),
-                            title: "Social Workers"
-                        )
-                    ),
+                            title: "Social Workers")),
                   ],
                 ),
               ),
@@ -117,19 +106,13 @@ class AdminStuffStats extends ConsumerWidget {
                     Expanded(
                         child: statWidget(
                             number: counts['Nurses'].toString(),
-                            title: "Nurses"
-                        )
-                    ),
+                            title: "Nurses")),
                     const SizedBox(width: 16),
                     Expanded(
                         child: GestureDetector(
-                          onTap: () => Get.toNamed(RoutesHelper.viewUserScreen),
-                          child: statWidget(
-                              number: "Staff",
-                              title: "Add/Remove"
-                          ),
-                        )
-                    ),
+                      onTap: () => Get.toNamed(RoutesHelper.viewUserScreen),
+                      child: statWidget(number: "Staff", title: "Add/Remove"),
+                    )),
                   ],
                 ),
               ),
@@ -147,9 +130,7 @@ class AdminStuffStats extends ConsumerWidget {
       alignment: Alignment.center,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 24),
       decoration: BoxDecoration(
-          color: Colors.grey.shade200,
-          borderRadius: BorderRadius.circular(16)
-      ),
+          color: Colors.grey.shade200, borderRadius: BorderRadius.circular(16)),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

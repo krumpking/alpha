@@ -1,6 +1,6 @@
-import 'package:alpha/custom_widgets/text_fields/custome_phone_input.dart';
-import 'package:alpha/models/shift.dart';
-import 'package:alpha/models/document.dart';
+import 'package:alpha/custom_widgets/text_fields/custom_phone_input.dart';
+import 'package:alpha/features/shift/models/shift.dart';
+import 'package:alpha/features/hours_worked/models/document.dart';
 import 'package:alpha/core/constants/color_constants.dart';
 import 'package:alpha/custom_widgets/custom_button/general_button.dart';
 import 'package:alpha/custom_widgets/text_fields/custom_text_field.dart';
@@ -11,7 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../../../custom_widgets/country_city_state/country_city_state.dart';
 import '../../../custom_widgets/custom_dropdown.dart';
-import '../../../models/user_profile.dart';
+import '../../manage_profile/models/user_profile.dart';
 import '../helper/add_user_helper.dart';
 import '../services/media_services.dart';
 
@@ -25,17 +25,18 @@ class AdminAddUser extends ConsumerStatefulWidget {
 class _AdminAddUserState extends ConsumerState<AdminAddUser> {
   String selectedRole = 'User';
   PhoneNumberInputController? phoneNumberController;
+  PhoneNumberInputController? contactInformationController;
   TextEditingController emailController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   TextEditingController previousEmployerController = TextEditingController();
-  PhoneNumberInputController? contactInformationController;
   TextEditingController documentNameController = TextEditingController();
   TextEditingController dobController = TextEditingController();
   TextEditingController shiftDayController = TextEditingController();
   TextEditingController shiftStartTimeController = TextEditingController();
   TextEditingController shiftEndTimeController = TextEditingController();
-  TextEditingController specializationTextEditingController = TextEditingController();
+  TextEditingController specializationTextEditingController =
+      TextEditingController();
   String selectedGender = 'Male';
   String? selectedCity;
   String? selectedState;
@@ -293,159 +294,6 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
             ),
 
             const SizedBox(height: 10),
-            const Divider(),
-
-            Column(
-              children: [
-                const Text(
-                  'Preferred Work Days',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 10),
-                Wrap(
-                  children: preferredWorkDays.map((shift) {
-                    return Chip(
-                      label: Text(
-                        '${shift.day}: ${shift.startTime} - ${shift.endTime}',
-                        style:
-                            const TextStyle(fontSize: 10, color: Colors.white),
-                      ),
-                      backgroundColor: Pallete.primaryColor.withOpacity(0.7),
-                      deleteIcon: const Icon(
-                        Icons.close,
-                        color: Colors.white,
-                      ),
-                      onDeleted: () {
-                        setState(() {
-                          preferredWorkDays.remove(shift);
-                        });
-                      },
-                    );
-                  }).toList(),
-                ),
-                GestureDetector(
-                  onTap: () async {
-                    await AddUserHelper.pickDate(
-                            context: context, initialDate: DateTime.now())
-                        .then((date) {
-                      setState(() {
-                        if (date != null) {
-                          String formattedDate =
-                              DateFormat('yyyy/MM/dd').format(date);
-                          shiftDayController.text = formattedDate;
-                        }
-                      });
-                    });
-                  },
-                  child: CustomTextField(
-                    enabled: false,
-                    controller: shiftDayController,
-                    prefixIcon: const Icon(
-                      Icons.calendar_month,
-                      color: Colors.grey,
-                    ),
-                    labelText: 'Shift Date',
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () async {
-                          await AddUserHelper.pickTime(context: context)
-                              .then((timeOfDay) {
-                            setState(() {
-                              if (timeOfDay != null) {
-                                final now = DateTime.now();
-                                final dateTime = DateTime(now.year, now.month,
-                                    now.day, timeOfDay.hour, timeOfDay.minute);
-
-                                String formattedTime =
-                                    DateFormat('HH:mm').format(dateTime);
-                                shiftStartTimeController.text = formattedTime;
-                              }
-                            });
-                          });
-                        },
-                        child: CustomTextField(
-                          enabled: false,
-                          controller: shiftStartTimeController,
-                          prefixIcon: const Icon(
-                            Icons.watch_later_outlined,
-                            color: Colors.grey,
-                          ),
-                          labelText: 'Start Time',
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () async {
-                          await AddUserHelper.pickTime(context: context)
-                              .then((timeOfDay) {
-                            setState(() {
-                              if (timeOfDay != null) {
-                                final now = DateTime.now();
-                                final dateTime = DateTime(now.year, now.month,
-                                    now.day, timeOfDay.hour, timeOfDay.minute);
-
-                                String formattedTime =
-                                    DateFormat('HH:mm').format(dateTime);
-                                shiftEndTimeController.text = formattedTime;
-                              }
-                            });
-                          });
-                        },
-                        child: CustomTextField(
-                          enabled: false,
-                          controller: shiftEndTimeController,
-                          prefixIcon: const Icon(
-                            Icons.watch_later_outlined,
-                            color: Colors.grey,
-                          ),
-                          labelText: 'End Time',
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                GeneralButton(
-                  onTap: () {
-                    setState(() {
-                      preferredWorkDays.add(
-                        Shift(
-                          day: shiftDayController.text.trim(),
-                          startTime: shiftStartTimeController.text.trim(),
-                          endTime: shiftEndTimeController.text.trim(),
-                        ),
-                      );
-                    });
-                    shiftDayController.clear();
-                    shiftStartTimeController.clear();
-                    shiftEndTimeController.clear();
-                  },
-                  borderRadius: 10,
-                  btnColor: Colors.white,
-                  boxBorder: Border.all(color: Pallete.primaryColor),
-                  width: 150,
-                  height: 40,
-                  child: Text(
-                    "Add Shift",
-                    style: TextStyle(
-                        color: Pallete.primaryColor,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ],
-            ),
-
-            const SizedBox(
-              height: 10,
-            ),
 
             const Divider(),
 
@@ -559,12 +407,14 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                         post: selectedPost,
                         name: nameController.text.trim(),
                         email: emailController.text.trim(),
-                        phoneNumber: phoneNumberController!.fullPhoneNumber.trim(),
+                        phoneNumber:
+                            phoneNumberController!.fullPhoneNumber.trim(),
                         address: addressController.text.trim(),
-                        preferredWorkDays: preferredWorkDays,
-                        previousEmployer:previousEmployerController.text.trim(),
+                        previousEmployer:
+                            previousEmployerController.text.trim(),
                         documents: documents,
-                        contactInformation: contactInformationController!.fullPhoneNumber,
+                        contactInformation:
+                            contactInformationController!.fullPhoneNumber,
                         role: selectedRole,
                         gender: selectedGender,
                         dob: dob,
@@ -574,7 +424,6 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                         specialisations: specialisations,
                       ),
                     );
-
                   } else {
                     AddUserHelper.validateAndSubmitForm(
                       userProfile: UserProfile(
@@ -584,7 +433,6 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                         phoneNumber:
                             phoneNumberController!.fullPhoneNumber.trim(),
                         address: addressController.text.trim(),
-                        preferredWorkDays: preferredWorkDays,
                         previousEmployer:
                             previousEmployerController.text.trim(),
                         documents: documents,

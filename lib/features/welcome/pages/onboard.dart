@@ -3,7 +3,7 @@ import 'package:animated_introduction/animated_introduction.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../core/utils/routes.dart';
+import '../../../core/routes/routes.dart';
 
 class WelcomePage extends StatelessWidget {
   WelcomePage({super.key});
