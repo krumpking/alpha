@@ -1,13 +1,21 @@
-import 'package:alpha/core/constants/color_constants.dart';
+import 'package:alpha/core/utils/logs.dart';
 import 'package:alpha/core/utils/providers.dart';
+import 'package:alpha/features/manage_profile/models/user_profile.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/constants/color_constants.dart';
 
-class SeeFeedback extends ConsumerWidget {
+
+class FeedbackTab extends ConsumerWidget {
+  final UserProfile selectedUser;
+
+  const FeedbackTab({super.key, required this.selectedUser});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final feedState = ref.watch(ProviderUtils.feedbackProvider);
+    // Listen to the shiftsProvider using the profileEmail
+    final feedbackAsyncValue = ref.watch(ProviderUtils.feedbackProvider(selectedUser.email!));
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Pallete.primaryColor,
@@ -18,19 +26,16 @@ class SeeFeedback extends ConsumerWidget {
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: feedState.when(
-          data: (feedback) {
-            if (feedback.isEmpty) {
-              return const Center(
-                child: Text('No feedback found.'),
-              );
+      body: feedbackAsyncValue.when(
+          data: (feedbacks) {
+            if (feedbacks.isEmpty) {
+              return const Center(child: Text('No Feedback Found.'));
             }
+
             return ListView.builder(
-              itemCount: feedback.length,
+              itemCount: feedbacks.length,
               itemBuilder: (context, index) {
-                final singleFeedback = feedback[index];
+                final feedback = feedbacks[index];
                 return Container(
                   padding: const EdgeInsets.all(8),
                   margin: const EdgeInsets.symmetric(vertical: 8),
@@ -45,46 +50,34 @@ class SeeFeedback extends ConsumerWidget {
                       color: Pallete.primaryColor,
                     ),
                     title: Text(
-                      singleFeedback.addedBy,
+                      feedback.addedBy,
                       style: const TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 14),
                     ),
                     subtitle: Text(
-                      singleFeedback.feedackTitle,
+                      feedback.feedbackTitle,
                       style:
-                          TextStyle(color: Colors.grey.shade600, fontSize: 12),
+                      TextStyle(color: Colors.grey.shade600, fontSize: 12),
                     ),
                     trailing: Text(
-                      singleFeedback.description,
+                      feedback.description,
                       style:
-                          TextStyle(color: Colors.grey.shade600, fontSize: 12),
+                      TextStyle(color: Colors.grey.shade600, fontSize: 12),
                     ),
                   ),
                 );
+
+                //return FeedbackCard(feedback: feedback);
               },
             );
           },
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (error, stackTrace) => Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Failed to load feedback: $error'),
-                const SizedBox(height: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    // Add logic to retry fetching users
-                    ref
-                        .read(ProviderUtils.feedbackProvider.notifier)
-                        .fetchFeedback();
-                  },
-                  child: const Text('Retry'),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
+          error: (error, stack) {
+            DevLogs.logError(error.toString());
+            return Center(
+              child: Text('Error: $error'),
+            );
+          }),
     );
   }
 }

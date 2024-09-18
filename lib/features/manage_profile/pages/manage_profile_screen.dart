@@ -181,7 +181,7 @@ class _ProfileScreenState extends ConsumerState<UserProfileScreen>
                     Tab(text: 'Documents'),
                     Tab(text: 'Assigned Shifts'),
                     Tab(text: 'Previous Shifts'),
-                    Tab(text: 'Notes'),
+                    Tab(text: 'Feedback'),
                   ],
                 ),
                 SizedBox(
@@ -199,7 +199,7 @@ class _ProfileScreenState extends ConsumerState<UserProfileScreen>
                       PreviousShiftsTab(selectedUser: userProfile),
 
                       // Notes Tab
-                      NotesTab(selectedUser: userProfile),
+                      FeedbackTab(selectedUser: userProfile),
                     ],
                   ),
                 ),
