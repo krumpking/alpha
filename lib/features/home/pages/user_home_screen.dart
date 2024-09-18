@@ -24,7 +24,9 @@ import 'package:skeletonizer/skeletonizer.dart';
 import '../../../core/constants/dimensions.dart';
 import '../../../core/utils/providers.dart';
 import '../../../custom_widgets/sidebar/user_drawer.dart';
+import '../../hours_worked/models/document.dart';
 import '../../manage_profile/models/user_profile.dart';
+import '../../not_found/user_profile_not_found.dart';
 
 class UserHomeScreen extends ConsumerStatefulWidget {
   const UserHomeScreen({super.key});
@@ -48,6 +50,7 @@ class _UserHomeScreenState extends ConsumerState<UserHomeScreen>
   final _key = GlobalKey<ScaffoldState>();
   final user = FirebaseAuth.instance.currentUser;
   List<FeedbackModel> feedback = [];
+  //List<Document> expiringDocuments = [];
 
   @override
   void initState() {
@@ -84,7 +87,8 @@ class _UserHomeScreenState extends ConsumerState<UserHomeScreen>
       });
     });
 
-    return Scaffold(
+    return userProfileAsync.hasValue
+        ? Scaffold(
       key: _key,
       drawer: Dimensions.isSmallScreen
           ? UserDrawer(
@@ -261,7 +265,8 @@ class _UserHomeScreenState extends ConsumerState<UserHomeScreen>
           ],
         ),
       ),
-    );
+    )
+        : const UserProfileNotFound();
   }
 
   Widget _buildTabCategory() {

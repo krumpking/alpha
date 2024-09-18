@@ -10,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/utils/providers.dart';
 import '../../../custom_widgets/sidebar/admin_drawer.dart';
 import '../../manage_profile/models/user_profile.dart';
+import '../../not_found/user_profile_not_found.dart';
 import 'admin_tabs/staff_tab.dart';
 
 class AdminHomeScreen extends ConsumerStatefulWidget {
@@ -48,11 +49,14 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen>
 
   @override
   Widget build(BuildContext context) {
+    final userProfileAsync = ref.watch(ProviderUtils.profileProvider(user!.email!));
+
     final staffState = ref.watch(
       ProviderUtils.staffProvider,
     );
 
-    return Scaffold(
+    return userProfileAsync.hasValue
+        ? Scaffold(
       key: _key,
       drawer: Dimensions.isSmallScreen
           ? AdminDrawer(
@@ -125,7 +129,8 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen>
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stackTrace) => Center(child: Text('Error: $error')),
       ),
-    );
+    )
+        : const UserProfileNotFound();
   }
 
   Widget _buildContent(List<UserProfile> users) {
