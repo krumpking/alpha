@@ -13,8 +13,10 @@ class FeedbackTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
     // Listen to the shiftsProvider using the profileEmail
     final feedbackAsyncValue = ref.watch(ProviderUtils.feedbackProvider(selectedUser.email!));
+
 
     return Scaffold(
       appBar: AppBar(
@@ -78,6 +80,7 @@ class FeedbackTab extends ConsumerWidget {
               child: Text('Error: $error'),
             );
           }),
+
     );
   }
 }
