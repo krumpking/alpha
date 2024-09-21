@@ -134,4 +134,38 @@ class StaffServices {
       return APIResponse(success: false, message: e.toString());
     }
   }
+
+
+  // Method to update an existing user's profile
+  static Future<APIResponse<String>> updateUserProfile({
+    required String email,
+    required UserProfile updatedProfile,
+  }) async {
+    try {
+      // Ensure the user exists by checking for their profile based on email
+      final querySnapshot = await _firestore
+          .collection('users')
+          .where('email', isEqualTo: email)
+          .get();
+
+      if (querySnapshot.docs.isEmpty) {
+        return APIResponse(
+            success: false, message: 'No user found with the specified email');
+      }
+
+      final docId = querySnapshot.docs.first.id;
+
+      final updatedData = updatedProfile.toJson();
+
+      await _firestore.collection('users').doc(docId).update(updatedData);
+
+      // Return a success response
+      return APIResponse(
+          success: true, data: '', message: 'User profile updated successfully');
+    } catch (e) {
+      // Log the error and return a failure response with the exception message
+      DevLogs.logError('UserProfile Update Error: $e');
+      return APIResponse(success: false, message: 'Profile update failed: $e');
+    }
+  }
 }

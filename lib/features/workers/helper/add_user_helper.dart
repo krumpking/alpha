@@ -215,4 +215,104 @@ class AddUserHelper {
     }
     return specialisations;
   }
+
+  static Future<void> validateAndUpdatePROFILE({
+    required UserProfile userProfile,
+  }) async {
+    // Validate Email
+    if (!GetUtils.isEmail(userProfile.email!)) {
+      CustomSnackBar.showErrorSnackbar(message: 'Please input a valid email.');
+      return;
+    }
+
+    // Validate Phone Number
+    if (userProfile.phoneNumber!.isEmpty ||
+        !GetUtils.isPhoneNumber(userProfile.phoneNumber!)) {
+      CustomSnackBar.showErrorSnackbar(
+          message: 'Please input a valid phone number.');
+      return;
+    }
+
+    // Validate Name
+    if (userProfile.name!.isEmpty) {
+      CustomSnackBar.showErrorSnackbar(message: 'Name is required.');
+      return;
+    }
+
+    if (userProfile.city!.isEmpty) {
+      CustomSnackBar.showErrorSnackbar(message: 'City is required.');
+      return;
+    }
+
+    if (userProfile.state!.isEmpty) {
+      CustomSnackBar.showErrorSnackbar(message: 'State is required.');
+      return;
+    }
+
+    if (userProfile.country!.isEmpty) {
+      CustomSnackBar.showErrorSnackbar(message: 'Country is required.');
+      return;
+    }
+
+    // Validate Address
+    if (userProfile.address!.isEmpty) {
+      CustomSnackBar.showErrorSnackbar(message: 'Address is required.');
+      return;
+    }
+
+    // Validate Previous Employer
+    if (userProfile.previousEmployer!.isEmpty) {
+      CustomSnackBar.showErrorSnackbar(
+          message: 'Previous Employer is required.');
+      return;
+    }
+
+    // Validate Contact Information
+    if (userProfile.contactInformation!.isEmpty) {
+      CustomSnackBar.showErrorSnackbar(
+          message: 'Contact Information is required.');
+      return;
+    }
+
+    // Validate Role
+    if (userProfile.role!.isEmpty) {
+      CustomSnackBar.showErrorSnackbar(message: 'Role is required.');
+      return;
+    }
+
+    // Validate Specialisations
+    if (userProfile.specialisations.isEmpty) {
+      CustomSnackBar.showErrorSnackbar(
+          message: 'At least one specialisation is required.');
+      return;
+    }
+
+    // Validate Document
+    if (userProfile.documents.isEmpty) {
+      CustomSnackBar.showErrorSnackbar(message: 'Document upload is required.');
+      return;
+    }
+
+    // Show loader while creating user
+    Get.dialog(
+      const CustomLoader(
+        message: 'Creating user',
+      ),
+      barrierDismissible: false,
+    );
+
+    await StaffServices.updateUserProfile(email: userProfile.email! ,updatedProfile: userProfile)
+        .then((response) {
+      if (!response.success) {
+        if (!Get.isSnackbarOpen) Get.back();
+        CustomSnackBar.showErrorSnackbar(
+            message: response.message ?? 'Something went wrong');
+      } else {
+        if (Get.isDialogOpen!) Get.back();
+        CustomSnackBar.showSuccessSnackbar(
+            message: 'User account created successfully');
+      }
+    });
+  }
+
 }

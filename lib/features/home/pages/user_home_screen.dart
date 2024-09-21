@@ -5,9 +5,12 @@ import 'package:alpha/core/constants/local_image_constants.dart';
 import 'package:alpha/core/utils/logs.dart';
 import 'package:alpha/custom_widgets/cards/category_card.dart';
 import 'package:alpha/custom_widgets/cards/task_item.dart';
+import 'package:alpha/custom_widgets/dialogs/custom_dialogs.dart';
+import 'package:alpha/custom_widgets/snackbar/custom_snackbar.dart';
 import 'package:alpha/custom_widgets/text_fields/custom_text_field.dart';
 import 'package:alpha/features/feedback/pages/see_feedback.dart';
 import 'package:alpha/features/feedback/models/feedback_model.dart';
+import 'package:alpha/features/home/helpers/helper.dart';
 import 'package:alpha/features/home/pages/user_tabs/previous_shifts_tab.dart';
 import 'package:alpha/features/home/pages/user_tabs/upcoming_shifts_tab.dart';
 import 'package:alpha/features/home/services/dummy.dart';
@@ -15,11 +18,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get/get.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../core/constants/dimensions.dart';
 import '../../../core/utils/providers.dart';
 import '../../../custom_widgets/sidebar/user_drawer.dart';
+import '../../hours_worked/models/document.dart';
+import '../../manage_profile/models/user_profile.dart';
+import '../../not_found/user_profile_not_found.dart';
 
 class UserHomeScreen extends ConsumerStatefulWidget {
   const UserHomeScreen({super.key});
@@ -43,12 +50,14 @@ class _UserHomeScreenState extends ConsumerState<UserHomeScreen>
   final _key = GlobalKey<ScaffoldState>();
   final user = FirebaseAuth.instance.currentUser;
   List<FeedbackModel> feedback = [];
+  //List<Document> expiringDocuments = [];
 
   @override
   void initState() {
     super.initState();
 
     _tabController = TabController(length: 3, vsync: this);
+
   }
 
   @override
@@ -59,10 +68,27 @@ class _UserHomeScreenState extends ConsumerState<UserHomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    final userProfileAsync =
-        ref.watch(ProviderUtils.profileProvider(user!.email!));
+    final userProfileAsync = ref.watch(ProviderUtils.profileProvider(user!.email!));
 
-    return Scaffold(
+    ref.listen<AsyncValue<UserProfile>>(ProviderUtils.profileProvider(user!.email!), (previous, next) {
+      next.whenData((userProfile) {
+        ref.read(ProviderUtils.expiringDocumentsProvider.notifier).checkExpiringDocuments(userProfile);
+
+        final expiringDocuments = ref.read(ProviderUtils.expiringDocumentsProvider);
+        if (expiringDocuments.isNotEmpty) {
+          Future.delayed(const Duration(seconds: 20), () {
+            HomeHelper.showExpiringDocuments(
+                message: 'The following documents are expiring or have expired:',
+                documents: expiringDocuments
+            );
+          });
+
+        }
+      });
+    });
+
+    return userProfileAsync.hasValue
+        ? Scaffold(
       key: _key,
       drawer: Dimensions.isSmallScreen
           ? UserDrawer(
@@ -239,7 +265,8 @@ class _UserHomeScreenState extends ConsumerState<UserHomeScreen>
           ],
         ),
       ),
-    );
+    )
+        : const UserProfileNotFound();
   }
 
   Widget _buildTabCategory() {

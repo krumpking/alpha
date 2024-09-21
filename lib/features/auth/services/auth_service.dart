@@ -180,6 +180,48 @@ class AuthServices {
     }
   }
 
+  static Future<APIResponse<void>> updatePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    try {
+      User? currentUser = FirebaseAuth.instance.currentUser;
+
+      if (currentUser == null) {
+        return APIResponse(success: false, message: 'No user is logged in.');
+      }
+
+      final credential = EmailAuthProvider.credential(
+        email: currentUser.email!,
+        password: currentPassword,
+      );
+
+      await currentUser.reauthenticateWithCredential(credential);
+
+      // Update the password
+      await currentUser.updatePassword(newPassword);
+
+      return APIResponse(success: true, message: 'Password updated successfully.');
+    } on FirebaseAuthException catch (e) {
+      switch (e.code) {
+        case 'wrong-password':
+          return APIResponse(
+              success: false, message: 'Current password is incorrect.');
+        case 'weak-password':
+          return APIResponse(
+              success: false, message: 'New password is too weak.');
+        default:
+          return APIResponse(
+              success: false,
+              message: e.message ?? 'Failed to update password.');
+      }
+    } catch (e) {
+      return APIResponse(
+          success: false, message: 'An error occurred. Please try again.');
+    }
+  }
+
+
   static Future<APIResponse<void>> requestVerificationCode({
     required String phoneNumber,
     required void Function(String verificationId) onCodeSent,

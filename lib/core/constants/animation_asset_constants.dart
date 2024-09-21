@@ -4,4 +4,5 @@ class AnimationAsset {
   static String createPasswordAnimation = 'assets/animations/create_password.json';
   static String successfulAnimation = 'assets/animations/verification_success.json';
   static String resetPasswordAnimation = 'assets/animations/create_password.json';
+  static String noAccountAnimation = 'assets/animations/no_account.json';
 }

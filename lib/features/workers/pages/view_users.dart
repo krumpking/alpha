@@ -66,10 +66,72 @@ class AdminViewUsers extends ConsumerWidget {
                       style:
                           TextStyle(color: Colors.grey.shade600, fontSize: 12),
                     ),
-                    trailing: Text(
-                      user.post!,
-                      style:
-                          TextStyle(color: Colors.grey.shade600, fontSize: 12),
+                    trailing: SizedBox(
+                      width: 180,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            user.post!,
+                            style:
+                                TextStyle(color: Colors.grey.shade600, fontSize: 12),
+                          ),
+
+                          PopupMenuButton<int>(
+                            onSelected: (int selectedValue) {
+                              // Handle the selected value
+                              switch (selectedValue) {
+                                case 0:
+                                // Perform some action for Edit
+                                  break;
+                                case 1:
+                                // Perform some action for Delete
+                                  break;
+                              }
+                            },
+                            itemBuilder: (BuildContext context) => [
+                              buildPopUpOption(
+                                title: 'View Profile',
+                                icon: Icons.remove_red_eye_outlined,
+                                value: 0,
+                                onTap: () {
+                                  Get.toNamed(RoutesHelper.userProfileScreen,
+                                      arguments: user.email);
+                                },
+                              ),
+                              buildPopUpOption(
+                                  title: 'Add Shift',
+                                  icon: Icons.calendar_month,
+                                  value: 1,
+                                  onTap: () => Get.toNamed(RoutesHelper.addShiftsScreen,
+                                      arguments: user)),
+                              buildPopUpOption(
+                                  title: 'Add Hours Worked',
+                                  icon: Icons.watch_later_outlined,
+                                  value: 2,
+                                  onTap: () => Get.toNamed(
+                                      RoutesHelper.addHoursWorkedScreen,
+                                      arguments: [user])),
+                              buildPopUpOption(
+                                  title: 'Add Feedback',
+                                  icon: Icons.feedback,
+                                  value: 1,
+                                  onTap: () => Get.toNamed(
+                                      RoutesHelper.addUserFeedbackScreen,
+                                      arguments: [user, null])),
+                              buildPopUpOption(
+                                  title: 'Edit Profile',
+                                  icon: Icons.edit,
+                                  value: 2,
+                                  onTap: () => Get.toNamed(
+                                      RoutesHelper.editUserProfileScreen,
+                                      arguments: user)
+                              ),
+                            ],
+                            icon: const Icon(Icons.more_vert),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 );
@@ -85,7 +147,6 @@ class AdminViewUsers extends ConsumerWidget {
                 const SizedBox(height: 10),
                 ElevatedButton(
                   onPressed: () {
-                    // Add logic to retry fetching users
                     ref
                         .read(ProviderUtils.staffProvider.notifier)
                         .streamUsers();
@@ -115,6 +176,28 @@ class AdminViewUsers extends ConsumerWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  dynamic buildPopUpOption({
+    required String title,
+    required IconData icon,
+    required int value,
+    required void Function() onTap,
+  }) {
+    return PopupMenuItem<int>(
+      onTap: onTap,
+      value: value,
+      child: Row(
+        children: [
+          Icon(icon, color: Colors.black54),
+          const SizedBox(width: 8),
+          Text(
+            title,
+            style: const TextStyle(fontSize: 12),
+          ),
+        ],
       ),
     );
   }

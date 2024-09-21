@@ -16,10 +16,11 @@ import 'package:alpha/features/workers/pages/add_user.dart';
 import 'package:alpha/features/workers/pages/view_users.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-
 import '../../features/auth/pages/email_verification_success.dart';
 import '../../features/auth/pages/login_page.dart';
 import '../../features/auth/pages/resend_reset_email_screen.dart';
+import '../../features/manage_profile/pages/edit_profile.dart';
+import '../../features/manage_profile/pages/update_password.dart';
 import '../../features/statistics/pages/admin_shift_stats.dart';
 import '../../features/shift/models/shift.dart';
 import '../../features/manage_profile/models/user_profile.dart';
@@ -41,6 +42,8 @@ class RoutesHelper {
   static String adminAddUserScreen = '/addUser';
   static String viewUserScreen = '/viewUsers';
   static String userProfileScreen = '/profile';
+  static String editUserProfileScreen = '/editProfile';
+  static String updatePasswordScreen = '/editProfile';
   static String addHoursWorkedScreen = '/addHoursWorkedScreen';
   static String editShiftScreen = '/editShift';
   static String addShiftsScreen = '/addShift';
@@ -65,6 +68,7 @@ class RoutesHelper {
           return ResendResetEmailScreen(email: email);
         }),
     GetPage(name: loginScreen, page: () => const LoginScreen()),
+    GetPage(name: updatePasswordScreen, page: () => const UpdatePasswordScreen()),
     GetPage(name: adminHomeScreen, page: () => const AdminHomeScreen()),
     GetPage(
         name: userProfileScreen,
@@ -72,6 +76,13 @@ class RoutesHelper {
           final String email = Get.arguments as String;
 
           return UserProfileScreen(profileEmail: email);
+        }),
+    GetPage(
+        name: editUserProfileScreen,
+        page: () {
+          final UserProfile userProfile = Get.arguments as UserProfile;
+
+          return EditUserProfileScreen(userProfile: userProfile);
         }),
     GetPage(
         name: userShiftStatsScreen,

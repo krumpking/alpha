@@ -36,12 +36,24 @@ class FeedbackServices {
     }
   }
 
+  // Existing method for fetching feedback by email
   static Stream<List<FeedbackModel>> streamFeedbackByEmail(
       {required String email}) {
-    // Return a Firestore snapshot stream for real-time updates
     return FirebaseFirestore.instance
         .collection('feedback')
         .where('userEmail', isEqualTo: email)
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs
+          .map((doc) => FeedbackModel.fromJson(doc.data()))
+          .toList();
+    });
+  }
+
+  // New method for fetching all feedback
+  static Stream<List<FeedbackModel>> streamAllFeedback() {
+    return FirebaseFirestore.instance
+        .collection('feedback')
         .snapshots()
         .map((snapshot) {
       return snapshot.docs

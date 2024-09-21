@@ -5,19 +5,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../custom_widgets/cards/feedbackcard.dart';
 
-class NotesTab extends ConsumerWidget {
+class FeedbackTab extends ConsumerWidget {
   final UserProfile selectedUser;
 
-  const NotesTab({super.key, required this.selectedUser});
+  const FeedbackTab({super.key, required this.selectedUser});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Listen to the shiftsProvider using the profileEmail
-    final notessAsyncValue =
-        ref.watch(ProviderUtils.feedbackProvider(selectedUser.email!));
+    final feedbackAsyncValue = ref.watch(ProviderUtils.feedbackProvider(selectedUser.email!));
 
     return Scaffold(
-      body: notessAsyncValue.when(
+      body: feedbackAsyncValue.when(
           data: (feedbacks) {
             if (feedbacks.isEmpty) {
               return const Center(child: Text('No Feedback Found.'));

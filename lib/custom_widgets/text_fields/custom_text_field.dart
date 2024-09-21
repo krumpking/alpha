@@ -18,8 +18,9 @@ class CustomTextField extends StatelessWidget {
   final int? maxLength;
   final Widget? suffixIconButton;
   final bool? enabled;
+  final bool? readOnly;
 
-  const CustomTextField({super.key, this.maxLength, this.controller, this.fillColor, this.filled, this.defaultBoarderColor, this.focusedBoarderColor, required this.labelText, this.labelStyle, this.inputTextStyle, this.keyBoardType, required this.prefixIcon, this.obscureText, this.suffixIconButton, this.enabled, this.onChanged, this.onSubmitted});
+  const CustomTextField({super.key, this.maxLength, this.readOnly, this.controller, this.fillColor, this.filled, this.defaultBoarderColor, this.focusedBoarderColor, required this.labelText, this.labelStyle, this.inputTextStyle, this.keyBoardType, required this.prefixIcon, this.obscureText, this.suffixIconButton, this.enabled, this.onChanged, this.onSubmitted});
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +30,7 @@ class CustomTextField extends StatelessWidget {
       obscureText: obscureText ?? false,
       controller: controller,
       onChanged: onChanged,
+      readOnly: readOnly ?? false,
       onSubmitted: onSubmitted,
       enabled: enabled ?? true,
       decoration: InputDecoration(
