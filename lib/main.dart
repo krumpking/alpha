@@ -29,14 +29,14 @@ class Alpha extends StatelessWidget {
     return GetMaterialApp(
       theme: ThemeData(
         primaryColor: Pallete.primaryColor,
-        dialogBackgroundColor: Colors.white, // Change dialog background color
-        focusColor: Pallete.primaryColor, // Change focus color
+        dialogBackgroundColor: Colors.white,
+        focusColor: Pallete.primaryColor,
         colorScheme: ColorScheme.fromSwatch().copyWith(
           primary: Pallete.primaryColor,
           secondary: Pallete.accentColor,
-          surface: Colors.grey[200], // General background color
-          onPrimary: Colors.white, // Text color on primary color
-          onSecondary: Colors.black, // Text color on secondary color
+          surface: Colors.grey[200],
+          onPrimary: Colors.white,
+          onSecondary: Colors.black,
           onSurface: Colors.black,
         ),
         textTheme: const TextTheme(

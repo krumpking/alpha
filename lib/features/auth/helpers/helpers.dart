@@ -63,10 +63,7 @@ class AuthHelpers {
     }
   }
 
-  static void validateAndSubmitForm({
-    required String password,
-    required String email,
-  }) async {
+  static void validateAndSubmitForm({required String password,required String email, }) async {
     if (password.isEmpty) {
       CustomSnackBar.showErrorSnackbar(message: 'Password is required.');
       return;
@@ -116,6 +113,57 @@ class AuthHelpers {
       }
     });
   }
+
+  static void validatePasswordUpdate({required String oldPass,required String newPass, required String confirmPass }) async {
+    if (oldPass.isEmpty) {
+      CustomSnackBar.showErrorSnackbar(message: 'Password is required.');
+      return;
+    }
+
+    if (oldPass.length < 8) {
+      CustomSnackBar.showErrorSnackbar(message: 'Old Password too Short');
+      return;
+    }
+
+    if (newPass.length < 8) {
+      CustomSnackBar.showErrorSnackbar(message: 'New Password too Short');
+      return;
+    }
+
+    if (newPass == oldPass) {
+      CustomSnackBar.showErrorSnackbar(message: 'Old password is the same as the new Password');
+      return;
+    }
+
+    if (newPass != confirmPass) {
+      CustomSnackBar.showErrorSnackbar(message: 'Passwords don`t match');
+      return;
+    }
+
+    Get.dialog(
+      const CustomLoader(
+        message: 'Changing Password',
+      ),
+      barrierDismissible: false,
+    );
+
+    await AuthServices.updatePassword(
+      newPassword: confirmPass.trim(),
+      currentPassword: oldPass.trim(),
+    ).then((response) {
+      if (!response.success){
+        if (Get.isDialogOpen!) Get.back();
+        CustomSnackBar.showErrorSnackbar(message: response.message ?? 'Something went wrong');
+      } else {
+        if (Get.isDialogOpen!) Get.back();
+        CustomSnackBar.showSuccessSnackbar(
+          message: 'Password Changed Successfully',
+        );
+        Get.offAllNamed(RoutesHelper.initialScreen);
+      }
+    });
+  }
+
 
   static Future<UserRole?> getUserRole(User user) async {
     UserRole? userRole = await CacheUtils.getUserRoleFromCache();

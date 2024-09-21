@@ -1,9 +1,11 @@
+import 'package:alpha/core/routes/routes.dart';
 import 'package:alpha/core/utils/logs.dart';
 import 'package:alpha/core/utils/providers.dart';
 import 'package:alpha/features/manage_profile/pages/documents_tab.dart';
 import 'package:alpha/features/manage_profile/pages/notes_tab.dart';
 import 'package:alpha/features/manage_profile/pages/previous_shifts_tab.dart';
 import 'package:alpha/features/manage_profile/pages/upcoming_shifts_tab.dart';
+import 'package:alpha/global/global.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -44,8 +46,9 @@ class _ProfileScreenState extends ConsumerState<UserProfileScreen>
 
   @override
   Widget build(BuildContext context) {
-    final userProfileAsync =
-        ref.watch(ProviderUtils.profileProvider(widget.profileEmail));
+    final currentUserRole = ref.watch(ProviderUtils.userRoleProvider);
+
+    final selectedUserProfileAsync = ref.watch(ProviderUtils.profileProvider(widget.profileEmail));
 
     return Scaffold(
       appBar: AppBar(
@@ -65,8 +68,8 @@ class _ProfileScreenState extends ConsumerState<UserProfileScreen>
                         },
                         icon: const Icon(Icons.arrow_back),
                       ),
-                    userProfileAsync.when(
-                      data: (userProfile) => Row(
+                    selectedUserProfileAsync.when(
+                      data: (selectedUserProfile) => Row(
                         children: [
                           Container(
                             width: 120,
@@ -76,7 +79,7 @@ class _ProfileScreenState extends ConsumerState<UserProfileScreen>
                               borderRadius: BorderRadius.circular(16),
                             ),
                             child: CachedNetworkImage(
-                              imageUrl: userProfile.profilePicture!,
+                              imageUrl: selectedUserProfile.profilePicture!,
                               placeholder: (context, url) => Skeletonizer(
                                 enabled: true,
                                 child: SizedBox(
@@ -100,19 +103,69 @@ class _ProfileScreenState extends ConsumerState<UserProfileScreen>
                           const SizedBox(
                             width: 16,
                           ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                userProfile.name!,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                userProfile.post!,
-                                style: const TextStyle(fontSize: 12),
-                              ),
-                            ],
+                          SizedBox(
+                            width: 250,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      selectedUserProfile.name!,
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(
+                                      selectedUserProfile.post!,
+                                      style: const TextStyle(fontSize: 12),
+                                    ),
+                                  ],
+                                ),
+
+                                if(currentUserRole == UserRole.user)PopupMenuButton<int>(
+                                  onSelected: (int selectedValue) {
+                                    // Handle the selected value
+                                    switch (selectedValue) {
+                                      case 0:
+                                      // Perform some action for Edit
+                                        break;
+                                      case 1:
+                                      // Perform some action for Delete
+                                        break;
+                                    }
+                                  },
+                                  itemBuilder: (BuildContext context) => [
+                                    buildPopUpOption(
+                                      title: 'Update Profile Picture',
+                                      icon: Icons.image,
+                                      value: 0,
+                                      onTap: () {
+
+                                      },
+                                    ),
+                                    buildPopUpOption(
+                                        title: 'Change Password',
+                                        icon: Icons.lock,
+                                        value: 1,
+                                        onTap: (){
+                                          Get.toNamed(RoutesHelper.updatePasswordScreen);
+                                        }
+                                        ),
+                                    buildPopUpOption(
+                                        title: 'Update Profile',
+                                        icon: Icons.edit,
+                                        value: 2,
+                                        onTap: () {
+                                          Get.toNamed(RoutesHelper.editUserProfileScreen, arguments: selectedUserProfile);
+                                        },
+                                    ),
+                                  ],
+                                  icon: const Icon(Icons.more_vert),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -164,7 +217,7 @@ class _ProfileScreenState extends ConsumerState<UserProfileScreen>
         physics: const BouncingScrollPhysics(),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: userProfileAsync.when(
+          child: selectedUserProfileAsync.when(
             data: (userProfile) => Column(
               children: [
                 // Tab bar for Documents, Shifts, and Notes
@@ -181,7 +234,7 @@ class _ProfileScreenState extends ConsumerState<UserProfileScreen>
                     Tab(text: 'Documents'),
                     Tab(text: 'Assigned Shifts'),
                     Tab(text: 'Previous Shifts'),
-                    Tab(text: 'Notes'),
+                    Tab(text: 'Feedback'),
                   ],
                 ),
                 SizedBox(
@@ -199,7 +252,7 @@ class _ProfileScreenState extends ConsumerState<UserProfileScreen>
                       PreviousShiftsTab(selectedUser: userProfile),
 
                       // Notes Tab
-                      NotesTab(selectedUser: userProfile),
+                      FeedbackTab(selectedUser: userProfile),
                     ],
                   ),
                 ),
@@ -211,6 +264,28 @@ class _ProfileScreenState extends ConsumerState<UserProfileScreen>
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  dynamic buildPopUpOption({
+    required String title,
+    required IconData icon,
+    required int value,
+    required void Function() onTap,
+  }) {
+    return PopupMenuItem<int>(
+      onTap: onTap,
+      value: value,
+      child: Row(
+        children: [
+          Icon(icon, color: Colors.black54),
+          const SizedBox(width: 8),
+          Text(
+            title,
+            style: const TextStyle(fontSize: 12),
+          ),
+        ],
       ),
     );
   }

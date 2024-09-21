@@ -41,20 +41,23 @@ class UserShiftStats extends ConsumerWidget {
             topRight: Radius.circular(26),
           ),
         ),
-        child: Column(
-          children: [
-            // Display daily stats
-            displayStats(hoursWorked: dailyHoursWorked, title: "Hours Worked Today"),
-            const SizedBox(height: 16),
-            // Display weekly stats
-            displayStats(hoursWorked: weeklyHoursWorked, title: "Hours Worked This Week"),
-            const SizedBox(height: 16),
-            // Display monthly stats
-            displayStats(hoursWorked: monthlyHoursWorked, title: "Hours Worked This Month"),
-            const SizedBox(height: 16),
-            // Display yearly stats
-            displayStats(hoursWorked: yearlyHoursWorked, title: "Hours Worked This Year"),
-          ],
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Column(
+            children: [
+              // Display daily stats
+              displayStats(hoursWorked: dailyHoursWorked, title: "Hours Worked Today"),
+              const SizedBox(height: 16),
+              // Display weekly stats
+              displayStats(hoursWorked: weeklyHoursWorked, title: "Hours Worked This Week"),
+              const SizedBox(height: 16),
+              // Display monthly stats
+              displayStats(hoursWorked: monthlyHoursWorked, title: "Hours Worked This Month"),
+              const SizedBox(height: 16),
+              // Display yearly stats
+              displayStats(hoursWorked: yearlyHoursWorked, title: "Hours Worked This Year"),
+            ],
+          ),
         ),
       ),
     );
