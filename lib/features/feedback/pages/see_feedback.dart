@@ -7,14 +7,14 @@ import '../../../core/constants/color_constants.dart';
 
 
 class MyFeedbackScreen extends ConsumerWidget {
-  final UserProfile selectedUser;
+  final String userEmail;
 
-  const MyFeedbackScreen({super.key, required this.selectedUser});
+  const MyFeedbackScreen({super.key, required this.userEmail});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Listen to the shiftsProvider using the profileEmail
-    final feedbackAsyncValue = ref.watch(ProviderUtils.feedbackProvider(selectedUser.email!));
+    final feedbackAsyncValue = ref.watch(ProviderUtils.feedbackProvider(userEmail));
 
     return Scaffold(
       appBar: AppBar(

@@ -88,40 +88,32 @@ class ShiftCard extends StatelessWidget {
                 ],
               ),
               trailing: PopupMenuButton<int>(
-                onSelected: (int selectedValue) {
-                  // Handle the selected value
-                  switch (selectedValue) {
-                    case 0:
-                      break;
-                    case 1:
-                      break;
-                    case 2:
-                      break;
-                    case 3:
-                      break;
-                  }
-                },
                 itemBuilder: (BuildContext context) => [
                   buildPopUpOption(
                       title: 'Edit',
                       icon: Icons.edit,
-                      value: 0,
                       onTap: () => Get.toNamed(RoutesHelper.editShiftScreen,
                           arguments: [selectedUser, shift])),
                   buildPopUpOption(
                       title: 'Add Feedback',
                       icon: Icons.feedback,
-                      value: 1,
                       onTap: () => Get.toNamed(
                           RoutesHelper.addUserFeedbackScreen,
-                          arguments: [selectedUser, shift])),
+                          arguments: [selectedUser, shift])
+                  ),
+                  if (shift.done)
+                    buildPopUpOption(
+                        title: 'See Shift Feedback',
+                        icon: Icons.feedback,
+                        onTap: () {
+
+                        }),
                   if (shift.done)
                     buildPopUpOption(
                         title: 'Remove',
                         icon: Icons.visibility_off,
-                        value: 3,
                         onTap: () {
-                          final updatedShift = shift.copyWith(visible: true);
+                          final updatedShift = shift.copyWith(visible: false);
 
                           ShiftHelpers.updateShift(shift: updatedShift);
                         })
@@ -166,12 +158,10 @@ class ShiftCard extends StatelessWidget {
   dynamic buildPopUpOption({
     required String title,
     required IconData icon,
-    required int value,
     required void Function() onTap,
   }) {
     return PopupMenuItem<int>(
       onTap: onTap,
-      value: value,
       child: Row(
         children: [
           Icon(icon, color: Colors.black54),

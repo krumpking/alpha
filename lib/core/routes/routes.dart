@@ -1,5 +1,6 @@
 import 'package:alpha/features/documents/pages/add_document.dart';
 import 'package:alpha/features/feedback/pages/add_feedback.dart';
+import 'package:alpha/features/feedback/pages/see_feedback.dart';
 import 'package:alpha/features/hours_worked/pages/add_hours_worked.dart';
 import 'package:alpha/features/auth/handlers/auth_handler.dart';
 import 'package:alpha/features/auth/pages/email_verification.dart';
@@ -52,6 +53,7 @@ class RoutesHelper {
   static String editShiftScreen = '/editShift';
   static String addShiftsScreen = '/addShift';
   static String addUserFeedbackScreen = '/addFeedback';
+  static String seeUserFeedbackScreen = '/seeUserFeedback';
 
   static List<GetPage> routes = [
     GetPage(name: welcomeScreen, page: () => WelcomePage()),
@@ -153,6 +155,16 @@ class RoutesHelper {
           return AddFeedbackScreen(
             selectedUser: selectedUser,
             shift: shift,
+          );
+        }
+        ),
+    GetPage(
+        name: seeUserFeedbackScreen,
+        page: () {
+          final String userEmail = Get.arguments as String;
+
+          return MyFeedbackScreen(
+            userEmail: userEmail
           );
         }),
   ];

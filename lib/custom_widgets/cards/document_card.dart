@@ -30,7 +30,7 @@ class DocumentCard extends StatelessWidget {
               itemBuilder: (BuildContext context) => [
                 buildPopUpOption(
                   title: 'edit',
-                  icon: Icons.delete,
+                  icon: Icons.edit,
                   value: 0,
                   onTap: () {
 

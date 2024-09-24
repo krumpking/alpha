@@ -33,9 +33,15 @@ class NotesCard extends StatelessWidget {
             trailing: PopupMenuButton<int>(
               itemBuilder: (BuildContext context) => [
                 buildPopUpOption(
+                  title: 'Comment',
+                  icon: Icons.comment,
+                  onTap: () {
+
+                  },
+                ),
+                buildPopUpOption(
                   title: 'Edit Note',
                   icon: Icons.edit,
-                  value: 0,
                   onTap: () {
 
                   },
@@ -43,7 +49,6 @@ class NotesCard extends StatelessWidget {
                 buildPopUpOption(
                     title: 'Delete',
                     icon: Icons.delete,
-                    value: 1,
                     onTap: () {
 
                     }
@@ -84,12 +89,10 @@ class NotesCard extends StatelessWidget {
   dynamic buildPopUpOption({
     required String title,
     required IconData icon,
-    required int value,
     required void Function() onTap,
   }) {
     return PopupMenuItem<int>(
       onTap: onTap,
-      value: value,
       child: Row(
         children: [
           Icon(icon, color: Colors.black54),

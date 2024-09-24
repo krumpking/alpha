@@ -7,7 +7,6 @@ import '../../../global/global.dart';
 import '../../manage_profile/models/user_profile.dart';
 
 class FeedbackServices {
-  static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   static Future<APIResponse<void>> submitFeedback({
     required User currentUser,
@@ -16,7 +15,7 @@ class FeedbackServices {
     required String feedbackSource,
     required String feedbackTitle,
   }) async {
-    var feedback = FeedbackModel(
+    final feedback = FeedbackModel(
       date: DateTime.now().toString(),
       addedBy: currentUser.email!,
       feedbackTitle: feedbackTitle,
@@ -50,7 +49,35 @@ class FeedbackServices {
     });
   }
 
-  // New method for fetching all feedback
+  static Future<APIResponse<FeedbackModel>> getFeedbackByShift({required String feedbackSource}) async {
+    try {
+      // Fetch the feedback documents for the given email
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('feedback')
+          .where('feedbackSource', isEqualTo: feedbackSource)
+          .limit(1)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        // Return the first feedback found
+        return APIResponse(
+          data: FeedbackModel.fromJson(querySnapshot.docs.first.data()),
+          success: true
+        );
+      } else {
+        return APIResponse(
+          message: 'No feedback found for this shift',
+          success: false
+        );
+      }
+    } catch (e) {
+      return APIResponse(
+          message: e.toString(),
+          success: false
+      );
+    }
+  }
+
   static Stream<List<FeedbackModel>> streamAllFeedback() {
     return FirebaseFirestore.instance
         .collection('feedback')

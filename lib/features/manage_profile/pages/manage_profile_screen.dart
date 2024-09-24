@@ -255,7 +255,7 @@ class _ProfileScreenState extends ConsumerState<UserProfileScreen>
                       FeedbackTab(selectedUser: userProfile),
 
                       // Notes Tab
-                      NotesTab(selectedUser: userProfile),
+                      NotesTab(selectedUserEmail: userProfile.email!),
                     ],
                   ),
                 ),
