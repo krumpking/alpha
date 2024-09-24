@@ -1,28 +1,30 @@
 import 'package:alpha/core/utils/string_methods.dart';
+import 'package:alpha/features/documents/helpers/document_helper.dart';
 import 'package:alpha/features/workers/helper/storage_helper.dart';
 import 'package:alpha/features/documents/models/document.dart';
 import 'package:alpha/features/manage_profile/models/user_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../../../core/constants/color_constants.dart';
 import '../../../custom_widgets/custom_button/general_button.dart';
-import '../../../custom_widgets/custom_switch/custom_switch.dart';
+import '../../../custom_widgets/snackbar/custom_snackbar.dart';
 import '../../../custom_widgets/text_fields/custom_text_field.dart';
-import '../../shift/models/shift.dart';
-import '../../shift/helpers/shift_helpers.dart';
+import '../../workers/helper/add_user_helper.dart';
 import '../../workers/services/media_services.dart';
 
-class AddHoursWorkedScreen extends StatefulWidget {
+class AddDocumentScreen extends StatefulWidget {
   final UserProfile selectedUser;
-  const AddHoursWorkedScreen({super.key, required this.selectedUser});
+  const AddDocumentScreen({super.key, required this.selectedUser});
 
   @override
-  State<AddHoursWorkedScreen> createState() => _AddHoursWorkedScreenState();
+  State<AddDocumentScreen> createState() => _AddDocumentScreenState();
 }
 
-class _AddHoursWorkedScreenState extends State<AddHoursWorkedScreen> {
+class _AddDocumentScreenState extends State<AddDocumentScreen> {
   final TextEditingController _documentNameController = TextEditingController();
-  final TextEditingController _hoursWorkedController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+  TextEditingController expiryDateTextEditing = TextEditingController();
   User? currentUser;
   List<Document> documents = [];
   String selectedDocumentUrl = "";
@@ -32,7 +34,6 @@ class _AddHoursWorkedScreenState extends State<AddHoursWorkedScreen> {
   void initState() {
     super.initState();
     currentUser = FirebaseAuth.instance.currentUser;
-    documents = [];
   }
 
   @override
@@ -45,7 +46,7 @@ class _AddHoursWorkedScreenState extends State<AddHoursWorkedScreen> {
         title: Text(
           widget.selectedUser.name!,
           style:
-              const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+          const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
       ),
       body: Padding(
@@ -57,11 +58,34 @@ class _AddHoursWorkedScreenState extends State<AddHoursWorkedScreen> {
             _buildDocumentUpload(),
             const SizedBox(height: 12),
             CustomTextField(
-              controller: _hoursWorkedController,
-              labelText: 'Hours Worked',
+              controller: descriptionController,
+              labelText: 'Description',
               prefixIcon: const Icon(Icons.description, color: Colors.grey),
-              keyBoardType: const TextInputType.numberWithOptions(
-                  decimal: false, signed: false),
+            ),
+            const SizedBox(height: 12),
+            GestureDetector(
+              onTap: () async {
+                await AddUserHelper.pickDate(
+                    context: context, initialDate: DateTime.now())
+                    .then((date) {
+                  setState(() {
+                    if (date != null) {
+                      String formattedDate =
+                      DateFormat('yyyy/MM/dd').format(date);
+                      expiryDateTextEditing.text = formattedDate;
+                    }
+                  });
+                });
+              },
+              child: CustomTextField(
+                enabled: false,
+                controller: expiryDateTextEditing,
+                prefixIcon: const Icon(
+                  Icons.calendar_month,
+                  color: Colors.grey,
+                ),
+                labelText: 'Expiry Date',
+              ),
             ),
             const SizedBox(height: 20),
             _buildUpdateButton(),
@@ -83,13 +107,13 @@ class _AddHoursWorkedScreenState extends State<AddHoursWorkedScreen> {
             border: Border.all(color: Pallete.primaryColor, width: 2),
           ),
           child: Icon(
-            Icons.calendar_month,
+            Icons.edit_document,
             size: 100,
             color: Pallete.primaryColor,
           ),
         ),
         Text(
-          'Add Hours Worked',
+          'Add Document',
           textAlign: TextAlign.center,
           style: TextStyle(
               color: Pallete.primaryColor,
@@ -133,54 +157,47 @@ class _AddHoursWorkedScreenState extends State<AddHoursWorkedScreen> {
     return Center(
       child: GeneralButton(
         onTap: () async {
-          await StorageHelper.triggerDocUpload(documentName:  _documentNameController.text, selectedFile: selectedFile)
-              .then((documentUrl) {
-            if (documentUrl != null) {
-              setState(() {
-                selectedDocumentUrl = documentUrl;
-                documents.add(Document(
-                  docID: StringMethods.generateRandomString(),
-                  documentName: _documentNameController.text,
-                  documentUrl: documentUrl,
-                ));
-              });
-            }
-          });
+          if(selectedFile != null){
+            await StorageHelper.triggerDocUpload(
+                documentName: _documentNameController.text, selectedFile: selectedFile)
+                .then((documentUrl) {
+              if (documentUrl != null) {
+                setState(() {
+                  selectedDocumentUrl = documentUrl;
+                  documents.add(Document(
+                    docID: StringMethods.generateRandomString(),
+                    documentName: _documentNameController.text,
+                    expiryDate: expiryDateTextEditing.text,
+                    documentDescription: descriptionController.text,
+                    documentUrl: documentUrl,
+                  ));
+                });
 
-          var id = StringMethods.generateRandomString();
-          var hours = _hoursWorkedController.text.isNotEmpty
-              ? int.parse(_hoursWorkedController.text)
-              : 0;
-          var addedBy = currentUser != null
-              ? currentUser!.uid
-              : "Admin user account not found";
+                // Once uploaded, validate and submit the document
+                DocumentHelper.validateAndSubmitDocument(
+                  profile: widget.selectedUser,
+                  docName: _documentNameController.text,
+                  docDescription: descriptionController.text,
+                  expiryDate: expiryDateTextEditing.text,
+                  docLink: documentUrl,
+                );
+              } else {
+                CustomSnackBar.showErrorSnackbar(message: 'Document upload failed.');
+              }
+            });
+          }else{
+            CustomSnackBar.showErrorSnackbar(message: 'Please pick a document to upload first');
+          }
 
-          Shift hoursWorked = Shift(
-              shiftId: id,
-              placeName: "Monthly Record",
-              startTime: "Monthly record",
-              endTime: "Monthly record",
-              duration: hours.toString(),
-              hoursWorked: hours,
-              date: DateTime.now().toString(),
-              visible: true,
-              dateAdded: DateTime.now().toString(),
-              addedBy: addedBy,
-              contactPersonNumber: "contactPersonNumber",
-              contactPersonAltNumber: "contactPersonAltNumber",
-              staffEmail: "staffEmail",
-              done: true,
-              notes: "notes");
-
-          ShiftHelpers.validateAndSubmitShift(shift: hoursWorked);
         },
         borderRadius: 10,
         btnColor: Pallete.primaryColor,
         width: 300,
         child: const Text(
-          "Add Hours Worked",
+          "Add Document",
           style: TextStyle(
-              color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+              color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold
+          ),
         ),
       ),
     );

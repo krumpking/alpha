@@ -24,7 +24,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 import '../../../core/constants/dimensions.dart';
 import '../../../core/utils/providers.dart';
 import '../../../custom_widgets/sidebar/user_drawer.dart';
-import '../../hours_worked/models/document.dart';
+import '../../documents/models/document.dart';
 import '../../manage_profile/models/user_profile.dart';
 import '../../not_found/user_profile_not_found.dart';
 

@@ -71,30 +71,54 @@ class StaffServices {
   }
 
   static Future<APIResponse<UserProfile>> fetchUserProfile({required String profileEmail}) async {
-    final usersRef = FirebaseFirestore.instance.collection('users');
+    try {
+      final usersRef = FirebaseFirestore.instance.collection('users');
 
-    // Query the collection to find a user document with the specified email
-    final querySnapshot =
-        await usersRef.where('email', isEqualTo: profileEmail).get();
+      final querySnapshot = await usersRef
+          .where('email', isEqualTo: profileEmail)
+          .limit(1)
+          .get();
 
-    // Check if any documents are found
-    if (querySnapshot.docs.isNotEmpty) {
-      // Get the first document found (assuming email is unique)
-      final userDoc = querySnapshot.docs.first.data();
+      if (querySnapshot.docs.isNotEmpty) {
+        final userDoc = querySnapshot.docs.first.data();
 
-      final userProfile = UserProfile.fromJson(userDoc);
+        if (userDoc.isNotEmpty) {
+          final userProfile = UserProfile.fromJson(userDoc);
 
-      return APIResponse(
-          success: true,
-          data: userProfile,
-          message: 'User fetched successfully');
-    } else {
-      return APIResponse(
+          DevLogs.logInfo('PROFILE with email $profileEmail FOUND');
+
+          return APIResponse(
+            success: true,
+            data: userProfile,
+            message: 'User fetched successfully',
+          );
+        } else {
+
+          DevLogs.logError('PROFILE with email $profileEmail NOT FOUND: User fetching failed: Document data is null or malformed');
+          return APIResponse(
+            success: false,
+            message: 'User fetching failed: Document data is null or malformed',
+          );
+        }
+      } else {
+
+        DevLogs.logError('User fetching failed: No user found with the specified email');
+        return APIResponse(
           success: false,
-          message:
-              'User fetching failed: no user found with the specified email');
+          message: 'User fetching failed: No user found with the specified email',
+        );
+      }
+    } catch (e) {
+
+      DevLogs.logError('User fetching failed: ${e.toString()}');
+
+      return APIResponse(
+        success: false,
+        message: 'An error occurred while fetching the user: ${e.toString()}',
+      );
     }
   }
+
 
 // Method to fetch all users from Firebase Firestore
   static Stream<List<UserProfile>> streamAllUsers() {

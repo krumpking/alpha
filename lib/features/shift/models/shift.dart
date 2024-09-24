@@ -1,4 +1,4 @@
-import '../../hours_worked/models/document.dart';
+import '../../documents/models/document.dart';
 
 class Shift {
   String shiftId;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import '../../hours_worked/models/document.dart';
+import '../../documents/models/document.dart';
 
 class HomeHelper {
   static void showExpiringDocuments({required String message, required List<Document> documents}) {

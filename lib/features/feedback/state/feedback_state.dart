@@ -17,8 +17,8 @@ class FeedbackNotifier extends StateNotifier<AsyncValue<List<FeedbackModel>>> {
 
     _feedbackSubscription =
         FeedbackServices.streamFeedbackByEmail(email: profileEmail).listen(
-              (shifts) {
-            state = AsyncValue.data(shifts);
+              (feedback) {
+            state = AsyncValue.data(feedback);
           },
           onError: (error) {
             state = AsyncValue.error(

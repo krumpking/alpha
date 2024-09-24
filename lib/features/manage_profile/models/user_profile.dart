@@ -1,6 +1,6 @@
 import 'package:alpha/features/shift/models/shift.dart';
 
-import '../../hours_worked/models/document.dart';
+import '../../documents/models/document.dart';
 
 class UserProfile {
   String? name;

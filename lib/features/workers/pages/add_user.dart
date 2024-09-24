@@ -1,6 +1,6 @@
 import 'package:alpha/custom_widgets/text_fields/custom_phone_input.dart';
 import 'package:alpha/features/shift/models/shift.dart';
-import 'package:alpha/features/hours_worked/models/document.dart';
+import 'package:alpha/features/documents/models/document.dart';
 import 'package:alpha/core/constants/color_constants.dart';
 import 'package:alpha/custom_widgets/custom_button/general_button.dart';
 import 'package:alpha/custom_widgets/text_fields/custom_text_field.dart';
@@ -9,6 +9,7 @@ import 'package:extended_phone_number_input/phone_number_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import '../../../core/utils/string_methods.dart';
 import '../../../custom_widgets/country_city_state/country_city_state.dart';
 import '../../../custom_widgets/custom_dropdown.dart';
 import '../../manage_profile/models/user_profile.dart';
@@ -23,6 +24,7 @@ class AdminAddUser extends ConsumerStatefulWidget {
 }
 
 class _AdminAddUserState extends ConsumerState<AdminAddUser> {
+  dynamic selectedFile;
   String selectedRole = 'User';
   PhoneNumberInputController? phoneNumberController;
   PhoneNumberInputController? contactInformationController;
@@ -359,25 +361,7 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                 const SizedBox(height: 10),
                 GeneralButton(
                   onTap: () async {
-                    await StorageHelper.triggerDocUpload(
-                            documentNameController.text.trim())
-                        .then((documentUrl) {
-                      if (documentUrl != null) {
-                        selectedDocumentUrl = documentUrl;
-
-                        setState(() {
-                          documents.add(
-                            Document(
-                              documentName: documentNameController.text.trim(),
-                              documentUrl: selectedDocumentUrl!,
-                              expiryDate: expiryDateTextEditing.text,
-                            ),
-                          );
-                          documentNameController.clear();
-                          expiryDateTextEditing.clear();
-                        });
-                      }
-                    });
+                    selectedFile = await MediaServices.pickDocument();
                   },
                   borderRadius: 10,
                   btnColor: Colors.white,
@@ -399,6 +383,22 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
             Center(
               child: GeneralButton(
                 onTap: () async {
+                  await StorageHelper.triggerDocUpload(documentName:  documentNameController.text, selectedFile: selectedFile)
+                      .then((documentUrl) {
+                    if (documentUrl != null) {
+                      setState(() {
+                        selectedDocumentUrl = documentUrl;
+                        documents.add(Document(
+                          docID: StringMethods.generateRandomString(),
+                          documentName: documentNameController.text,
+                          expiryDate: expiryDateTextEditing.text,
+                          documentUrl: documentUrl,
+                        ));
+                      });
+                    }
+                  });
+
+
                   if (pickedImage != null) {
                     AddUserHelper.validateAndSubmitForm(
                       pickedImageBytes: pickedImage!.files.single.bytes,

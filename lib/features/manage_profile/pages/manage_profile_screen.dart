@@ -118,6 +118,14 @@ class _ProfileScreenState extends ConsumerState<UserProfileScreen>
                                           fontWeight: FontWeight.bold),
                                     ),
                                     Text(
+                                      selectedUserProfile.email!,
+                                      style: const TextStyle(fontSize: 12),
+                                    ),
+                                    Text(
+                                      selectedUserProfile.phoneNumber!,
+                                      style: const TextStyle(fontSize: 12),
+                                    ),
+                                    Text(
                                       selectedUserProfile.post!,
                                       style: const TextStyle(fontSize: 12),
                                     ),
@@ -251,8 +259,11 @@ class _ProfileScreenState extends ConsumerState<UserProfileScreen>
                       // Previous Shifts Tab
                       PreviousShiftsTab(selectedUser: userProfile),
 
+                      // Feedback
+                      NotesTab(selectedUser: userProfile),
+
                       // Notes Tab
-                      FeedbackTab(selectedUser: userProfile),
+                      NotesTab(selectedUser: userProfile),
                     ],
                   ),
                 ),

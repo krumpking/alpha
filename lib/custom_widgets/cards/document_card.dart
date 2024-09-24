@@ -1,6 +1,6 @@
 import 'package:alpha/core/constants/color_constants.dart';
 import 'package:alpha/features/manage_profile/helpers/profile_helpers.dart';
-import 'package:alpha/features/hours_worked/models/document.dart';
+import 'package:alpha/features/documents/models/document.dart';
 import 'package:flutter/material.dart';
 
 class DocumentCard extends StatelessWidget {
