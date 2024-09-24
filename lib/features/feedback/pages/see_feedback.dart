@@ -6,10 +6,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/color_constants.dart';
 
 
-class FeedbackTab extends ConsumerWidget {
+class MyFeedbackScreen extends ConsumerWidget {
   final UserProfile selectedUser;
 
-  const FeedbackTab({super.key, required this.selectedUser});
+  const MyFeedbackScreen({super.key, required this.selectedUser});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

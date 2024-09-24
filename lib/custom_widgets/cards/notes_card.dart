@@ -29,6 +29,29 @@ class NotesCard extends StatelessWidget {
                         fontWeight: FontWeight.bold, fontSize: 14)),
               ],
             ),
+
+            trailing: PopupMenuButton<int>(
+              itemBuilder: (BuildContext context) => [
+                buildPopUpOption(
+                  title: 'Edit Note',
+                  icon: Icons.edit,
+                  value: 0,
+                  onTap: () {
+
+                  },
+                ),
+                buildPopUpOption(
+                    title: 'Delete',
+                    icon: Icons.delete,
+                    value: 1,
+                    onTap: () {
+
+                    }
+                ),
+
+              ],
+              icon: const Icon(Icons.more_vert),
+            ),
           ),
           const Divider(
             color: Colors.grey,
@@ -52,6 +75,28 @@ class NotesCard extends StatelessWidget {
               Text(note.content,
                   style: const TextStyle(color: Colors.white, fontSize: 12)),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  dynamic buildPopUpOption({
+    required String title,
+    required IconData icon,
+    required int value,
+    required void Function() onTap,
+  }) {
+    return PopupMenuItem<int>(
+      onTap: onTap,
+      value: value,
+      child: Row(
+        children: [
+          Icon(icon, color: Colors.black54),
+          const SizedBox(width: 8),
+          Text(
+            title,
+            style: const TextStyle(fontSize: 12),
           ),
         ],
       ),

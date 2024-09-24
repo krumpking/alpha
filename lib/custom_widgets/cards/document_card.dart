@@ -27,23 +27,13 @@ class DocumentCard extends StatelessWidget {
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
             ),
             trailing: PopupMenuButton<int>(
-              onSelected: (int selectedValue) async {
-                switch (selectedValue) {
-                  case 0:
-                    await ProfileHelpers.viewDocument(document.documentUrl);
-                    break;
-                  case 1:
-                    await ();
-                    break;
-                }
-              },
               itemBuilder: (BuildContext context) => [
                 buildPopUpOption(
-                  title: 'Download',
-                  icon: Icons.download,
+                  title: 'edit',
+                  icon: Icons.delete,
                   value: 0,
                   onTap: () {
-                    // View logic handled in onSelected
+
                   },
                 ),
                 buildPopUpOption(

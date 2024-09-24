@@ -1,7 +1,9 @@
 import 'package:alpha/core/routes/routes.dart';
 import 'package:alpha/core/utils/logs.dart';
 import 'package:alpha/core/utils/providers.dart';
+import 'package:alpha/features/feedback/pages/see_feedback.dart';
 import 'package:alpha/features/manage_profile/pages/documents_tab.dart';
+import 'package:alpha/features/manage_profile/pages/feedback_tab.dart';
 import 'package:alpha/features/manage_profile/pages/notes_tab.dart';
 import 'package:alpha/features/manage_profile/pages/previous_shifts_tab.dart';
 import 'package:alpha/features/manage_profile/pages/upcoming_shifts_tab.dart';
@@ -35,7 +37,7 @@ class _ProfileScreenState extends ConsumerState<UserProfileScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 5, vsync: this);
   }
 
   @override
@@ -133,17 +135,6 @@ class _ProfileScreenState extends ConsumerState<UserProfileScreen>
                                 ),
 
                                 if(currentUserRole == UserRole.user)PopupMenuButton<int>(
-                                  onSelected: (int selectedValue) {
-                                    // Handle the selected value
-                                    switch (selectedValue) {
-                                      case 0:
-                                      // Perform some action for Edit
-                                        break;
-                                      case 1:
-                                      // Perform some action for Delete
-                                        break;
-                                    }
-                                  },
                                   itemBuilder: (BuildContext context) => [
                                     buildPopUpOption(
                                       title: 'Update Profile Picture',
@@ -243,6 +234,7 @@ class _ProfileScreenState extends ConsumerState<UserProfileScreen>
                     Tab(text: 'Assigned Shifts'),
                     Tab(text: 'Previous Shifts'),
                     Tab(text: 'Feedback'),
+                    Tab(text: 'Notes'),
                   ],
                 ),
                 SizedBox(
@@ -260,7 +252,7 @@ class _ProfileScreenState extends ConsumerState<UserProfileScreen>
                       PreviousShiftsTab(selectedUser: userProfile),
 
                       // Feedback
-                      NotesTab(selectedUser: userProfile),
+                      FeedbackTab(selectedUser: userProfile),
 
                       // Notes Tab
                       NotesTab(selectedUser: userProfile),
