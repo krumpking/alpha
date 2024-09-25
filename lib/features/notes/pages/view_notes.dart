@@ -7,8 +7,6 @@ import '../../../core/constants/color_constants.dart';
 import '../../../custom_widgets/custom_button/general_button.dart';
 import '../../../custom_widgets/text_fields/custom_text_field.dart';
 import '../helper/notes_helper.dart';
-import '../models/comment.dart';
-
 class ViewNotesScreen extends StatefulWidget {
   final Note note;
   final UserProfile selectedUser;
