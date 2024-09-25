@@ -10,7 +10,8 @@ class NotesCard extends StatelessWidget {
   final UserProfile userProfile;
   const NotesCard({
     super.key,
-    required this.note, required this.userProfile,
+    required this.note,
+    required this.userProfile,
   });
 
   @override
@@ -33,31 +34,31 @@ class NotesCard extends StatelessWidget {
                         fontWeight: FontWeight.bold, fontSize: 14)),
               ],
             ),
-
             trailing: PopupMenuButton<int>(
               itemBuilder: (BuildContext context) => [
                 buildPopUpOption(
                   title: 'View',
                   icon: Icons.remove_red_eye,
                   onTap: () {
-                    Get.toNamed(RoutesHelper.viewNoteScreen, arguments: [userProfile, note]);
+                    Get.toNamed(RoutesHelper.viewNoteScreen,
+                        arguments: [userProfile, note]);
                   },
                 ),
                 buildPopUpOption(
                   title: 'Edit Note',
                   icon: Icons.edit,
                   onTap: () {
-                    Get.toNamed(RoutesHelper.editNotesScreen, arguments: [userProfile, note]);
+                    Get.toNamed(RoutesHelper.editNotesScreen,
+                        arguments: [userProfile, note]);
                   },
                 ),
-                buildPopUpOption(
-                    title: 'Delete',
-                    icon: Icons.delete,
-                    onTap: () {
+                // buildPopUpOption(
+                //     title: 'Delete',
+                //     icon: Icons.delete,
+                //     onTap: () {
 
-                    }
-                ),
-
+                //     }
+                // ),
               ],
               icon: const Icon(Icons.more_vert),
             ),
@@ -77,7 +78,7 @@ class NotesCard extends StatelessWidget {
                   TextSpan(
                       text: note.dateAdded.toString(),
                       style:
-                      TextStyle(fontSize: 12, color: Pallete.primaryColor)),
+                          TextStyle(fontSize: 12, color: Pallete.primaryColor)),
                 ]),
               ),
               const SizedBox(height: 4),

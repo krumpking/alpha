@@ -361,7 +361,12 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                 const SizedBox(height: 10),
                 GeneralButton(
                   onTap: () async {
-                    selectedFile = await MediaServices.pickDocument();
+                    var res = await MediaServices.pickDocument();
+                    if (res != null) {
+                      setState(() {
+                        selectedFile = res;
+                      });
+                    }
                   },
                   borderRadius: 10,
                   btnColor: Colors.white,
@@ -369,7 +374,7 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                   height: 40,
                   boxBorder: Border.all(color: Pallete.primaryColor),
                   child: Text(
-                    "Add Document",
+                    selectedFile != null ? 'Document attached' : "Add Document",
                     style: TextStyle(
                         color: Pallete.primaryColor,
                         fontSize: 12,
@@ -383,7 +388,9 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
             Center(
               child: GeneralButton(
                 onTap: () async {
-                  await StorageHelper.triggerDocUpload(documentName:  documentNameController.text, selectedFile: selectedFile)
+                  await StorageHelper.triggerDocUpload(
+                          documentName: documentNameController.text,
+                          selectedFile: selectedFile)
                       .then((documentUrl) {
                     if (documentUrl != null) {
                       setState(() {
@@ -397,7 +404,6 @@ class _AdminAddUserState extends ConsumerState<AdminAddUser> {
                       });
                     }
                   });
-
 
                   if (pickedImage != null) {
                     AddUserHelper.validateAndSubmitForm(

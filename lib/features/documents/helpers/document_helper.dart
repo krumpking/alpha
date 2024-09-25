@@ -9,7 +9,6 @@ import '../../../core/utils/string_methods.dart';
 import '../../../custom_widgets/circular_loader/circular_loader.dart';
 import '../../../custom_widgets/snackbar/custom_snackbar.dart';
 
-
 class DocumentHelper {
   static void deleteDocument({
     required Document document,
@@ -41,7 +40,8 @@ class DocumentHelper {
                   .toList();
 
               // Create an updated profile without the deleted document
-              final updatedProfile = profile.copyWith(documents: updatedDocuments);
+              final updatedProfile =
+                  profile.copyWith(documents: updatedDocuments);
 
               // Update the user's profile in Firestore
               final response = await StaffServices.updateUserProfile(
@@ -55,12 +55,16 @@ class DocumentHelper {
               // Show a success or error message
               if (response.success) {
                 // Notify the provider to update the global state
-                ref.read(ProviderUtils.profileProvider(profile.email!).notifier)
+                ref
+                    .read(
+                        ProviderUtils.profileProvider(profile.email!).notifier)
                     .deleteDocument(document);
 
-                CustomSnackBar.showSuccessSnackbar(message: 'Document deleted successfully');
+                CustomSnackBar.showSuccessSnackbar(
+                    message: 'Document deleted successfully');
               } else {
-                CustomSnackBar.showErrorSnackbar(message: response.message ?? 'Failed to delete document');
+                CustomSnackBar.showErrorSnackbar(
+                    message: response.message ?? 'Failed to delete document');
               }
             },
             child: const Text("Delete"),
@@ -72,7 +76,6 @@ class DocumentHelper {
       name: 'Delete Document Confirmation',
     );
   }
-
 
   static void validateAndSubmitDocument({
     required UserProfile profile,
@@ -88,12 +91,14 @@ class DocumentHelper {
     }
 
     if (docDescription.isEmpty) {
-      CustomSnackBar.showErrorSnackbar(message: 'Please input a document description');
+      CustomSnackBar.showErrorSnackbar(
+          message: 'Please input a document description');
       return;
     }
 
     if (expiryDate.isEmpty) {
-      CustomSnackBar.showErrorSnackbar(message: 'Please input a document expiry date');
+      CustomSnackBar.showErrorSnackbar(
+          message: 'Please input a document expiry date');
       return;
     }
 
@@ -132,10 +137,13 @@ class DocumentHelper {
       if (Get.isDialogOpen!) Get.back();
 
       if (response.success) {
-        CustomSnackBar.showSuccessSnackbar(message: 'Document added successfully');
-        Get.back();  // Optionally close the form/screen if needed
+        CustomSnackBar.showSuccessSnackbar(
+            message: 'Document added successfully');
+        Get.back(
+            closeOverlays: true); // Optionally close the form/screen if needed
       } else {
-        CustomSnackBar.showErrorSnackbar(message: response.message ?? 'Failed to submit document');
+        CustomSnackBar.showErrorSnackbar(
+            message: response.message ?? 'Failed to submit document');
       }
     } catch (e) {
       // Handle any unexpected errors and close the dialog if open
@@ -143,5 +151,4 @@ class DocumentHelper {
       CustomSnackBar.showErrorSnackbar(message: 'An error occurred: $e');
     }
   }
-
 }

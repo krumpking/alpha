@@ -46,7 +46,7 @@ class _AddDocumentScreenState extends State<AddDocumentScreen> {
         title: Text(
           widget.selectedUser.name!,
           style:
-          const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+              const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
       ),
       body: Padding(
@@ -66,12 +66,12 @@ class _AddDocumentScreenState extends State<AddDocumentScreen> {
             GestureDetector(
               onTap: () async {
                 await AddUserHelper.pickDate(
-                    context: context, initialDate: DateTime.now())
+                        context: context, initialDate: DateTime.now())
                     .then((date) {
                   setState(() {
                     if (date != null) {
                       String formattedDate =
-                      DateFormat('yyyy/MM/dd').format(date);
+                          DateFormat('yyyy/MM/dd').format(date);
                       expiryDateTextEditing.text = formattedDate;
                     }
                   });
@@ -141,16 +141,17 @@ class _AddDocumentScreenState extends State<AddDocumentScreen> {
             Expanded(
               child: GeneralButton(
                 onTap: () async {
-                  selectedFile = await MediaServices.pickDocument().then((file) {
-                    if (file != null) {
-                      CustomSnackBar.showSuccessSnackbar(message: 'File Picked Successfully');
-                      setState(() {
-                        selectedFile = file;
-                      });
-                    } else {
-                      CustomSnackBar.showErrorSnackbar(message: 'No file selected.');
-                    }
-                  });
+                  var res = await MediaServices.pickDocument();
+                  if (res != null) {
+                    CustomSnackBar.showSuccessSnackbar(
+                        message: 'File Picked Successfully');
+                    setState(() {
+                      selectedFile = res;
+                    });
+                  } else {
+                    CustomSnackBar.showErrorSnackbar(
+                        message: 'No file selected.');
+                  }
                 },
                 borderRadius: 10,
                 btnColor: Colors.white,
@@ -165,35 +166,18 @@ class _AddDocumentScreenState extends State<AddDocumentScreen> {
             )
           ],
         ),
-        if (selectedFile != null)
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: Row(
-              children: [
-                Icon(Icons.check_circle, color: Pallete.primaryColor),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    'File "${selectedFile.name}" selected',
-                    style: TextStyle(color: Pallete.primaryColor),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
-            ),
-          ),
       ],
     );
   }
-
 
   Widget _buildUpdateButton() {
     return Center(
       child: GeneralButton(
         onTap: () async {
-          if(selectedFile != null){
+          if (selectedFile != null) {
             await StorageHelper.triggerDocUpload(
-                documentName: _documentNameController.text, selectedFile: selectedFile)
+                    documentName: _documentNameController.text,
+                    selectedFile: selectedFile)
                 .then((documentUrl) {
               if (documentUrl != null) {
                 setState(() {
@@ -216,13 +200,14 @@ class _AddDocumentScreenState extends State<AddDocumentScreen> {
                   docLink: documentUrl,
                 );
               } else {
-                CustomSnackBar.showErrorSnackbar(message: 'Document upload failed.');
+                CustomSnackBar.showErrorSnackbar(
+                    message: 'Document upload failed.');
               }
             });
-          }else{
-            CustomSnackBar.showErrorSnackbar(message: 'Please pick a document to upload first');
+          } else {
+            CustomSnackBar.showErrorSnackbar(
+                message: 'Please pick a document to upload first');
           }
-
         },
         borderRadius: 10,
         btnColor: Pallete.primaryColor,
@@ -230,8 +215,7 @@ class _AddDocumentScreenState extends State<AddDocumentScreen> {
         child: const Text(
           "Add Document",
           style: TextStyle(
-              color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold
-          ),
+              color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
         ),
       ),
     );

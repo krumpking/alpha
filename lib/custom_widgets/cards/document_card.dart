@@ -10,7 +10,11 @@ class DocumentCard extends StatelessWidget {
   final Document document;
   final UserProfile profile;
   final WidgetRef ref;
-  const DocumentCard({super.key, required this.document, required this.profile, required this.ref});
+  const DocumentCard(
+      {super.key,
+      required this.document,
+      required this.profile,
+      required this.ref});
 
   @override
   Widget build(BuildContext context) {
@@ -33,20 +37,21 @@ class DocumentCard extends StatelessWidget {
             ),
             trailing: PopupMenuButton<int>(
               itemBuilder: (BuildContext context) => [
-                buildPopUpOption(
-                  title: 'edit',
-                  icon: Icons.edit,
-                  value: 0,
-                  onTap: () {
+                // buildPopUpOption(
+                //   title: 'edit',
+                //   icon: Icons.edit,
+                //   value: 0,
+                //   onTap: () {
 
-                  },
-                ),
+                //   },
+                // ),
                 buildPopUpOption(
                   title: 'Delete',
                   icon: Icons.delete,
                   value: 1,
                   onTap: () {
-                    DocumentHelper.deleteDocument(document: document, profile: profile, ref: ref);
+                    DocumentHelper.deleteDocument(
+                        document: document, profile: profile, ref: ref);
                   },
                 ),
               ],
