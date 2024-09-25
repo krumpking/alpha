@@ -22,13 +22,6 @@ class _AddFeedbackScreenState extends State<AddFeedbackScreen> {
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController feedbackTitleController = TextEditingController();
   final currentUser = FirebaseAuth.instance.currentUser;
-  FeedbackTag? feedbackTag;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,8 +32,10 @@ class _AddFeedbackScreenState extends State<AddFeedbackScreen> {
         iconTheme: const IconThemeData(color: Colors.white),
         title: Text(
           widget.selectedUser.name!,
-          style:
-              const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
         ),
       ),
       body: Padding(
@@ -68,42 +63,37 @@ class _AddFeedbackScreenState extends State<AddFeedbackScreen> {
               'Add Feedback',
               textAlign: TextAlign.center,
               style: TextStyle(
-                  color: Pallete.primaryColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16),
+                color: Pallete.primaryColor,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
             ),
-            const SizedBox(
-              height: 24,
-            ),
+            const SizedBox(height: 24),
             CustomTextField(
               keyBoardType: TextInputType.text,
               controller: feedbackTitleController,
               labelText: 'Title',
               prefixIcon: const Icon(Icons.description, color: Colors.grey),
             ),
-            const SizedBox(
-              height: 12,
-            ),
+            const SizedBox(height: 12),
             CustomTextField(
               controller: descriptionController,
               labelText: 'Description',
               prefixIcon: const Icon(Icons.description, color: Colors.grey),
             ),
-            const SizedBox(
-              height: 12,
-            ),
+            const SizedBox(height: 12),
             Center(
               child: GeneralButton(
-                onTap: () => {
+                onTap: () {
                   FeedbackHelper.validateAndSubmitFeedback(
                     description: descriptionController.text.trim(),
                     currentUser: currentUser!,
                     feedbackTitle: feedbackTitleController.text.trim(),
                     selectedUser: widget.selectedUser,
-                    feedbackSource: widget.shift == null
+                    feedbackSource: widget.shift != null
                         ? widget.shift!.shiftId
-                        : 'general ',
-                  )
+                        : 'general',
+                  );
                 },
                 borderRadius: 10,
                 btnColor: Pallete.primaryColor,
@@ -111,14 +101,16 @@ class _AddFeedbackScreenState extends State<AddFeedbackScreen> {
                 child: const Text(
                   "Add Feedback",
                   style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold),
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
           ],
         ),
+
       ),
     );
   }
