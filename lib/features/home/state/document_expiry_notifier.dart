@@ -2,7 +2,7 @@ import 'package:alpha/core/utils/logs.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../../hours_worked/models/document.dart';
+import '../../documents/models/document.dart';
 import '../../manage_profile/models/user_profile.dart';
 
 class ExpiringDocumentsNotifier extends StateNotifier<List<Document>> {

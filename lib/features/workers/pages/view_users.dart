@@ -78,17 +78,6 @@ class AdminViewUsers extends ConsumerWidget {
                           ),
 
                           PopupMenuButton<int>(
-                            onSelected: (int selectedValue) {
-                              // Handle the selected value
-                              switch (selectedValue) {
-                                case 0:
-                                // Perform some action for Edit
-                                  break;
-                                case 1:
-                                // Perform some action for Delete
-                                  break;
-                              }
-                            },
                             itemBuilder: (BuildContext context) => [
                               buildPopUpOption(
                                 title: 'View Profile',
@@ -112,6 +101,14 @@ class AdminViewUsers extends ConsumerWidget {
                                   onTap: () => Get.toNamed(
                                       RoutesHelper.addHoursWorkedScreen,
                                       arguments: [user])),
+                              buildPopUpOption(
+                                  title: 'Add Document',
+                                  icon: Icons.file_copy,
+                                  value: 2,
+                                  onTap: () => Get.toNamed(
+                                      RoutesHelper.addDocumentsScreen,
+                                      arguments: [user])),
+
                               buildPopUpOption(
                                   title: 'Add Feedback',
                                   icon: Icons.feedback,

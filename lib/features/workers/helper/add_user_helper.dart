@@ -123,9 +123,9 @@ class AddUserHelper {
         CustomSnackBar.showErrorSnackbar(
             message: response.message ?? 'Something went wrong');
       } else {
-        if (Get.isDialogOpen!) Get.back();
         CustomSnackBar.showSuccessSnackbar(
             message: 'User account created successfully');
+        if (Get.isDialogOpen!) Get.back(closeOverlays: true);
       }
     });
   }
@@ -301,7 +301,8 @@ class AddUserHelper {
       barrierDismissible: false,
     );
 
-    await StaffServices.updateUserProfile(email: userProfile.email! ,updatedProfile: userProfile)
+    await StaffServices.updateUserProfile(
+            email: userProfile.email!, updatedProfile: userProfile)
         .then((response) {
       if (!response.success) {
         if (!Get.isSnackbarOpen) Get.back();
@@ -314,5 +315,4 @@ class AddUserHelper {
       }
     });
   }
-
 }

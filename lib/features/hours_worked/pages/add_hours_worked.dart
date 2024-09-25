@@ -1,6 +1,6 @@
 import 'package:alpha/core/utils/string_methods.dart';
 import 'package:alpha/features/workers/helper/storage_helper.dart';
-import 'package:alpha/features/hours_worked/models/document.dart';
+import 'package:alpha/features/documents/models/document.dart';
 import 'package:alpha/features/manage_profile/models/user_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +10,7 @@ import '../../../custom_widgets/custom_switch/custom_switch.dart';
 import '../../../custom_widgets/text_fields/custom_text_field.dart';
 import '../../shift/models/shift.dart';
 import '../../shift/helpers/shift_helpers.dart';
+import '../../workers/services/media_services.dart';
 
 class AddHoursWorkedScreen extends StatefulWidget {
   final UserProfile selectedUser;
@@ -22,16 +23,15 @@ class AddHoursWorkedScreen extends StatefulWidget {
 class _AddHoursWorkedScreenState extends State<AddHoursWorkedScreen> {
   final TextEditingController _documentNameController = TextEditingController();
   final TextEditingController _hoursWorkedController = TextEditingController();
-  bool _isCompleted = false;
   User? currentUser;
   List<Document> documents = [];
   String selectedDocumentUrl = "";
+  dynamic selectedFile;
 
   @override
   void initState() {
     super.initState();
     currentUser = FirebaseAuth.instance.currentUser;
-    _isCompleted = false;
     documents = [];
   }
 
@@ -115,18 +115,7 @@ class _AddHoursWorkedScreenState extends State<AddHoursWorkedScreen> {
         Expanded(
           child: GeneralButton(
             onTap: () async {
-              await StorageHelper.triggerDocUpload(_documentNameController.text)
-                  .then((documentUrl) {
-                if (documentUrl != null) {
-                  setState(() {
-                    selectedDocumentUrl = documentUrl;
-                    documents.add(Document(
-                      documentName: _documentNameController.text,
-                      documentUrl: documentUrl,
-                    ));
-                  });
-                }
-              });
+              selectedFile = await MediaServices.pickDocument();
             },
             borderRadius: 10,
             btnColor: Colors.white,
@@ -144,6 +133,20 @@ class _AddHoursWorkedScreenState extends State<AddHoursWorkedScreen> {
     return Center(
       child: GeneralButton(
         onTap: () async {
+          await StorageHelper.triggerDocUpload(documentName:  _documentNameController.text, selectedFile: selectedFile)
+              .then((documentUrl) {
+            if (documentUrl != null) {
+              setState(() {
+                selectedDocumentUrl = documentUrl;
+                documents.add(Document(
+                  docID: StringMethods.generateRandomString(),
+                  documentName: _documentNameController.text,
+                  documentUrl: documentUrl,
+                ));
+              });
+            }
+          });
+
           var id = StringMethods.generateRandomString();
           var hours = _hoursWorkedController.text.isNotEmpty
               ? int.parse(_hoursWorkedController.text)

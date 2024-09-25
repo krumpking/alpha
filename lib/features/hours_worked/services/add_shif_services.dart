@@ -139,7 +139,6 @@ class ShiftServices {
     }
   }
 
-
   static Future<APIResponse<Map<String, Duration>>> getHoursWorked({
     String? staffEmail,
     required String period,
@@ -165,14 +164,16 @@ class ShiftServices {
           throw Exception("Invalid period");
       }
 
-      // Query shifts for the given staff or all staff if no email is provided
-      final query = FirebaseFirestore.instance.collection('shifts').where(
+      // Initialize the query
+      var query = FirebaseFirestore.instance.collection('shifts')
+          .where(
         'day',
         isGreaterThanOrEqualTo: DateFormat('yyyy/MM/dd').format(startDate),
       );
 
+      // Apply the staff email filter only if it's provided
       if (staffEmail != null) {
-        query.where('staffEmail', isEqualTo: staffEmail);
+        query = query.where('staffEmail', isEqualTo: staffEmail);
       }
 
       final querySnapshot = await query.get();
