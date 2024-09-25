@@ -1,4 +1,4 @@
-import 'package:alpha/features/hours_worked/models/document.dart';
+import 'package:alpha/features/documents/models/document.dart';
 import 'package:alpha/features/shift/models/shift.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';

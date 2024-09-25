@@ -9,8 +9,7 @@ import '../services/storage_services.dart';
 import 'package:path/path.dart' as path;
 
 class StorageHelper {
-  static Future<String?> triggerDocUpload(String documentName) async {
-    final selectedFile = await MediaServices.pickDocument();
+  static Future<String?> triggerDocUpload({required String documentName, required dynamic selectedFile}) async {
 
     Get.log('File ${selectedFile['bytes']}');
 

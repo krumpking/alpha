@@ -2,6 +2,7 @@ import 'package:alpha/core/utils/logs.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../../core/utils/api_response.dart';
+import '../../documents/models/document.dart';
 import '../../manage_profile/models/user_profile.dart';
 
 class StaffServices {
@@ -27,6 +28,11 @@ class StaffServices {
       // If no user with the same email, proceed with adding the user
       final userData = userProfile.toJson();
       await _firestore.collection('users').add(userData);
+
+      // Add user to temp
+      await _firestore.collection('temp_users').add({
+        'email': userProfile.email,
+      });
 
       return APIResponse(
           success: true, data: '', message: 'User added successfully');
@@ -70,29 +76,100 @@ class StaffServices {
     }
   }
 
-  static Future<APIResponse<UserProfile>> fetchUserProfile({required String profileEmail}) async {
-    final usersRef = FirebaseFirestore.instance.collection('users');
+  static Future<APIResponse<dynamic>> fetchTempUser(
+      {required String profileEmail}) async {
+    try {
+      final usersRef = FirebaseFirestore.instance.collection('temp_users');
 
-    // Query the collection to find a user document with the specified email
-    final querySnapshot =
-        await usersRef.where('email', isEqualTo: profileEmail).get();
+      final querySnapshot =
+          await usersRef.where('email', isEqualTo: profileEmail).limit(1).get();
 
-    // Check if any documents are found
-    if (querySnapshot.docs.isNotEmpty) {
-      // Get the first document found (assuming email is unique)
-      final userDoc = querySnapshot.docs.first.data();
+      if (querySnapshot.docs.isNotEmpty) {
+        final userDoc = querySnapshot.docs.first.data();
 
-      final userProfile = UserProfile.fromJson(userDoc);
+        if (userDoc.isNotEmpty) {
+          // Delete the document after fetching
+          for (var docSnapshot in querySnapshot.docs) {
+            await usersRef.doc(docSnapshot.id).delete();
+          }
 
-      return APIResponse(
-          success: true,
-          data: userProfile,
-          message: 'User fetched successfully');
-    } else {
-      return APIResponse(
+          return APIResponse(
+            success: true,
+            data: {"email": profileEmail},
+            message: 'User fetched successfully',
+          );
+        } else {
+          DevLogs.logError(
+              'PROFILE with email $profileEmail NOT FOUND: User fetching failed: Document data is null or malformed');
+          return APIResponse(
+            success: false,
+            message: 'User fetching failed: Document data is null or malformed',
+          );
+        }
+      } else {
+        DevLogs.logError(
+            'User fetching failed: No user found with the specified email');
+        return APIResponse(
           success: false,
           message:
-              'User fetching failed: no user found with the specified email');
+              'User fetching failed: No user found with the specified email',
+        );
+      }
+    } catch (e) {
+      DevLogs.logError('User fetching failed: ${e.toString()}');
+
+      return APIResponse(
+        success: false,
+        message: 'An error occurred while fetching the user: ${e.toString()}',
+      );
+    }
+  }
+
+  static Future<APIResponse<UserProfile>> fetchUserProfile(
+      {required String profileEmail}) async {
+    try {
+      final usersRef = FirebaseFirestore.instance.collection('users');
+
+      final querySnapshot =
+          await usersRef.where('email', isEqualTo: profileEmail).limit(1).get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        final userDoc = querySnapshot.docs.first.data();
+
+        if (userDoc.isNotEmpty) {
+          final userProfile = UserProfile.fromJson(userDoc);
+
+          DevLogs.logInfo('PROFILE with email $profileEmail FOUND');
+
+          return APIResponse(
+            success: true,
+            data: userProfile,
+            message: 'User fetched successfully',
+          );
+        } else {
+          DevLogs.logError(
+              'PROFILE with email $profileEmail NOT FOUND: User fetching failed: Document data is null or malformed');
+          return APIResponse(
+            success: false,
+            message: 'User fetching failed: Document data is null or malformed',
+          );
+        }
+      } else {
+        DevLogs.logError(
+            'User fetching failed: No user found with the specified email');
+        return APIResponse(
+          success: false,
+          message:
+              'User fetching failed: No user found with the specified email',
+        );
+      }
+    } catch (e) {
+      DevLogs.logError('User fetching failed: ${e.toString()}');
+
+      return APIResponse(
+        success: false,
+        message: 'An error occurred while fetching the user: ${e.toString()}',
+      );
     }
   }
 
@@ -135,7 +212,6 @@ class StaffServices {
     }
   }
 
-
   // Method to update an existing user's profile
   static Future<APIResponse<String>> updateUserProfile({
     required String email,
@@ -161,7 +237,9 @@ class StaffServices {
 
       // Return a success response
       return APIResponse(
-          success: true, data: '', message: 'User profile updated successfully');
+          success: true,
+          data: '',
+          message: 'User profile updated successfully');
     } catch (e) {
       // Log the error and return a failure response with the exception message
       DevLogs.logError('UserProfile Update Error: $e');

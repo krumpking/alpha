@@ -149,7 +149,7 @@ class _EditUserProfileScreenState extends State<EditUserProfileScreen> {
                 });
               },
               
-              isEnabled: true,
+              isEnabled: selectedRole.toLowerCase() == "admin" ? true :false,
             ),
             const SizedBox(height: 20),
             GeneralButton(

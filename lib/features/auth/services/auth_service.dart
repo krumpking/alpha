@@ -70,7 +70,7 @@ class AuthServices {
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         final userDoc =
-            await StaffServices.fetchUserProfile(profileEmail: emailAddress);
+            await StaffServices.fetchTempUser(profileEmail: emailAddress);
 
         if (userDoc.data != null) {
           try {
@@ -79,13 +79,14 @@ class AuthServices {
                     email: emailAddress, password: password);
 
             if (userCredential.user != null) {
-              await userCredential.user!.updateProfile(
-                displayName: userDoc.data!.name,
-                photoURL: userDoc.data!.profilePicture!.isNotEmpty ||
-                        userDoc.data!.profilePicture != null
-                    ? userDoc.data!.profilePicture
-                    : null,
-              );
+              // Update in another place
+              // await userCredential.user!.updateProfile(
+              //   displayName: userDoc.data!.name,
+              //   photoURL: userDoc.data!.profilePicture!.isNotEmpty ||
+              //           userDoc.data!.profilePicture != null
+              //       ? userDoc.data!.profilePicture
+              //       : null,
+              // );
 
               await userCredential.user!.sendEmailVerification();
             }
@@ -201,7 +202,8 @@ class AuthServices {
       // Update the password
       await currentUser.updatePassword(newPassword);
 
-      return APIResponse(success: true, message: 'Password updated successfully.');
+      return APIResponse(
+          success: true, message: 'Password updated successfully.');
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case 'wrong-password':
@@ -220,7 +222,6 @@ class AuthServices {
           success: false, message: 'An error occurred. Please try again.');
     }
   }
-
 
   static Future<APIResponse<void>> requestVerificationCode({
     required String phoneNumber,

@@ -1,6 +1,8 @@
 import 'package:alpha/core/constants/color_constants.dart';
+import 'package:alpha/core/utils/logs.dart';
 import 'package:alpha/core/utils/providers.dart';
 import 'package:alpha/features/statistics/helpers/stats_helper.dart';
+import 'package:alpha/global/global.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -16,10 +18,13 @@ class UserShiftStats extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
-    final dailyHoursWorked = ref.watch(ProviderUtils.hoursWorkedProvider(Tuple2('day', profileEmail)));
-    final weeklyHoursWorked = ref.watch(ProviderUtils.hoursWorkedProvider(Tuple2('week', profileEmail)));
-    final monthlyHoursWorked = ref.watch(ProviderUtils.hoursWorkedProvider(Tuple2('month', profileEmail)));
-    final yearlyHoursWorked = ref.watch(ProviderUtils.hoursWorkedProvider(Tuple2('year', profileEmail)));
+    final userRole = ref.watch(ProviderUtils.userRoleProvider);
+    final String? email = userRole == UserRole.user ? profileEmail : null;
+
+    final dailyHoursWorked = ref.watch(ProviderUtils.hoursWorkedProvider(Tuple2('day', email)));
+    final weeklyHoursWorked = ref.watch(ProviderUtils.hoursWorkedProvider(Tuple2('week', email)));
+    final monthlyHoursWorked = ref.watch(ProviderUtils.hoursWorkedProvider(Tuple2('month', email)));
+    final yearlyHoursWorked = ref.watch(ProviderUtils.hoursWorkedProvider(Tuple2('year', email)));
 
 
     return Scaffold(
@@ -45,17 +50,22 @@ class UserShiftStats extends ConsumerWidget {
           physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
-              // Display daily stats
-              displayStats(hoursWorked: dailyHoursWorked, title: "Hours Worked Today"),
-              const SizedBox(height: 16),
-              // Display weekly stats
-              displayStats(hoursWorked: weeklyHoursWorked, title: "Hours Worked This Week"),
+              Row(
+                children: [
+                  Expanded(child: displayStats(hoursWorked: dailyHoursWorked, title: "Hours Worked Today")),
+                  const SizedBox(width: 16),
+                  Expanded(child: displayStats(hoursWorked: weeklyHoursWorked, title: "Hours Worked This Week")),
+                ],
+              ),
               const SizedBox(height: 16),
               // Display monthly stats
-              displayStats(hoursWorked: monthlyHoursWorked, title: "Hours Worked This Month"),
-              const SizedBox(height: 16),
-              // Display yearly stats
-              displayStats(hoursWorked: yearlyHoursWorked, title: "Hours Worked This Year"),
+              Row(
+                children: [
+                  Expanded(child: displayStats(hoursWorked: monthlyHoursWorked, title: "Hours Worked This Month")),
+                  const SizedBox(width: 16),
+                  Expanded(child: displayStats(hoursWorked: yearlyHoursWorked, title: "Hours Worked This Year")),
+                ],
+              )
             ],
           ),
         ),
@@ -113,7 +123,10 @@ class UserShiftStats extends ConsumerWidget {
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (error, stack) => Center(child: Text(error.toString())),
+      error: (error, stack) {
+        DevLogs.logError(error.toString());
+        return Center(child: Text(error.toString()));
+      },
     );
   }
 

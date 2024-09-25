@@ -6,16 +6,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/color_constants.dart';
 
 
-class FeedbackTab extends ConsumerWidget {
-  final UserProfile selectedUser;
+class MyFeedbackScreen extends ConsumerWidget {
+  final String userEmail;
 
-  const FeedbackTab({super.key, required this.selectedUser});
+  const MyFeedbackScreen({super.key, required this.userEmail});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
     // Listen to the shiftsProvider using the profileEmail
-    final feedbackAsyncValue = ref.watch(ProviderUtils.feedbackProvider(selectedUser.email!));
+    final feedbackAsyncValue = ref.watch(ProviderUtils.feedbackProvider(userEmail));
 
 
     return Scaffold(

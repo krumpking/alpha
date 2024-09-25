@@ -1,7 +1,9 @@
+import 'package:alpha/core/utils/logs.dart';
 import 'package:alpha/features/workers/services/add_user_services.dart';
 import 'package:alpha/features/manage_profile/models/user_profile.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/utils/api_response.dart';
+import '../../documents/models/document.dart';
 
 class ProfileNotifier extends StateNotifier<AsyncValue<UserProfile>> {
   final String profileEmail;
@@ -17,20 +19,49 @@ class ProfileNotifier extends StateNotifier<AsyncValue<UserProfile>> {
 
     try {
       // Fetch user profile from the service
-      final APIResponse<UserProfile> response =
-          await StaffServices.fetchUserProfile(profileEmail: profileEmail);
+      final APIResponse<UserProfile> response = await StaffServices.fetchUserProfile(profileEmail: profileEmail);
 
       if (response.success) {
-        // Update state with user data if successful
         state = AsyncValue.data(response.data!);
       } else {
-        // Update state with error message if not successful
         state = AsyncValue.error(
-            response.message ?? 'Failed to fetch user', StackTrace.current);
+            response.message ?? 'Failed to fetch user', StackTrace.current
+        );
       }
     } catch (e, stackTrace) {
-      // Handle unexpected errors and include stack trace
       state = AsyncValue.error('An unexpected error occurred: $e', stackTrace);
     }
+  }
+
+  // Update the state with a new profile
+  void updateProfile(UserProfile updatedProfile) {
+    state = AsyncValue.data(updatedProfile);
+  }
+
+  // Handle document deletion
+  Future<void> deleteDocument(Document document) async {
+    final currentProfile = state.value;
+
+    if (currentProfile == null) return;
+
+    final updatedDocuments = currentProfile.documents
+        .where((doc) => doc.docID != document.docID)
+        .toList();
+
+    final updatedProfile = currentProfile.copyWith(documents: updatedDocuments);
+
+    state = AsyncValue.data(updatedProfile);
+  }
+
+  // Handle document addition
+  Future<void> addDocument(Document newDocument) async {
+    final currentProfile = state.value;
+
+    if (currentProfile == null) return;
+
+    final updatedDocuments = [...currentProfile.documents, newDocument];
+    final updatedProfile = currentProfile.copyWith(documents: updatedDocuments);
+
+    state = AsyncValue.data(updatedProfile);
   }
 }

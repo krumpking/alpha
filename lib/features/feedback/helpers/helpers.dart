@@ -53,7 +53,7 @@ class FeedbackHelper {
       } else {
         if (Get.isDialogOpen!) Get.back();
         CustomSnackBar.showSuccessSnackbar(
-            message: 'Shift submitted successfully');
+            message: 'Feedback submitted successfully');
       }
     });
   }

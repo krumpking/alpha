@@ -3,30 +3,30 @@ import 'package:alpha/core/utils/providers.dart';
 import 'package:alpha/features/manage_profile/models/user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../custom_widgets/cards/notes_card.dart';
+import '../../../custom_widgets/cards/feedbackcard.dart';
 
-class NotesTab extends ConsumerWidget {
+class FeedbackTab extends ConsumerWidget {
   final UserProfile selectedUser;
 
-  const NotesTab({super.key, required this.selectedUser});
+  const FeedbackTab({super.key, required this.selectedUser});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Listen to the shiftsProvider using the profileEmail
-    final notesState = ref.watch(ProviderUtils.notesProvider(selectedUser.email!));
+    final feedbackAsyncValue = ref.watch(ProviderUtils.feedbackProvider(selectedUser.email!));
 
     return Scaffold(
-      body: notesState.when(
-          data: (notes) {
-            if (notes.isEmpty) {
-              return const Center(child: Text('No Notes Found.'));
+      body: feedbackAsyncValue.when(
+          data: (feedbacks) {
+            if (feedbacks.isEmpty) {
+              return const Center(child: Text('No Feedback Found.'));
             }
 
             return ListView.builder(
-              itemCount: notes.length,
+              itemCount: feedbacks.length,
               itemBuilder: (context, index) {
-                final note = notes[index];
-                return NotesCard(note: note, userProfile: selectedUser,);
+                final feedback = feedbacks[index];
+                return FeedbackCard(feedback: feedback);
               },
             );
           },

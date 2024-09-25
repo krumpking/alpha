@@ -27,26 +27,28 @@ class StaffCard extends StatelessWidget {
           children: [
             ListTile(
               contentPadding: EdgeInsets.zero,
-              title: Text(
-                user.name!,
-                style: const TextStyle(fontWeight: FontWeight.bold),
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    user.name!,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    user.email!,
+                    style:const TextStyle(fontSize: 12),
+                  ),
+                  Text(
+                    user.phoneNumber!,
+                    style: const TextStyle(fontSize: 12),
+                  ),
+                ],
               ),
               subtitle: Text(
                 user.post!,
                 style: const TextStyle(fontSize: 12),
               ),
               trailing: PopupMenuButton<int>(
-                onSelected: (int selectedValue) {
-                  // Handle the selected value
-                  switch (selectedValue) {
-                    case 0:
-                      // Perform some action for Edit
-                      break;
-                    case 1:
-                      // Perform some action for Delete
-                      break;
-                  }
-                },
                 itemBuilder: (BuildContext context) => [
                   buildPopUpOption(
                     title: 'View Profile',
@@ -70,6 +72,23 @@ class StaffCard extends StatelessWidget {
                       onTap: () => Get.toNamed(
                           RoutesHelper.addHoursWorkedScreen,
                           arguments: [user])),
+                  buildPopUpOption(
+                      title: 'Add Document',
+                      icon: Icons.file_copy,
+                      value: 2,
+                      onTap: () => Get.toNamed(
+                          RoutesHelper.addDocumentsScreen,
+                          arguments: [user])),
+
+                  buildPopUpOption(
+                      title: 'Add Notes',
+                      icon: Icons.note_alt_outlined,
+                      value: 2,
+                      onTap: () => Get.toNamed(
+                          RoutesHelper.addNotesScreen,
+                          arguments: [user])),
+
+
                   buildPopUpOption(
                       title: 'Add Feedback',
                       icon: Icons.feedback,

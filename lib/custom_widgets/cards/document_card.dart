@@ -1,11 +1,20 @@
 import 'package:alpha/core/constants/color_constants.dart';
+import 'package:alpha/features/documents/helpers/document_helper.dart';
 import 'package:alpha/features/manage_profile/helpers/profile_helpers.dart';
-import 'package:alpha/features/hours_worked/models/document.dart';
+import 'package:alpha/features/documents/models/document.dart';
+import 'package:alpha/features/manage_profile/models/user_profile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class DocumentCard extends StatelessWidget {
   final Document document;
-  const DocumentCard({super.key, required this.document});
+  final UserProfile profile;
+  final WidgetRef ref;
+  const DocumentCard(
+      {super.key,
+      required this.document,
+      required this.profile,
+      required this.ref});
 
   @override
   Widget build(BuildContext context) {
@@ -27,30 +36,23 @@ class DocumentCard extends StatelessWidget {
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
             ),
             trailing: PopupMenuButton<int>(
-              onSelected: (int selectedValue) async {
-                switch (selectedValue) {
-                  case 0:
-                    await ProfileHelpers.viewDocument(document.documentUrl);
-                    break;
-                  case 1:
-                    await ();
-                    break;
-                }
-              },
               itemBuilder: (BuildContext context) => [
-                buildPopUpOption(
-                  title: 'Download',
-                  icon: Icons.download,
-                  value: 0,
-                  onTap: () {
-                    // View logic handled in onSelected
-                  },
-                ),
+                // buildPopUpOption(
+                //   title: 'edit',
+                //   icon: Icons.edit,
+                //   value: 0,
+                //   onTap: () {
+
+                //   },
+                // ),
                 buildPopUpOption(
                   title: 'Delete',
                   icon: Icons.delete,
                   value: 1,
-                  onTap: () {},
+                  onTap: () {
+                    DocumentHelper.deleteDocument(
+                        document: document, profile: profile, ref: ref);
+                  },
                 ),
               ],
               icon: const Icon(Icons.more_vert),

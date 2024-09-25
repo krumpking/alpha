@@ -1,17 +1,12 @@
-import 'package:alpha/core/utils/logs.dart';
-import 'package:alpha/core/routes/routes.dart';
 import 'package:alpha/features/feedback/helpers/helpers.dart';
 import 'package:alpha/global/global.dart';
 import 'package:alpha/features/shift/models/shift.dart';
 import 'package:alpha/features/manage_profile/models/user_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
 import '../../../core/constants/color_constants.dart';
 import '../../../custom_widgets/custom_button/general_button.dart';
-import '../../../custom_widgets/custom_switch/custom_switch.dart';
 import '../../../custom_widgets/text_fields/custom_text_field.dart';
-import 'package:get/get.dart';
 
 class AddFeedbackScreen extends StatefulWidget {
   final UserProfile selectedUser;
@@ -27,13 +22,6 @@ class _AddFeedbackScreenState extends State<AddFeedbackScreen> {
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController feedbackTitleController = TextEditingController();
   final currentUser = FirebaseAuth.instance.currentUser;
-  FeedbackTag? feedbackTag;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +32,10 @@ class _AddFeedbackScreenState extends State<AddFeedbackScreen> {
         iconTheme: const IconThemeData(color: Colors.white),
         title: Text(
           widget.selectedUser.name!,
-          style:
-              const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
         ),
       ),
       body: Padding(
@@ -73,42 +63,37 @@ class _AddFeedbackScreenState extends State<AddFeedbackScreen> {
               'Add Feedback',
               textAlign: TextAlign.center,
               style: TextStyle(
-                  color: Pallete.primaryColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16),
+                color: Pallete.primaryColor,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
             ),
-            const SizedBox(
-              height: 24,
-            ),
+            const SizedBox(height: 24),
             CustomTextField(
               keyBoardType: TextInputType.text,
               controller: feedbackTitleController,
               labelText: 'Title',
               prefixIcon: const Icon(Icons.description, color: Colors.grey),
             ),
-            const SizedBox(
-              height: 12,
-            ),
+            const SizedBox(height: 12),
             CustomTextField(
               controller: descriptionController,
               labelText: 'Description',
               prefixIcon: const Icon(Icons.description, color: Colors.grey),
             ),
-            const SizedBox(
-              height: 12,
-            ),
+            const SizedBox(height: 12),
             Center(
               child: GeneralButton(
-                onTap: () => {
+                onTap: () {
                   FeedbackHelper.validateAndSubmitFeedback(
                     description: descriptionController.text.trim(),
                     currentUser: currentUser!,
                     feedbackTitle: feedbackTitleController.text.trim(),
                     selectedUser: widget.selectedUser,
-                    feedbackSource: widget.shift == null
+                    feedbackSource: widget.shift != null
                         ? widget.shift!.shiftId
-                        : 'general ',
-                  )
+                        : 'general',
+                  );
                 },
                 borderRadius: 10,
                 btnColor: Pallete.primaryColor,
@@ -116,14 +101,16 @@ class _AddFeedbackScreenState extends State<AddFeedbackScreen> {
                 child: const Text(
                   "Add Feedback",
                   style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold),
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
           ],
         ),
+
       ),
     );
   }

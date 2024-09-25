@@ -60,76 +60,76 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen>
       key: _key,
       drawer: Dimensions.isSmallScreen
           ? AdminDrawer(
-        user: user!,
-      )
+              user: user!,
+            )
           : null,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(150),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Column(
-              children: [
-                Row(
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(150),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Column(
                   children: [
-                    if (Dimensions.isSmallScreen)
-                      IconButton(
-                        onPressed: () {
-                          _key.currentState!.openDrawer();
-                        },
-                        icon: const Icon(Icons.menu),
-                      ),
-                    Container(
-                      width: 120,
-                      height: 120,
-                      clipBehavior: Clip.hardEdge,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Image.network(
-                        user!.photoURL ?? '',
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    Row(
                       children: [
-                        Text(
-                          user!.displayName ?? '',
-                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        if (Dimensions.isSmallScreen)
+                          IconButton(
+                            onPressed: () {
+                              _key.currentState!.openDrawer();
+                            },
+                            icon: const Icon(Icons.menu),
+                          ),
+                        Container(
+                          width: 120,
+                          height: 120,
+                          clipBehavior: Clip.hardEdge,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Image.network(
+                            user!.photoURL ?? '',
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                        Text(
-                          user!.email ?? '',
-                          style: const TextStyle(fontSize: 12),
+                        const SizedBox(width: 16),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              user!.displayName ?? '',
+                              style: const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              user!.email ?? '',
+                              style: const TextStyle(fontSize: 12),
+                            ),
+                          ],
                         ),
                       ],
                     ),
+                    const SizedBox(height: 16),
+                    CustomTextField(
+                      labelText: 'Find Staff',
+                      prefixIcon: const Icon(Icons.search),
+                      controller: _searchTextEditingController,
+                      onChanged: (value) {
+                        setState(() {
+                          searchTerm = value!;
+                        });
+                      },
+                    ),
                   ],
                 ),
-                const SizedBox(height: 16),
-                CustomTextField(
-                  labelText: 'Find Staff',
-                  prefixIcon: const Icon(Icons.search),
-                  controller: _searchTextEditingController,
-                  onChanged: (value) {
-                    setState(() {
-                      searchTerm = value!;
-                    });
-                  },
-                ),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
-      body: staffState.when(
-        data: (users) => _buildContent(users),
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stackTrace) => Center(child: Text('Error: $error')),
-      ),
-    )
+          body: staffState.when(
+            data: (users) => _buildContent(users),
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (error, stackTrace) => Center(child: Text('Error: $error')),
+          ),
+        )
         : const UserProfileNotFound();
   }
 
@@ -157,8 +157,7 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen>
                 final stuffCard = jsonData[index];
                 final randomColor = colors[Random().nextInt(colors.length)];
 
-                List<String>? imagesLinks =
-                List<String>.from(stuffCard['images']);
+                List<String>? imagesLinks = List<String>.from(stuffCard['images']);
 
                 return CategoryCard(
                   color: randomColor,
@@ -203,7 +202,7 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen>
               controller: _tabController,
               children: [
                 StaffTab(
-                  searchTerm: searchTerm,  // Pass the search term to each tab
+                  searchTerm: searchTerm,
                   users: users
                       .where((user) =>
                   user.post!.toLowerCase() == 'nurse' &&
@@ -211,7 +210,7 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen>
                       .toList(),
                 ),
                 StaffTab(
-                  searchTerm: searchTerm,  // Pass the search term to each tab
+                  searchTerm: searchTerm,
                   users: users
                       .where((user) =>
                   user.post!.toLowerCase() == 'social worker' &&
@@ -219,7 +218,7 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen>
                       .toList(),
                 ),
                 StaffTab(
-                  searchTerm: searchTerm,  // Pass the search term to each tab
+                  searchTerm: searchTerm,
                   users: users
                       .where((user) =>
                   user.post!.toLowerCase() == 'care/support worker' &&

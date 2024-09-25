@@ -1,30 +1,25 @@
 import 'dart:math';
-
 import 'package:alpha/core/constants/color_constants.dart';
 import 'package:alpha/core/constants/local_image_constants.dart';
-import 'package:alpha/core/utils/logs.dart';
+import 'package:alpha/core/routes/routes.dart';
 import 'package:alpha/custom_widgets/cards/category_card.dart';
-import 'package:alpha/custom_widgets/cards/task_item.dart';
-import 'package:alpha/custom_widgets/dialogs/custom_dialogs.dart';
-import 'package:alpha/custom_widgets/snackbar/custom_snackbar.dart';
 import 'package:alpha/custom_widgets/text_fields/custom_text_field.dart';
-import 'package:alpha/features/feedback/pages/see_feedback.dart';
 import 'package:alpha/features/feedback/models/feedback_model.dart';
 import 'package:alpha/features/home/helpers/helper.dart';
 import 'package:alpha/features/home/pages/user_tabs/previous_shifts_tab.dart';
 import 'package:alpha/features/home/pages/user_tabs/upcoming_shifts_tab.dart';
 import 'package:alpha/features/home/services/dummy.dart';
+import 'package:alpha/features/manage_profile/pages/documents_tab.dart';
+import 'package:alpha/features/manage_profile/pages/notes_tab.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-
 import '../../../core/constants/dimensions.dart';
 import '../../../core/utils/providers.dart';
 import '../../../custom_widgets/sidebar/user_drawer.dart';
-import '../../hours_worked/models/document.dart';
 import '../../manage_profile/models/user_profile.dart';
 import '../../not_found/user_profile_not_found.dart';
 
@@ -50,13 +45,12 @@ class _UserHomeScreenState extends ConsumerState<UserHomeScreen>
   final _key = GlobalKey<ScaffoldState>();
   final user = FirebaseAuth.instance.currentUser;
   List<FeedbackModel> feedback = [];
-  //List<Document> expiringDocuments = [];
 
   @override
   void initState() {
     super.initState();
 
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
 
   }
 
@@ -209,12 +203,11 @@ class _UserHomeScreenState extends ConsumerState<UserHomeScreen>
                   final stuffCard = jsonData[index];
                   final randomColor = colors[Random().nextInt(colors.length)];
 
-                  List<String>? imagesLinks =
-                      List<String>.from(stuffCard['images']);
+                  List<String>? imagesLinks = List<String>.from(stuffCard['images']);
 
                   return GestureDetector(
                     onTap: () {
-
+                      Get.toNamed(RoutesHelper.seeUserFeedbackScreen, arguments: user!.email!);
                     },
                     child: CategoryCard(
                       color: randomColor,
@@ -247,9 +240,10 @@ class _UserHomeScreenState extends ConsumerState<UserHomeScreen>
                   const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
               tabAlignment: TabAlignment.start,
               tabs: const [
-                Tab(text: 'Shifts'),
-                Tab(text: 'Documents Expiring'),
+                Tab(text: 'Upcoming Shifts'),
                 Tab(text: 'Shifts Done'),
+                Tab(text: 'Documents Expiring'),
+                Tab(text: 'Notes'),
               ],
             ),
             SizedBox(
@@ -258,8 +252,9 @@ class _UserHomeScreenState extends ConsumerState<UserHomeScreen>
                   controller: _tabController,
                   children: [
                     MyUpcomingShiftsTab(currentUser: user!, searchTerm: searchTerm),
-                    _buildTabCategory(),
                     MyPreviousShiftsTab(currentUser: user!, searchTerm: searchTerm),
+                    DocumentsTab(ref: ref, profile: userProfileAsync.value!, documents: ref.read(ProviderUtils.expiringDocumentsProvider)),
+                    NotesTab(selectedUser: userProfileAsync.value!)
                   ],
                 )),
           ],
@@ -267,15 +262,5 @@ class _UserHomeScreenState extends ConsumerState<UserHomeScreen>
       ),
     )
         : const UserProfileNotFound();
-  }
-
-  Widget _buildTabCategory() {
-    return SizedBox(
-      height: 800,
-      child: ListView(
-        physics: const BouncingScrollPhysics(),
-        children: const []
-      ),
-    );
   }
 }
