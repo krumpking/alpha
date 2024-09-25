@@ -64,4 +64,23 @@ class ProfileNotifier extends StateNotifier<AsyncValue<UserProfile>> {
 
     state = AsyncValue.data(updatedProfile);
   }
+
+  // Handle document update
+  Future<void> updateDocument(Document updatedDocument) async {
+    final currentProfile = state.value;
+
+    if (currentProfile == null) return;
+
+    // Update the specific document in the documents list
+    final updatedDocuments = currentProfile.documents.map((doc) {
+      return doc.docID == updatedDocument.docID ? updatedDocument : doc;
+    }).toList();
+
+    // Create an updated profile with the modified document list
+    final updatedProfile = currentProfile.copyWith(documents: updatedDocuments);
+
+    // Update the state with the new profile
+    state = AsyncValue.data(updatedProfile);
+  }
+
 }

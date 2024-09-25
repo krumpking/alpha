@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../custom_widgets/circular_loader/circular_loader.dart';
 import '../../../custom_widgets/snackbar/custom_snackbar.dart';
@@ -138,6 +139,54 @@ class NotesHelper {
           note: updateNote
       );
     }
+  }
+
+  static void deleteNote({
+    required Note note
+  }) {
+    Get.dialog(
+      AlertDialog(
+        title: const Text("Delete Note"),
+        content: const Text("Are you sure you want to delete this note"),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(), // Dismiss the dialog
+            child: const Text("Cancel"),
+          ),
+          TextButton(
+            onPressed: () async {
+              Get.back(); // Close the dialog
+
+              // Show a loading indicator while processing the deletion
+              Get.dialog(
+                const CustomLoader(message: 'Deleting Note'),
+                barrierDismissible: false,
+              );
+
+
+              // Update the user's profile in Firestore
+              final response = await NotesServices.deleteNoteFromFirebase(noteID: note.noteID);
+
+              // Close the loader dialog
+              if (Get.isDialogOpen!) Get.back();
+
+              // Show a success or error message
+              if (response.success) {
+                CustomSnackBar.showSuccessSnackbar(
+                    message: 'Note deleted successfully');
+              } else {
+                CustomSnackBar.showErrorSnackbar(
+                    message: response.message ?? 'Failed to delete note');
+              }
+            },
+            child: const Text("Delete"),
+          ),
+        ],
+      ),
+      barrierDismissible: false,
+      useSafeArea: true,
+      name: 'Delete Document Confirmation',
+    );
   }
 
 

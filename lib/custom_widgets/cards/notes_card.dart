@@ -1,6 +1,7 @@
 import 'package:alpha/core/constants/color_constants.dart';
 import 'package:alpha/core/routes/routes.dart';
 import 'package:alpha/features/manage_profile/models/user_profile.dart';
+import 'package:alpha/features/notes/helper/notes_helper.dart';
 import 'package:alpha/features/notes/models/note.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -52,13 +53,13 @@ class NotesCard extends StatelessWidget {
                         arguments: [userProfile, note]);
                   },
                 ),
-                // buildPopUpOption(
-                //     title: 'Delete',
-                //     icon: Icons.delete,
-                //     onTap: () {
-
-                //     }
-                // ),
+                buildPopUpOption(
+                    title: 'Delete',
+                    icon: Icons.delete,
+                    onTap: () {
+                      NotesHelper.deleteNote(note: note);
+                    }
+                ),
               ],
               icon: const Icon(Icons.more_vert),
             ),

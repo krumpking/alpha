@@ -63,5 +63,29 @@ class NotesServices{
       return APIResponse(success: false, message: e.toString());
     }
   }
+  static Future<APIResponse<String?>> deleteNoteFromFirebase({
+    required String noteID,
+  }) async {
+    try {
+      // Query to find the document where noteID matches
+      QuerySnapshot snapshot = await _firestore
+          .collection('notes')
+          .where('noteID', isEqualTo: noteID)
+          .limit(1)
+          .get();
 
+      // Check if the document exists
+      if (snapshot.docs.isEmpty) {
+        return APIResponse(success: false, message: 'Note not found');
+      }
+
+      // Delete the first matching document
+      final docRef = snapshot.docs.first.reference;
+      await docRef.delete();
+
+      return APIResponse(success: true, data: '', message: 'Note deleted successfully');
+    } catch (e) {
+      return APIResponse(success: false, message: e.toString());
+    }
+  }
 }
