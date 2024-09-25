@@ -8,6 +8,8 @@ import 'package:alpha/features/auth/pages/forgot_password.dart';
 import 'package:alpha/features/home/pages/admin_home_screen.dart';
 import 'package:alpha/features/home/pages/user_home_screen.dart';
 import 'package:alpha/features/manage_profile/pages/manage_profile_screen.dart';
+import 'package:alpha/features/notes/models/note.dart';
+import 'package:alpha/features/notes/pages/edit_notes.dart';
 import 'package:alpha/features/shift/pages/add_user_shift.dart';
 import 'package:alpha/features/shift/pages/edit_shift.dart';
 import 'package:alpha/features/statistics/pages/admin_stuff_stats.dart';
@@ -24,6 +26,7 @@ import '../../features/auth/pages/resend_reset_email_screen.dart';
 import '../../features/manage_profile/pages/edit_profile.dart';
 import '../../features/manage_profile/pages/update_password.dart';
 import '../../features/notes/pages/add_notes.dart';
+import '../../features/notes/pages/view_notes.dart';
 import '../../features/statistics/pages/admin_shift_stats.dart';
 import '../../features/shift/models/shift.dart';
 import '../../features/manage_profile/models/user_profile.dart';
@@ -46,10 +49,12 @@ class RoutesHelper {
   static String viewUserScreen = '/viewUsers';
   static String userProfileScreen = '/profile';
   static String editUserProfileScreen = '/editProfile';
-  static String updatePasswordScreen = '/editProfile';
+  static String updatePasswordScreen = '/updatePassword';
   static String addHoursWorkedScreen = '/addHoursWorkedScreen';
   static String addDocumentsScreen = '/addDocumentsScreen';
   static String addNotesScreen = '/addNotesScreen';
+  static String editNotesScreen = '/editNotesScreen';
+  static String viewNoteScreen = '/viewNotesScreen';
   static String editShiftScreen = '/editShift';
   static String addShiftsScreen = '/addShift';
   static String addUserFeedbackScreen = '/addFeedback';
@@ -121,6 +126,24 @@ class RoutesHelper {
           final UserProfile selectedUser = args[0] as UserProfile;
 
           return AddNotesScreen(selectedUser: selectedUser);
+        }),
+    GetPage(
+        name: editNotesScreen,
+        page: () {
+          final args = Get.arguments as List;
+          final UserProfile selectedUser = args[0] as UserProfile;
+          final Note note = args[1] as Note;
+
+          return EditNotesScreen(selectedUser: selectedUser, note: note,);
+        }),
+    GetPage(
+        name: viewNoteScreen,
+        page: () {
+          final args = Get.arguments as List;
+          final UserProfile selectedUser = args[0] as UserProfile;
+          final Note note = args[1] as Note;
+
+          return ViewNotesScreen(selectedUser: selectedUser, note: note,);
         }),
     GetPage(
         name: editShiftScreen,

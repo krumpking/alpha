@@ -243,7 +243,7 @@ class _ProfileScreenState extends ConsumerState<UserProfileScreen>
                     controller: _tabController,
                     children: [
                       // Documents Tab
-                      DocumentsTab(documents: userProfile.documents),
+                      DocumentsTab(documents: userProfile.documents, profile: userProfile, ref: ref,),
 
                       // Upcoming Shifts Tab
                       UpcomingShiftsTab(selectedUser: userProfile),
@@ -255,7 +255,7 @@ class _ProfileScreenState extends ConsumerState<UserProfileScreen>
                       FeedbackTab(selectedUser: userProfile),
 
                       // Notes Tab
-                      NotesTab(selectedUserEmail: userProfile.email!),
+                      NotesTab(selectedUser: userProfile),
                     ],
                   ),
                 ),

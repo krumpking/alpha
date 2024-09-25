@@ -11,12 +11,10 @@ class NotesServices{
     required Note note,
   }) async {
     try {
-
       final userNotes = note.toJson();
       await _firestore.collection('notes').add(userNotes);
 
-      return APIResponse(
-          success: true, data: '', message: 'Notes added successfully');
+      return APIResponse(success: true, data: '', message: 'Notes added successfully');
     } catch (e) {
       return APIResponse(success: false, message: e.toString());
     }
@@ -36,4 +34,34 @@ class NotesServices{
           .toList();
     });
   }
+
+  static Future<APIResponse<String?>> updateNoteInFirebase({
+    required String noteID,
+    required Note updatedNote,
+  }) async {
+    try {
+      // Query to find the document where noteID matches
+      QuerySnapshot snapshot = await _firestore
+          .collection('notes')
+          .where('noteID', isEqualTo: noteID)
+          .limit(1)
+          .get();
+
+      // Check if the document exists
+      if (snapshot.docs.isEmpty) {
+        return APIResponse(success: false, message: 'Note not found');
+      }
+
+      // Update the first matching document
+      final docRef = snapshot.docs.first.reference;
+      final userNotes = updatedNote.toJson();
+
+      await docRef.update(userNotes);
+
+      return APIResponse(success: true, data: '', message: 'Note updated successfully');
+    } catch (e) {
+      return APIResponse(success: false, message: e.toString());
+    }
+  }
+
 }

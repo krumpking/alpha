@@ -9,17 +9,23 @@ import 'package:tuple/tuple.dart';
 import '../../../core/constants/local_image_constants.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/utils/logs.dart';
+import '../../../global/global.dart';
+
 class AdminShiftStats extends ConsumerWidget {
-  const AdminShiftStats({super.key});
+  final String? profileEmail;
+  const AdminShiftStats({super.key, this.profileEmail, });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    //Since the Tuple takes 2 values the period and the email address, we will pass null for the email address so that we get the statistics for all users
-    final dailyHoursWorked = ref.watch(ProviderUtils.hoursWorkedProvider(const Tuple2('day', null)));
-    final weeklyHoursWorked = ref.watch(ProviderUtils.hoursWorkedProvider(const Tuple2('week', null)));
-    final monthlyHoursWorked = ref.watch(ProviderUtils.hoursWorkedProvider(const Tuple2('month', null)));
-    final yearlyHoursWorked = ref.watch(ProviderUtils.hoursWorkedProvider(const Tuple2('year', null)));
 
+    final userRole = ref.watch(ProviderUtils.userRoleProvider);
+    final String? email = userRole == UserRole.user ? profileEmail : null;
+
+    final dailyHoursWorked = ref.watch(ProviderUtils.hoursWorkedProvider(Tuple2('day', email)));
+    final weeklyHoursWorked = ref.watch(ProviderUtils.hoursWorkedProvider(Tuple2('week', email)));
+    final monthlyHoursWorked = ref.watch(ProviderUtils.hoursWorkedProvider(Tuple2('month', email)));
+    final yearlyHoursWorked = ref.watch(ProviderUtils.hoursWorkedProvider(Tuple2('year', email)));
 
 
     return Scaffold(
@@ -41,20 +47,28 @@ class AdminShiftStats extends ConsumerWidget {
             topRight: Radius.circular(26),
           ),
         ),
-        child: Column(
-          children: [
-            // Display daily stats
-            displayStats(hoursWorked: dailyHoursWorked, title: "Hours Worked Today"),
-            const SizedBox(height: 16),
-            // Display weekly stats
-            displayStats(hoursWorked: weeklyHoursWorked, title: "Hours Worked This Week"),
-            const SizedBox(height: 16),
-            // Display monthly stats
-            displayStats(hoursWorked: monthlyHoursWorked, title: "Hours Worked This Month"),
-            const SizedBox(height: 16),
-            // Display yearly stats
-            displayStats(hoursWorked: yearlyHoursWorked, title: "Hours Worked This Year"),
-          ],
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(child: displayStats(hoursWorked: dailyHoursWorked, title: "Hours Worked Today")),
+                  const SizedBox(width: 16),
+                  Expanded(child: displayStats(hoursWorked: weeklyHoursWorked, title: "Hours Worked This Week")),
+                ],
+              ),
+              const SizedBox(height: 16),
+              // Display monthly stats
+              Row(
+                children: [
+                  Expanded(child: displayStats(hoursWorked: monthlyHoursWorked, title: "Hours Worked This Month")),
+                  const SizedBox(width: 16),
+                  Expanded(child: displayStats(hoursWorked: yearlyHoursWorked, title: "Hours Worked This Year")),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -110,7 +124,10 @@ class AdminShiftStats extends ConsumerWidget {
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (error, stack) => Center(child: Text(error.toString())),
+      error: (error, stack) {
+        DevLogs.logError(error.toString());
+        return Center(child: Text(error.toString()));
+      },
     );
   }
 

@@ -1,17 +1,12 @@
-import 'package:alpha/core/utils/logs.dart';
-import 'package:alpha/core/routes/routes.dart';
 import 'package:alpha/features/feedback/helpers/helpers.dart';
 import 'package:alpha/global/global.dart';
 import 'package:alpha/features/shift/models/shift.dart';
 import 'package:alpha/features/manage_profile/models/user_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
 import '../../../core/constants/color_constants.dart';
 import '../../../custom_widgets/custom_button/general_button.dart';
-import '../../../custom_widgets/custom_switch/custom_switch.dart';
 import '../../../custom_widgets/text_fields/custom_text_field.dart';
-import 'package:get/get.dart';
 
 class AddFeedbackScreen extends StatefulWidget {
   final UserProfile selectedUser;

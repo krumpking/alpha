@@ -2,6 +2,7 @@ import 'package:alpha/core/utils/logs.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../../core/utils/api_response.dart';
+import '../../documents/models/document.dart';
 import '../../manage_profile/models/user_profile.dart';
 
 class StaffServices {
@@ -193,3 +194,4 @@ class StaffServices {
     }
   }
 }
+

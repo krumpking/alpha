@@ -253,8 +253,8 @@ class _UserHomeScreenState extends ConsumerState<UserHomeScreen>
                   children: [
                     MyUpcomingShiftsTab(currentUser: user!, searchTerm: searchTerm),
                     MyPreviousShiftsTab(currentUser: user!, searchTerm: searchTerm),
-                    DocumentsTab(documents: ref.read(ProviderUtils.expiringDocumentsProvider)),
-                    NotesTab(selectedUserEmail: user!.email!)
+                    DocumentsTab(ref: ref, profile: userProfileAsync.value!, documents: ref.read(ProviderUtils.expiringDocumentsProvider)),
+                    NotesTab(selectedUser: userProfileAsync.value!)
                   ],
                 )),
           ],

@@ -1,12 +1,16 @@
 import 'package:alpha/core/constants/color_constants.dart';
+import 'package:alpha/core/routes/routes.dart';
+import 'package:alpha/features/manage_profile/models/user_profile.dart';
 import 'package:alpha/features/notes/models/note.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class NotesCard extends StatelessWidget {
   final Note note;
+  final UserProfile userProfile;
   const NotesCard({
     super.key,
-    required this.note,
+    required this.note, required this.userProfile,
   });
 
   @override
@@ -33,17 +37,17 @@ class NotesCard extends StatelessWidget {
             trailing: PopupMenuButton<int>(
               itemBuilder: (BuildContext context) => [
                 buildPopUpOption(
-                  title: 'Comment',
-                  icon: Icons.comment,
+                  title: 'View',
+                  icon: Icons.remove_red_eye,
                   onTap: () {
-
+                    Get.toNamed(RoutesHelper.viewNoteScreen, arguments: [userProfile, note]);
                   },
                 ),
                 buildPopUpOption(
                   title: 'Edit Note',
                   icon: Icons.edit,
                   onTap: () {
-
+                    Get.toNamed(RoutesHelper.editNotesScreen, arguments: [userProfile, note]);
                   },
                 ),
                 buildPopUpOption(

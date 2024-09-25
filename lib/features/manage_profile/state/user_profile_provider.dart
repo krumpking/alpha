@@ -3,6 +3,7 @@ import 'package:alpha/features/workers/services/add_user_services.dart';
 import 'package:alpha/features/manage_profile/models/user_profile.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/utils/api_response.dart';
+import '../../documents/models/document.dart';
 
 class ProfileNotifier extends StateNotifier<AsyncValue<UserProfile>> {
   final String profileEmail;
@@ -22,7 +23,6 @@ class ProfileNotifier extends StateNotifier<AsyncValue<UserProfile>> {
 
       if (response.success) {
         state = AsyncValue.data(response.data!);
-
       } else {
         state = AsyncValue.error(
             response.message ?? 'Failed to fetch user', StackTrace.current
@@ -31,5 +31,37 @@ class ProfileNotifier extends StateNotifier<AsyncValue<UserProfile>> {
     } catch (e, stackTrace) {
       state = AsyncValue.error('An unexpected error occurred: $e', stackTrace);
     }
+  }
+
+  // Update the state with a new profile
+  void updateProfile(UserProfile updatedProfile) {
+    state = AsyncValue.data(updatedProfile);
+  }
+
+  // Handle document deletion
+  Future<void> deleteDocument(Document document) async {
+    final currentProfile = state.value;
+
+    if (currentProfile == null) return;
+
+    final updatedDocuments = currentProfile.documents
+        .where((doc) => doc.docID != document.docID)
+        .toList();
+
+    final updatedProfile = currentProfile.copyWith(documents: updatedDocuments);
+
+    state = AsyncValue.data(updatedProfile);
+  }
+
+  // Handle document addition
+  Future<void> addDocument(Document newDocument) async {
+    final currentProfile = state.value;
+
+    if (currentProfile == null) return;
+
+    final updatedDocuments = [...currentProfile.documents, newDocument];
+    final updatedProfile = currentProfile.copyWith(documents: updatedDocuments);
+
+    state = AsyncValue.data(updatedProfile);
   }
 }

@@ -125,33 +125,67 @@ class _AddDocumentScreenState extends State<AddDocumentScreen> {
   }
 
   Widget _buildDocumentUpload() {
-    return Row(
+    return Column(
       children: [
-        Expanded(
-          flex: 5,
-          child: CustomTextField(
-            controller: _documentNameController,
-            labelText: 'Document Name',
-            prefixIcon: const Icon(Icons.description, color: Colors.grey),
-          ),
+        Row(
+          children: [
+            Expanded(
+              flex: 5,
+              child: CustomTextField(
+                controller: _documentNameController,
+                labelText: 'Document Name',
+                prefixIcon: const Icon(Icons.description, color: Colors.grey),
+              ),
+            ),
+            const SizedBox(width: 6),
+            Expanded(
+              child: GeneralButton(
+                onTap: () async {
+                  selectedFile = await MediaServices.pickDocument().then((file) {
+                    if (file != null) {
+                      CustomSnackBar.showSuccessSnackbar(message: 'File Picked Successfully');
+                      setState(() {
+                        selectedFile = file;
+                      });
+                    } else {
+                      CustomSnackBar.showErrorSnackbar(message: 'No file selected.');
+                    }
+                  });
+                },
+                borderRadius: 10,
+                btnColor: Colors.white,
+                width: 60,
+                height: 50,
+                boxBorder: Border.all(color: Pallete.primaryColor),
+                child: Icon(
+                  selectedFile == null ? Icons.upload : Icons.check,
+                  color: Pallete.primaryColor,
+                ),
+              ),
+            )
+          ],
         ),
-        const SizedBox(width: 6),
-        Expanded(
-          child: GeneralButton(
-            onTap: () async {
-              selectedFile = await MediaServices.pickDocument();
-            },
-            borderRadius: 10,
-            btnColor: Colors.white,
-            width: 60,
-            height: 50,
-            boxBorder: Border.all(color: Pallete.primaryColor),
-            child: Icon(Icons.upload, color: Pallete.primaryColor),
+        if (selectedFile != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Row(
+              children: [
+                Icon(Icons.check_circle, color: Pallete.primaryColor),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    'File "${selectedFile.name}" selected',
+                    style: TextStyle(color: Pallete.primaryColor),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
           ),
-        )
       ],
     );
   }
+
 
   Widget _buildUpdateButton() {
     return Center(

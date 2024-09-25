@@ -76,6 +76,7 @@ class ProviderUtils {
     final period = params.item1;
     final email = params.item2;
 
+    // Call getHoursWorked with the appropriate parameters
     final response = await ShiftServices.getHoursWorked(period: period, staffEmail: email);
     if (response.success) {
       return response.data!;
@@ -83,6 +84,7 @@ class ProviderUtils {
       throw Exception(response.message);
     }
   });
+
 
   static final expiringDocumentsProvider = StateNotifierProvider<ExpiringDocumentsNotifier, List<Document>>((ref) {
     return ExpiringDocumentsNotifier();

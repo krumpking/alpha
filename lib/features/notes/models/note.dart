@@ -7,6 +7,7 @@ class Note {
   String content;
   String email;
   String addedBy;
+  String? editedBy;
   DateTime dateAdded;
   List<Comment> comments;
 
@@ -16,6 +17,7 @@ class Note {
     required this.description,
     required this.email,
     required this.content,
+    this.editedBy,
     required this.addedBy,
     required this.dateAdded,
     this.comments = const [],
@@ -28,6 +30,7 @@ class Note {
     'email': email,
     'content': content,
     'addedBy': addedBy,
+    'editedBy': editedBy,
     'dateAdded': dateAdded.toIso8601String(),
     'comments': comments.map((comment) => comment.toJson()).toList(),
   };
@@ -37,6 +40,7 @@ class Note {
     title: json['title'],
     description: json['description'],
     email: json['email'],
+    editedBy: json['editedBy'] ?? '',
     content: json['content'],
     addedBy: json['addedBy'],
     dateAdded: DateTime.parse(json['dateAdded']),
@@ -44,4 +48,28 @@ class Note {
         .map((comment) => Comment.fromJson(comment))
         .toList(),
   );
+
+  Note copyWith({
+    String? noteID,
+    String? title,
+    String? description,
+    String? content,
+    String? email,
+    String? addedBy,
+    String? editedBy,
+    DateTime? dateAdded,
+    List<Comment>? comments,
+  }) {
+    return Note(
+      noteID: noteID ?? this.noteID,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      content: content ?? this.content,
+      email: email ?? this.email,
+      addedBy: addedBy ?? this.addedBy,
+      editedBy: editedBy ?? this.editedBy,
+      dateAdded: dateAdded ?? this.dateAdded,
+      comments: comments ?? this.comments,
+    );
+  }
 }
