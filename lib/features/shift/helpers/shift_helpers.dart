@@ -1,19 +1,14 @@
 import 'dart:math';
-
 import 'package:alpha/core/utils/validator.dart';
-import 'package:alpha/features/hours_worked/services/add_shif_services.dart';
 import 'package:alpha/features/shift/models/shift.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../../../custom_widgets/circular_loader/circular_loader.dart';
 import '../../../custom_widgets/snackbar/custom_snackbar.dart';
-import '../../manage_profile/models/user_profile.dart';
+import '../services/shift_services.dart';
 
 class ShiftHelpers {
-  static void validateAndSubmitShift({
-    required Shift shift,
-  }) async {
+  static void validateAndSubmitShift({required Shift shift,}) async {
     // Validate Email
     if (!Validator.isValidTimeFormat(shift.duration)) {
       CustomSnackBar.showErrorSnackbar(message: 'Please input a valid time.');

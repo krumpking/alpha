@@ -9,8 +9,9 @@ import 'package:tuple/tuple.dart';
 import '../../features/home/state/document_expiry_notifier.dart';
 import '../../features/home/state/search_notifier.dart';
 import '../../features/documents/models/document.dart';
-import '../../features/hours_worked/services/add_shif_services.dart';
+import '../../features/hours_worked/services/hours_worked_services.dart';
 import '../../features/notes/models/note.dart';
+import '../../features/shift/services/shift_services.dart';
 import '../../features/shift/state/previous_shifts_provider.dart';
 import '../../features/statistics/state/count_provider.dart';
 import '../../features/workers/state/stuff_provider.dart';
@@ -71,20 +72,19 @@ class ProviderUtils {
     return SearchStaffNotifier();
   });
 
-
   static final hoursWorkedProvider = FutureProvider.family<Map<String, Duration>, Tuple2<String, String?>>((ref, params) async {
     final period = params.item1;
     final email = params.item2;
 
-    // Call getHoursWorked with the appropriate parameters
-    final response = await ShiftServices.getHoursWorked(period: period, staffEmail: email);
+
+    final response = await HoursWorkedService.getHoursWorked(period: period, staffEmail: email);
+
     if (response.success) {
       return response.data!;
     } else {
       throw Exception(response.message);
     }
   });
-
 
   static final expiringDocumentsProvider = StateNotifierProvider<ExpiringDocumentsNotifier, List<Document>>((ref) {
     return ExpiringDocumentsNotifier();

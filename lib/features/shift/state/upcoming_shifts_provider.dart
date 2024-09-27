@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:alpha/features/shift/models/shift.dart';
-import '../../hours_worked/services/add_shif_services.dart';
+import '../services/shift_services.dart';
 
 class UpcomingShiftsNotifier extends StateNotifier<AsyncValue<List<Shift>>> {
   final String profileEmail;

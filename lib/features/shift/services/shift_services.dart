@@ -1,12 +1,9 @@
 import 'package:alpha/core/utils/api_response.dart';
 import 'package:alpha/core/utils/logs.dart';
 import 'package:alpha/features/shift/helpers/shift_helpers.dart';
-import 'package:alpha/features/hours_worked/models/hours_worked.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 import '../../shift/models/shift.dart';
-import '../../manage_profile/models/user_profile.dart';
 
 class ShiftServices {
   static Future<APIResponse<void>> submitUserShift(
@@ -120,59 +117,6 @@ class ShiftServices {
       DevLogs.logError('Failed to update shift: $e');
       return APIResponse(
           success: false, message: 'Failed to update shift: ${e.toString()}');
-    }
-  }
-
-  // Fetch and calculate total hours worked for all staff or individual staff by day/week/month/year
-  static Future<APIResponse<Map<String, Duration>>> getHoursWorked({
-    String? staffEmail,
-    required String period, // "day", "week", "month", or "year"
-  }) async {
-    try {
-      final now = DateTime.now();
-      DateTime startDate;
-
-      switch (period) {
-        case 'day':
-          startDate = DateTime(now.year, now.month, now.day);
-          break;
-        case 'week':
-          startDate = now.subtract(Duration(days: now.weekday - 1));
-          break;
-        case 'month':
-          startDate = DateTime(now.year, now.month);
-          break;
-        case 'year':
-          startDate = DateTime(now.year);
-          break;
-        default:
-          throw Exception("Invalid period");
-      }
-
-      // Query shifts for the given staff or all staff if no email is provided
-      final query = FirebaseFirestore.instance.collection('shifts').where('day',
-          isGreaterThanOrEqualTo: DateFormat('yyyy/MM/dd').format(startDate));
-
-      if (staffEmail != null) {
-        query.where('staffEmail', isEqualTo: staffEmail);
-      }
-
-      final querySnapshot = await query.get();
-
-      // Sum the durations of all shifts
-      Duration totalDuration = Duration.zero;
-
-      for (var doc in querySnapshot.docs) {
-        final shiftData = doc.data();
-        final duration = ShiftHelpers.parseShiftDuration(shiftData['duration']);
-        totalDuration += duration;
-      }
-
-      return APIResponse(success: true, data: {'total': totalDuration});
-    } catch (e) {
-      return APIResponse(
-          success: false,
-          message: 'Failed to get hours worked: ${e.toString()}');
     }
   }
 }

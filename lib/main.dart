@@ -1,11 +1,8 @@
 import 'package:alpha/core/constants/color_constants.dart';
 import 'package:alpha/core/routes/routes.dart';
-import 'package:alpha/core/utils/shared_pref.dart';
 import 'package:alpha/features/auth/handlers/auth_handler.dart';
 import 'package:alpha/features/not_found/not_found_screen.dart';
-import 'package:alpha/features/welcome/pages/splash.dart';
 import 'package:alpha/firebase_options.dart';
-import 'package:alpha/global/global.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
