@@ -1,5 +1,7 @@
+import 'package:alpha/core/utils/logs.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:alpha/core/utils/api_response.dart';
+import 'package:intl/intl.dart';
 import '../models/hours_worked.dart';
 
 class HoursWorkedService {
@@ -37,7 +39,7 @@ class HoursWorkedService {
       double totalHours = 0;
       for (var doc in querySnapshot.docs) {
         final hoursWorkedData = doc.data();
-        totalHours += (hoursWorkedData['hours_worked'] as num).toDouble();
+        totalHours += (hoursWorkedData['hoursWorked'] as num).toDouble();
       }
 
       return APIResponse(success: true, data: totalHours);
@@ -104,10 +106,10 @@ class HoursWorkedService {
     }
   }
 
-  // Fetch and calculate total hours worked for all staff or individual staff by day/week/month/year
+
   static Future<APIResponse<Map<String, Duration>>> getHoursWorked({
     String? staffEmail,
-    required String period, // "day", "week", "month", or "year"
+    required String period,
   }) async {
     try {
       final now = DateTime.now();
@@ -118,43 +120,50 @@ class HoursWorkedService {
           startDate = DateTime(now.year, now.month, now.day);
           break;
         case 'week':
-          startDate = now.subtract(Duration(days: now.weekday - 1)); // Start of week
+          startDate = now.subtract(Duration(days: now.weekday - 1));
           break;
         case 'month':
-          startDate = DateTime(now.year, now.month); // Start of month
+          startDate = DateTime(now.year, now.month);
           break;
         case 'year':
-          startDate = DateTime(now.year); // Start of year
+          startDate = DateTime(now.year);
           break;
         default:
           throw Exception("Invalid period");
       }
 
-      // Query hours worked for the given staff or all staff if no email is provided
-      var query = FirebaseFirestore.instance
-          .collection('hours_worked')
-          .where('dateAdded', isGreaterThanOrEqualTo: startDate);
+      // Initialize the query
+      var query = FirebaseFirestore.instance.collection('hours_worked')
+          .where(
+        'dateAdded',
+        isGreaterThanOrEqualTo: startDate,  // Compare directly using DateTime
+      );
 
+      // Apply the staff email filter only if it's provided
       if (staffEmail != null) {
         query = query.where('staffEmail', isEqualTo: staffEmail);
       }
 
       final querySnapshot = await query.get();
 
-      // Sum the hours worked
+      // Sum the hours worked for all shifts
       Duration totalDuration = Duration.zero;
 
       for (var doc in querySnapshot.docs) {
-        final hoursWorkedData = doc.data();
-        final double hoursWorked = hoursWorkedData['hoursWorked'] as double;
-        totalDuration += Duration(hours: hoursWorked.toInt(), minutes: ((hoursWorked % 1) * 60).toInt());
+        final shiftData = doc.data();
+        DevLogs.logInfo('Document data: $shiftData'); // Add logging for debugging
+
+        final double hoursWorked = (shiftData['hoursWorked'] as num).toDouble();
+        totalDuration += Duration(hours: hoursWorked.toInt());
       }
 
       return APIResponse(success: true, data: {'total': totalDuration});
     } catch (e) {
       return APIResponse(
-          success: false,
-          message: 'Failed to get hours worked: ${e.toString()}');
+        success: false,
+        message: 'Failed to get hours worked: ${e.toString()}',
+      );
     }
   }
+
 }

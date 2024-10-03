@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import '../../../core/constants/color_constants.dart';
 import '../../../custom_widgets/custom_button/general_button.dart';
 import '../../../custom_widgets/text_fields/custom_text_field.dart';
-import '../../shift/helpers/shift_helpers.dart';
 import '../../workers/services/media_services.dart';
 
 class AddHoursWorkedScreen extends StatefulWidget {
@@ -187,7 +186,8 @@ class _AddHoursWorkedScreenState extends State<AddHoursWorkedScreen> {
         child: const Text(
           "Add Hours Worked",
           style: TextStyle(
-              color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+              color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold
+          ),
         ),
       ),
     );
