@@ -151,4 +151,75 @@ class DocumentHelper {
       CustomSnackBar.showErrorSnackbar(message: 'An error occurred: $e');
     }
   }
+
+
+
+  static void validateAndUpdateDocument({
+    required UserProfile profile,
+    required Document updatedDocument,
+    required WidgetRef ref,
+  }) async {
+    // Validation checks
+    if (updatedDocument.documentName.isEmpty) {
+      CustomSnackBar.showErrorSnackbar(message: 'Please input a document name');
+      return;
+    }
+
+    if (updatedDocument.documentDescription!.isEmpty) {
+      CustomSnackBar.showErrorSnackbar(
+          message: 'Please input a document description');
+      return;
+    }
+
+    if (updatedDocument.expiryDate!.isEmpty) {
+      CustomSnackBar.showErrorSnackbar(
+          message: 'Please input a document expiry date');
+      return;
+    }
+
+    // Show loading dialog
+    Get.dialog(
+      const CustomLoader(message: 'Updating Document'),
+      barrierDismissible: false,
+    );
+
+    try {
+      // Replace the document in the user's document list with the updated one
+      final updatedDocuments = profile.documents.map((doc) {
+        return doc.docID == updatedDocument.docID ? updatedDocument : doc;
+      }).toList();
+
+      // Create an updated profile with the new document list
+      final updatedProfile = profile.copyWith(documents: updatedDocuments);
+
+      // Update the user's profile in Firestore
+      final response = await StaffServices.updateUserProfile(
+        email: profile.email!,
+        updatedProfile: updatedProfile,
+      );
+
+      // Close the loader dialog
+      if (Get.isDialogOpen!) Get.back();
+
+      // Show success or error message
+      if (response.success) {
+        // Notify the provider to update the global state
+        ref
+            .read(ProviderUtils.profileProvider(profile.email!).notifier)
+            .updateDocument(updatedDocument);
+
+        CustomSnackBar.showSuccessSnackbar(
+            message: 'Document updated successfully');
+        Get.back(closeOverlays: true); // Optionally close the form/screen
+      } else {
+        CustomSnackBar.showErrorSnackbar(
+            message: response.message ?? 'Failed to update document');
+      }
+    } catch (e) {
+      // Handle any unexpected errors and close the dialog if open
+      if (Get.isDialogOpen!) Get.back();
+      CustomSnackBar.showErrorSnackbar(message: 'An error occurred: $e');
+    }
+  }
+
 }

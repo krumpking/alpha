@@ -1,10 +1,12 @@
 import 'package:alpha/core/constants/color_constants.dart';
+import 'package:alpha/core/routes/routes.dart';
 import 'package:alpha/features/documents/helpers/document_helper.dart';
 import 'package:alpha/features/manage_profile/helpers/profile_helpers.dart';
 import 'package:alpha/features/documents/models/document.dart';
 import 'package:alpha/features/manage_profile/models/user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get/get.dart';
 
 class DocumentCard extends StatelessWidget {
   final Document document;
@@ -37,14 +39,14 @@ class DocumentCard extends StatelessWidget {
             ),
             trailing: PopupMenuButton<int>(
               itemBuilder: (BuildContext context) => [
-                // buildPopUpOption(
-                //   title: 'edit',
-                //   icon: Icons.edit,
-                //   value: 0,
-                //   onTap: () {
-
-                //   },
-                // ),
+                buildPopUpOption(
+                  title: 'edit',
+                  icon: Icons.edit,
+                  value: 0,
+                  onTap: () {
+                    Get.toNamed(RoutesHelper.editDocumentScreen, arguments: [profile,document, ref]);
+                  },
+                ),
                 buildPopUpOption(
                   title: 'Delete',
                   icon: Icons.delete,

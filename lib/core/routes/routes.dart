@@ -1,4 +1,5 @@
 import 'package:alpha/features/documents/pages/add_document.dart';
+import 'package:alpha/features/documents/pages/edit_documents.dart';
 import 'package:alpha/features/feedback/pages/add_feedback.dart';
 import 'package:alpha/features/feedback/pages/see_feedback.dart';
 import 'package:alpha/features/hours_worked/pages/add_hours_worked.dart';
@@ -19,10 +20,12 @@ import 'package:alpha/features/welcome/pages/splash.dart';
 import 'package:alpha/features/workers/pages/add_user.dart';
 import 'package:alpha/features/workers/pages/view_users.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import '../../features/auth/pages/email_verification_success.dart';
 import '../../features/auth/pages/login_page.dart';
 import '../../features/auth/pages/resend_reset_email_screen.dart';
+import '../../features/documents/models/document.dart';
 import '../../features/manage_profile/pages/edit_profile.dart';
 import '../../features/manage_profile/pages/update_password.dart';
 import '../../features/notes/pages/add_notes.dart';
@@ -52,6 +55,7 @@ class RoutesHelper {
   static String updatePasswordScreen = '/updatePassword';
   static String addHoursWorkedScreen = '/addHoursWorkedScreen';
   static String addDocumentsScreen = '/addDocumentsScreen';
+  static String editDocumentScreen = '/editDocumentScreen';
   static String addNotesScreen = '/addNotesScreen';
   static String editNotesScreen = '/editNotesScreen';
   static String viewNoteScreen = '/viewNotesScreen';
@@ -153,6 +157,16 @@ class RoutesHelper {
           final Shift shift = args[1] as Shift;
 
           return EditUserShift(selectedUser: selectedUser, shift: shift);
+        }),
+    GetPage(
+        name: editDocumentScreen,
+        page: () {
+          final args = Get.arguments as List;
+          final UserProfile selectedUser = args[0] as UserProfile;
+          final Document document = args[1] as Document;
+          final WidgetRef ref = args[2] as WidgetRef;
+
+          return EditUserDocumentScreen(profile: selectedUser, document: document, ref: ref,);
         }),
     GetPage(
         name: addShiftsScreen,

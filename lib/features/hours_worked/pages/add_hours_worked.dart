@@ -1,4 +1,6 @@
 import 'package:alpha/core/utils/string_methods.dart';
+import 'package:alpha/features/hours_worked/helpers/add_hours_worked.dart';
+import 'package:alpha/features/hours_worked/models/hours_worked.dart';
 import 'package:alpha/features/workers/helper/storage_helper.dart';
 import 'package:alpha/features/documents/models/document.dart';
 import 'package:alpha/features/manage_profile/models/user_profile.dart';
@@ -6,10 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../../core/constants/color_constants.dart';
 import '../../../custom_widgets/custom_button/general_button.dart';
-import '../../../custom_widgets/custom_switch/custom_switch.dart';
 import '../../../custom_widgets/text_fields/custom_text_field.dart';
-import '../../shift/models/shift.dart';
-import '../../shift/helpers/shift_helpers.dart';
 import '../../workers/services/media_services.dart';
 
 class AddHoursWorkedScreen extends StatefulWidget {
@@ -148,31 +147,38 @@ class _AddHoursWorkedScreenState extends State<AddHoursWorkedScreen> {
           });
 
           var id = StringMethods.generateRandomString();
-          var hours = _hoursWorkedController.text.isNotEmpty
-              ? int.parse(_hoursWorkedController.text)
-              : 0;
           var addedBy = currentUser != null
-              ? currentUser!.uid
+              ? currentUser!.email
               : "Admin user account not found";
 
-          Shift hoursWorked = Shift(
-              shiftId: id,
-              placeName: "Monthly Record",
-              startTime: "Monthly record",
-              endTime: "Monthly record",
-              duration: hours.toString(),
-              hoursWorked: hours,
-              date: DateTime.now().toString(),
-              visible: true,
-              dateAdded: DateTime.now().toString(),
-              addedBy: addedBy,
-              contactPersonNumber: "contactPersonNumber",
-              contactPersonAltNumber: "contactPersonAltNumber",
-              staffEmail: "staffEmail",
-              done: true,
-              notes: "notes");
+          await StorageHelper.triggerDocUpload(
+              documentName: _documentNameController.text,
+              selectedFile: selectedFile)
+              .then((documentUrl) {
+            if (documentUrl != null) {
+              setState(() {
+                selectedDocumentUrl = documentUrl;
+                documents.add(Document(
+                  docID: StringMethods.generateRandomString(),
+                  documentName: _documentNameController.text,
+                  expiryDate: '',
+                  documentUrl: documentUrl,
+                ));
+              });
+            }
+          });
 
-          ShiftHelpers.validateAndSubmitShift(shift: hoursWorked);
+
+          HoursWorked hoursWorked = HoursWorked(
+            id: id,
+            addedBy: addedBy!,
+            staffEmail: widget.selectedUser.email!,
+            dateAdded: DateTime.now(),
+            documents: documents,
+            hoursWorked: double.parse(_hoursWorkedController.text),
+          );
+
+          AddHoursWorkedHelper.validateAndSubmitHoursWorked(hoursWorked: hoursWorked);
         },
         borderRadius: 10,
         btnColor: Pallete.primaryColor,
@@ -180,7 +186,8 @@ class _AddHoursWorkedScreenState extends State<AddHoursWorkedScreen> {
         child: const Text(
           "Add Hours Worked",
           style: TextStyle(
-              color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+              color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold
+          ),
         ),
       ),
     );

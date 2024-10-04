@@ -13,8 +13,7 @@ class PreviousShiftsTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Listen to the shiftsProvider using the profileEmail
-    final shiftsAsyncValue =
-        ref.watch(ProviderUtils.previousShiftsProvider(selectedUser.email!));
+    final shiftsAsyncValue =  ref.watch(ProviderUtils.previousShiftsProvider(selectedUser.email!));
 
     return Scaffold(
       body: shiftsAsyncValue.when(
@@ -27,11 +26,11 @@ class PreviousShiftsTab extends ConsumerWidget {
               itemCount: shifts.length,
               itemBuilder: (context, index) {
                 final shift = shifts[index];
-                return ShiftCard(
+                return shift.visible ? ShiftCard(
                   isUpcomingShift: false,
                   shift: shift,
                   selectedUser: selectedUser,
-                );
+                ) : Container();
               },
             );
           },
