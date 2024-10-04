@@ -119,4 +119,51 @@ class ShiftServices {
           success: false, message: 'Failed to update shift: ${e.toString()}');
     }
   }
+
+  // Method to fetch previous shifts by email with a one-time get request
+  static Future<APIResponse<List<Shift>>> getPreviousShiftsByEmail({required String email}) async {
+    try {
+      final now = DateTime.now();
+      final today = DateFormat('yyyy/MM/dd').format(now);
+
+      // Query Firestore to get past shifts for the user
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('shifts')
+          .where('staffEmail', isEqualTo: email)
+          .where('day', isLessThan: today)
+          .orderBy('day', descending: true)
+          .orderBy('startTime', descending: true)
+          .get();
+
+      final shiftsList = querySnapshot.docs.map((doc) => Shift.fromJson(doc.data())).toList();
+
+      return APIResponse(success: true, data: shiftsList, message: 'Previous shifts fetched successfully');
+    } catch (e) {
+      return APIResponse(success: false, message: 'Error fetching previous shifts: $e');
+    }
+  }
+
+  // One-time fetch of upcoming shifts by email
+  static Future<APIResponse<List<Shift>>> getUpcomingShiftsByEmail({required String email}) async {
+    try {
+      final now = DateTime.now();
+      final today = DateFormat('yyyy/MM/dd').format(now);
+
+      // Query Firestore to get upcoming shifts
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('shifts')
+          .where('staffEmail', isEqualTo: email)
+          .where('done', isEqualTo: false)
+          .where('day', isGreaterThanOrEqualTo: today)
+          .orderBy('day', descending: false)
+          .orderBy('startTime', descending: false)
+          .get();
+
+      final shiftsList = querySnapshot.docs.map((doc) => Shift.fromJson(doc.data())).toList();
+
+      return APIResponse(success: true, data: shiftsList, message: 'Upcoming shifts fetched successfully');
+    } catch (e) {
+      return APIResponse(success: false, message: 'Error fetching upcoming shifts: $e');
+    }
+  }
 }

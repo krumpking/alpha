@@ -35,6 +35,33 @@ class NotesServices{
     });
   }
 
+  // Method to fetch notes by email with a one-time get request
+  static Future<APIResponse<List<Note>>> getNotesByEmail({
+    required String email,
+  }) async {
+    try {
+      // Query Firestore to get notes for the user
+      final querySnapshot = await _firestore
+          .collection('notes')
+          .where('email', isEqualTo: email)
+          .get();
+
+      // Map the query results to Note objects
+      final notesList = querySnapshot.docs
+          .map((doc) => Note.fromJson(doc.data()))
+          .toList();
+
+      return APIResponse(
+        success: true,
+        data: notesList,
+        message: 'Notes fetched successfully',
+      );
+    } catch (e) {
+      return APIResponse(success: false, message: 'Error fetching notes: $e');
+    }
+  }
+
+
   static Future<APIResponse<String?>> updateNoteInFirebase({
     required String noteID,
     required Note updatedNote,
