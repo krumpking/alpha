@@ -182,6 +182,28 @@ class StaffServices {
     });
   }
 
+  // Method to fetch all users from Firebase Firestore with a one-time get request
+  static Future<APIResponse<List<UserProfile>>> getAllUsers() async {
+    try {
+      // Query Firestore to get all users
+      final querySnapshot = await _firestore.collection('users').get();
+
+      // Map the query results to UserProfile objects
+      final userList = querySnapshot.docs
+          .map((doc) => UserProfile.fromJson(doc.data()))
+          .toList();
+
+      return APIResponse(
+        success: true,
+        data: userList,
+        message: 'Users fetched successfully',
+      );
+    } catch (e) {
+      return APIResponse(success: false, message: e.toString());
+    }
+  }
+
+
   // Method to count users based on posts
   static Future<APIResponse<Map<String, int>>> countUsersByRole() async {
     try {

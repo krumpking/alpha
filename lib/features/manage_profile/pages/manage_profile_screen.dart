@@ -17,6 +17,11 @@ import 'package:skeletonizer/skeletonizer.dart';
 import '../../../core/constants/color_constants.dart';
 import '../../../core/constants/dimensions.dart';
 import '../../../core/constants/local_image_constants.dart';
+import '../../../custom_widgets/circular_loader/circular_loader.dart';
+import '../../../custom_widgets/snackbar/custom_snackbar.dart';
+import '../../workers/services/add_user_services.dart';
+import '../../workers/services/media_services.dart';
+import '../../workers/services/storage_services.dart';
 
 class UserProfileScreen extends ConsumerStatefulWidget {
   final String profileEmail;
@@ -33,6 +38,7 @@ class _ProfileScreenState extends ConsumerState<UserProfileScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final user = FirebaseAuth.instance.currentUser;
+  dynamic pickedImage;
 
   @override
   void initState() {
@@ -140,8 +146,65 @@ class _ProfileScreenState extends ConsumerState<UserProfileScreen>
                                       title: 'Update Profile Picture',
                                       icon: Icons.image,
                                       value: 0,
-                                      onTap: () {
+                                      onTap: () async {
+                                        await MediaServices.getImageFromGallery().then((file) {
+                                          setState(() {
+                                            pickedImage = file;
+                                          });
+                                        });
 
+                                        if (pickedImage != null) {
+                                          // Show loading indicator
+                                          Get.dialog(const CustomLoader(message: 'Uploading Image'), barrierDismissible: false);
+
+                                          // Convert image to bytes
+                                          final pickedImageBytes = await pickedImage.readAsBytes();
+                                          String? profilePictureUrl;
+                                          String? fileName = pickedImage.path.split('/').last; // Get file name
+
+                                          // Upload the image
+                                          final uploadResponse = await StorageServices.uploadDocumentAsUint8List(
+                                            location: 'users/dps',
+                                            uploadfile: pickedImageBytes,
+                                            fileName: fileName!,
+                                          );
+
+                                          // Handle upload response
+                                          if (!uploadResponse.success) {
+                                            if (!Get.isSnackbarOpen) Get.back();
+                                            CustomSnackBar.showErrorSnackbar(
+                                                message: uploadResponse.message ?? 'Failed to upload image, Please try again'
+                                            );
+                                            return;
+                                          }
+
+                                          profilePictureUrl = uploadResponse.data;
+
+                                          // Update the user's profile in Firestore
+                                          final updatedProfile = selectedUserProfile.copyWith(profilePicture: profilePictureUrl);
+                                          final response = await StaffServices.updateUserProfile(
+                                            email: selectedUserProfile.email!,
+                                            updatedProfile: updatedProfile,
+                                          );
+
+                                          // Update Firebase Auth profile picture
+                                          if (user != null && user!.email == selectedUserProfile.email) {
+                                            await user!.updateProfile(photoURL: profilePictureUrl);
+                                          }
+
+                                          // Close the loader dialog
+                                          if (Get.isDialogOpen!) Get.back();
+
+                                          // Show a success or error message
+                                          if (response.success) {
+                                            // Notify the provider to update the global state
+                                            ref.read(ProviderUtils.profileProvider(selectedUserProfile.email!).notifier)
+                                                .updateProfilePicture(profilePictureUrl!);
+                                            CustomSnackBar.showSuccessSnackbar(message: 'Profile picture updated successfully');
+                                          } else {
+                                            CustomSnackBar.showErrorSnackbar(message: response.message ?? 'Failed to update profile picture');
+                                          }
+                                        }
                                       },
                                     ),
                                     buildPopUpOption(

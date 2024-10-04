@@ -4,18 +4,19 @@ import '../services/add_user_services.dart';
 
 class StaffNotifier extends StateNotifier<AsyncValue<List<UserProfile>>> {
   StaffNotifier() : super(const AsyncValue.loading()) {
-    streamUsers();
+    fetchUsers();
   }
 
-  // Stream users and update state in real-time
-  void streamUsers() {
+  // Fetch users using a one-time get request
+  void fetchUsers() async {
     try {
-      // Listen to Firestore user stream
-      StaffServices.streamAllUsers().listen((users) {
-        state = AsyncValue.data(users);
-      }, onError: (error) {
-        state = AsyncValue.error(error, StackTrace.current);
-      });
+      // Fetch all users from Firestore
+      final usersResponse = await StaffServices.getAllUsers();
+      if (usersResponse.success) {
+        state = AsyncValue.data(usersResponse.data!);
+      } else {
+        state = AsyncValue.error(usersResponse.message ?? 'Something went wrong', StackTrace.current);
+      }
     } catch (e, stackTrace) {
       state = AsyncValue.error('An unexpected error occurred: $e', stackTrace);
     }

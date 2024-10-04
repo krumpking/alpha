@@ -49,6 +49,30 @@ class FeedbackServices {
     });
   }
 
+  static Future<APIResponse<List<FeedbackModel>>> getFeedbackByEmail({required String email}) async {
+    try {
+      // Query Firestore to get feedback for the user
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('feedback')
+          .where('userEmail', isEqualTo: email)
+          .get();
+
+      // Map the query results to FeedbackModel objects
+      final feedbackList = querySnapshot.docs
+          .map((doc) => FeedbackModel.fromJson(doc.data()))
+          .toList();
+
+      return APIResponse(
+        success: true,
+        data: feedbackList,
+        message: 'Feedback fetched successfully',
+      );
+    } catch (e) {
+      return APIResponse(success: false, message: 'Error fetching feedback: $e');
+    }
+  }
+
+
   static Future<APIResponse<FeedbackModel>> getFeedbackByShift({required String feedbackSource}) async {
     try {
       // Fetch the feedback documents for the given email
